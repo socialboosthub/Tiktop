@@ -1,0 +1,21 @@
+# Robots.txt for TikTop.online
+User-agent: *
+Disallow: /api/
+Disallow: /admin/
+Disallow: /private/
+# These are helper files for the app logic; blocking them prevents "Thin Content" flags
+Disallow: /video-download.html
+Disallow: /mp3-download.html
+Disallow: /story-download.html
+Disallow: /slider-download.html
+Disallow: /download.html
+Disallow: /history.html
+Disallow: /profile-download.html
+
+# Specific rules for Googlebot to ensure it crawls everything else
+User-agent: Googlebot
+Allow: /
+Disallow: /api/
+
+# Sitemap location
+Sitemap: https://tiktop.online/sitemap.xml

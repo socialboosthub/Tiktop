@@ -1,0 +1,1472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TikTok Downloader - Download Video Without Watermark (HD & MP3)</title>
+  
+  <meta name="description" content="TikTop is a comprehensive, free TikTok video downloader. Read our ultimate guide to downloading TikTok videos in HD, MP3 audio, stories, and sliders without watermark. Fastest TikTok Downloader. Save TikTok videos without watermark in HD, convert to MP3, and download stories. Free, unlimited, and works on Android, iOS, and PC.">
+  <meta name="keywords" content="tiktok downloader, download tiktok videos, tiktok video downloader hd, tiktok mp3 downloader, tiktok story downloader, tiktok slider downloader, tiktok batch downloader, tiktok no watermark, tiktop, tiktok fair use guide, social media archiving">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <meta name="theme-color" content="#EE1D52">
+  <link rel="canonical" href="https://tiktop.online/">
+
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="TikTok Video Downloader – Download TikTok Videos HD | TikTop">
+  <meta property="og:description" content="The ultimate tool to download TikTok videos in HD, MP3 audio, stories, and sliders. Includes comprehensive guides on iOS, Android, and PC downloading.">
+  <meta property="og:url" content="https://tiktop.online/">
+  <meta property="og:site_name" content="TikTop">
+  <meta property="og:image" content="https://tiktop.online/assets/Logo.png">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="TikTok Video Downloader – TikTop">
+  <meta name="twitter:description" content="Fast & free TikTok downloader. Read our deep-dive guide on saving HD videos, MP3, stories & batch downloads without watermark.">
+  <meta name="twitter:image" content="https://tiktop.online/assets/Logo.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="alternate" href="https://tiktop.online/" hreflang="en">
+  <link rel="icon" href="https://tiktop.online/assets/Logo.ico" type="image/x-icon">
+
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "name": "TikTop",
+      "url": "https://tiktop.online/",
+      "applicationCategory": "MultimediaApplication",
+      "operatingSystem": "All",
+      "browserRequirements": "Requires JavaScript",
+      "description": "TikTop is a free TikTok downloader that allows users to download TikTok videos in HD, MP3 audio, stories, sliders, and batch downloads without watermark.",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [{
+        "@type": "Question",
+        "name": "How to download TikTok videos without watermark?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "1. Copy the link from the TikTok app. 2. Paste it into TikTop.online. 3. Click Download to save the HD video."
+        }
+      }, {
+        "@type": "Question",
+        "name": "Is TikTop free?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, TikTop is completely free and requires no registration."
+        }
+      }]
+    }
+  ]
+}
+  </script>
+  <script src="https://unpkg.com/i18next@24/i18next.min.js"></script>
+
+
+  <style>
+    #page-preloader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--bg);
+      z-index: 999999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.5s ease, visibility 0.5s ease;
+    }
+
+    #page-preloader.hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
+    
+    .neon-loader { position: relative; width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; }
+    .neon-ring { position: absolute; border: 4px solid transparent; border-radius: 50%; animation: ring-pulse 2s cubic-bezier(0.455, 0.03, 0.515, 0.955) infinite; }
+    .ring-1 { width: 100%; height: 100%; border-top-color: var(--cyan); border-bottom-color: var(--cyan); animation-delay: 0s; }
+    .ring-2 { width: 70%; height: 70%; border-left-color: var(--pink); border-right-color: var(--pink); animation-delay: 0.5s; }
+    .ring-3 { width: 40%; height: 40%; border-top-color: var(--text-main); border-bottom-color: var(--text-main); animation-delay: 1s; } 
+    
+    @keyframes ring-pulse {
+        0% { transform: rotate(0deg) scale(1); opacity: 1; }
+        50% { transform: rotate(180deg) scale(1.2); opacity: 0.5; }
+        100% { transform: rotate(360deg) scale(1); opacity: 1; }
+    }
+    
+    .loader-text-neon { margin-top: 25px; font-size: 11px; letter-spacing: 4px; color: var(--text-main); font-weight: bold; text-transform: uppercase; animation: fade-blink 1s infinite; }
+    @keyframes fade-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+        #page-preloader.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    :root {
+      --bg: #000000;
+      --card: #111111;
+      --text: #ffffff;
+      --text-main: #ffffff;
+      --text-dim: #b0b0b0;
+      --muted: #aaaaaa;
+      --border: rgba(255, 255, 255, 0.08);
+      --box-bg: #111111;
+      --pink: #EE1D52;
+      --cyan: #25F4EE;
+      --nav-bg: #0a0a23;
+      --border-gradient: linear-gradient(to bottom right, #EE1D52, #25F4EE);
+    }
+
+    body.light-mode {
+      --bg: #f5f5f7;
+      --card: #ffffff;
+      --text: #111111;
+      --text-main: #000000;
+      --text-dim: #222222;
+      --muted: #666666;
+      --border: rgba(0,0,0,0.08);
+      --box-bg: linear-gradient(to bottom, #EE1D52, #25F4EE);
+      --nav-bg: #0a0a23;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Inter, 'Segoe UI', Arial, sans-serif;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text-main);
+      transition: background 0.3s, color 0.3s;
+      overflow-x: hidden;
+      top: 0 !important;
+      position: static !important;
+      margin-top: 0 !important;
+    }
+
+    html {
+      margin-top: 0 !important;
+      height: 100% !important;
+    }
+    
+    .ad-container { min-height: 250px; }
+
+    .fcc-nav {
+      position: fixed;
+      top: 0 !important;
+      left: 0;
+      width: 100%;
+      height: 70px;
+      background: var(--nav-bg);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      z-index: 10000;
+    }
+
+    #index-content {
+      padding-top: 70px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .fcc-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+    }
+
+    .fcc-logo img {
+      height: 32px;
+      width: auto;
+      display: block;
+    }
+
+    .fcc-logo span {
+      background: linear-gradient(to bottom right, var(--pink), var(--cyan));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: bold;
+      font-size: 20px;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .theme-icon {
+      cursor: pointer;
+      font-size: 20px;
+      transition: 0.3s;
+    }
+
+    .menu-toggle {
+      background: #3b3b4f;
+      border: 1px solid #fff;
+      color: #fff;
+      padding: 5px 10px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    .side-menu {
+      position: fixed;
+      top: 50px;
+      right: -100%;
+      width: 250px;
+      height: calc(100vh - 50px);
+      background: var(--nav-bg);
+      transition: 0.4s;
+      z-index: 9999;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      border-left: 1px solid #3b3b4f;
+    }
+
+    .side-menu.open {
+      right: 0;
+    }
+
+    .side-menu a {
+      color: #fff;
+      text-decoration: none;
+      font-size: 18px;
+      border-bottom: 1px solid #3b3b4f;
+      padding-bottom: 10px;
+    }
+
+    .tab-container {
+      display: flex;
+      max-width: 500px;
+      margin: 30px auto 10px;
+      gap: 8px;
+      padding: 0 10px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+
+  
+    .tab-container::-webkit-scrollbar {
+      display: none; 
+    }
+
+    .filter-button {
+      flex: 1;
+      min-width: 70px;
+      padding: 12px 10px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      color: white;
+      font-size: 14px; /* Increased from 11px to a readable size! */
+      font-weight: 600;
+      background: linear-gradient(to bottom, #EE1D52 50%, #25F4EE 50%);
+      background-size: 100% 200%;
+      background-position: top;
+      transition: 0.4s ease;
+      text-align: center;
+      white-space: nowrap; /* Stops text from wrapping to a second line */
+    }
+
+
+    .filter-button.selected {
+      background-position: bottom;
+      color: #000;
+    }
+
+    /* --- DOWNLOAD BOX --- */
+        .gradient-box {
+      background: linear-gradient(180deg, #EE1D52 0%, #25F4EE 100%);
+      padding: 35px 25px;
+      border-radius: 12px;
+      text-align: center;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      max-width: 500px;
+      width: calc(100% - 20px); /* 1. Forces full width immediately on mobile load */
+      margin: 15px auto 30px;   /* 2. Replaced 'auto' with a fixed top margin to stop the vertical jump */
+      position: relative;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+    }
+
+
+    .gradient-box h1,
+    .gradient-box p {
+      color: #fff;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .input-box {
+      display: flex;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 10px;
+      padding: 8px 18px;
+      margin-bottom: 20px;
+      min-height: 55px;
+      border: 2px solid #fff;
+      transition: 0.3s;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+      position: relative;
+    }
+
+    .input-box input,
+    .input-box textarea {
+      flex: 1;
+      border: none;
+      outline: none;
+      font-size: 15px;
+      color: #333;
+      background: transparent;
+      width: 100%;
+    }
+
+    .input-box textarea {
+      display: none;
+      height: 60px;
+      padding-top: 15px;
+      resize: none;
+      border-radius: 5px;
+    }
+
+    .action-btn {
+      background: var(--cyan);
+      color: #000;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 10px;
+      font-weight: bold;
+      cursor: pointer;
+      height: 38px;
+      transition: 0.3s;
+      margin-left: 8px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    .action-btn:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.1);
+    }
+
+    #clear-btn {
+      background: var(--pink);
+      color: #fff;
+      display: none;
+    }
+
+    #error-toast {
+      position: absolute;
+      top: -50px;
+      left: 50%;
+      transform: translateX(-50%) scale(0.8);
+      background: #EE1D52;
+      color: white;
+      padding: 10px 25px;
+      border-radius: 30px;
+      font-size: 14px;
+      font-weight: 800;
+      pointer-events: none;
+      opacity: 0;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      box-shadow: 0 10px 20px rgba(238, 29, 82, 0.4);
+      z-index: 10;
+      white-space: nowrap;
+      border: 2px solid #fff;
+    }
+
+    #error-toast.show {
+      opacity: 1;
+      transform: translateX(-50%) scale(1);
+      top: -65px;
+    }
+
+    .glow-wrapper {
+      position: relative;
+      margin-top: 15px;
+      border-radius: 12px;
+      padding: 2px;
+      background: linear-gradient(45deg, #EE1D52, #25F4EE, #EE1D52, #25F4EE);
+      background-size: 400%;
+      animation: glowing 8s linear infinite;
+    }
+
+    @keyframes glowing {
+      0% { background-position: 0 0; }
+      50% { background-position: 400% 0; }
+      100% { background-position: 0 0; }
+    }
+
+    .process-btn {
+      height: 55px;
+      width: 100%;
+      background: #000;
+      color: white;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: bold;
+      display: none;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .process-btn.active {
+      display: block;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20% { transform: translateX(-10px); }
+      40% { transform: translateX(10px); }
+      60% { transform: translateX(-10px); }
+      80% { transform: translateX(10px); }
+    }
+
+    .error-shake {
+      animation: shake 0.4s ease-in-out;
+      border: 2px solid #EE1D52 !important;
+    }
+
+    /* --- FEATURE CARDS & CONTENT --- */
+    .section-wrap {
+      max-width: 1100px;
+      margin: 60px auto;
+      padding: 0 20px;
+    }
+
+    h2 {
+      font-size: 36px;
+      margin-bottom: 12px;
+    }
+    
+    .section-desc {
+      color: var(--muted);
+      max-width: 600px;
+      margin-bottom: 40px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+    }
+
+    .feature-card {
+      background: var(--box-bg);
+      padding: 30px;
+      border-radius: 20px;
+      border: 1px solid #222;
+      text-align: center;
+      cursor: pointer;
+      transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--cyan);
+    }
+
+    .feature-card:active {
+      transform: scale(0.92);
+    }
+
+    .feature-card.pop {
+      transform: scale(1.05);
+      border: 2px solid var(--cyan);
+      box-shadow: 0 0 20px rgba(37, 244, 238, 0.4);
+    }
+
+    .feature-card h3 {
+      margin-bottom: 10px;
+      transition: 0.3s;
+    }
+
+    .feature-card.pop h3 {
+      color: var(--cyan);
+      transform: scale(1.1);
+    }
+
+    .step-card,
+    .guide-card,
+    .article-card {
+      background: var(--box-bg);
+      padding: 30px;
+      border-radius: 20px;
+      border: 1px solid #222;
+      text-align: center;
+    }
+
+    /* Light Mode Specifics */
+    body.light-mode .feature-card,
+    body.light-mode .guide-card,
+    body.light-mode .article-card {
+      background: #fff;
+      border: 2px solid var(--cyan);
+    }
+
+    body.light-mode .step-card {
+      background: var(--pink);
+      color: white;
+    }
+
+    .step-card {
+      background: var(--pink);
+    }
+
+    .step-img {
+      width: 80px;
+      height: 80px;
+      margin-bottom: 15px;
+    }
+
+    .article-card {
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .article-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--pink);
+    }
+
+    .article-card h3 {
+      color: var(--cyan);
+      margin-bottom: 10px;
+    }
+
+    .article-card p {
+      font-size: 14px;
+      color: var(--text-dim);
+      margin-bottom: 20px;
+    }
+
+    .read-more {
+      color: var(--pink);
+      font-weight: bold;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    /* SUPPORTED CONTENT */
+    .content-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      text-align: center;
+    }
+
+    .content-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .content-card span {
+      font-size: 32px;
+    }
+
+    .content-card h3 {
+      margin-top: 14px;
+      margin-bottom: 8px;
+    }
+
+    .content-card p {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .content-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    }
+    
+    body.light-mode .content-card { 
+        background: white; 
+        border: 2px solid var(--pink); 
+        border-radius: 12px;
+    }
+
+    /* SEO TEXT */
+    .seo-text h3 {
+      margin-top: 25px;
+      margin-bottom: 10px;
+      color: var(--text-main);
+    }
+
+    .seo-text p {
+      color: var(--text-dim);
+      line-height: 1.6;
+      margin-bottom: 15px;
+    }
+
+    /* FAQ */
+    .faq-item {
+      background: var(--box-bg);
+      margin-bottom: 10px;
+      border-radius: 12px;
+      border: 1px solid #222;
+      overflow: hidden;
+    }
+
+    .faq-btn {
+      width: 100%;
+      padding: 20px;
+      background: none;
+      border: none;
+      color: var(--text-main);
+      text-align: left;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .faq-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: 0.3s ease;
+      font-size: 15px;
+      color: var(--text-dim);
+      padding: 0 20px;
+      line-height: 1.6;
+    }
+
+    .faq-item.active .faq-content {
+      max-height: 500px;
+      padding-bottom: 20px;
+    }
+    
+    .faq-btn span {
+      transition: transform 0.3s ease;
+      display: inline-block;
+    }
+
+    .faq-item.active .faq-btn span {
+      transform: rotate(45deg);
+    }
+
+    /* DISCLAIMER */
+    .disclaimer {
+      background: var(--card);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      text-align: center;
+      margin-top: 40px;
+      padding-bottom: 40px;
+      padding-top: 20px;
+    }
+
+    .disclaimer p {
+      color: var(--muted);
+      max-width: 900px;
+      margin: 0 auto 16px auto;
+      line-height: 1.6;
+    }
+
+    body.light-mode .disclaimer { 
+        background: white; 
+        border: 2px solid var(--pink); 
+        border-radius: 12px;
+    }
+
+    /* FOOTER */
+    .footer {
+      padding: 60px 6% 40px;
+      background: #000;
+      margin-top: auto; 
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+
+    .footer h3,
+    .footer h4 {
+      margin-bottom: 12px;
+    }
+
+    .footer p,
+    .footer a {
+      color: black;
+      font-size: 14px;
+      text-decoration: none;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .footer a:hover {
+      color: var(--text);
+    }
+/* Update this block in your mp3-download.html <style> section */
+.footer-bottom { 
+    margin-top: 40px; 
+    text-align: center; 
+    font-size: 13px; 
+    opacity: 0.7; 
+    border-top: 1px solid rgba(0,0,0,0.1); 
+    padding-top: 20px;
+    padding-bottom: 40px; /* <--- ADD THIS EXTRA PADDING */
+}
+    
+
+/* Also ensure the footer itself doesn't cut off */
+.footer { 
+    padding: 60px 6% 40px; /* Increase last value from 30px to 40px */
+    background: var(--pink); 
+    border-radius: 12px; 
+    margin-top: 50px; 
+    text-align: left; 
+    color: #000; 
+}
+
+
+    body.light-mode .footer { 
+        background: var(--pink);
+    }
+    body.light-mode .footer p, 
+    body.light-mode .footer a,
+    body.light-mode .footer h3,
+    body.light-mode .footer h4 {
+        color: black;
+    }
+
+    /* LANGUAGE MENU */
+    .lang-icon {
+      cursor: pointer;
+      font-size: 20px;
+    }
+
+    .lang-menu {
+      position: fixed;
+      top: 55px;
+      right: 80px;
+      background: #0a0a23;
+      border: 1px solid #3b3b4f;
+      border-radius: 10px;
+      display: none;
+      z-index: 10002;
+      overflow: hidden;
+    }
+
+    .lang-menu div {
+      padding: 10px 16px;
+      color: #fff;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .lang-menu div:hover {
+      background: #EE1D52;
+    }
+
+    /* SCROLL TOP & IFRAMES */
+    #scrollTop {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 55px;
+      height: 55px;
+      background: var(--border-gradient);
+      border-radius: 50%;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      font-size: 25px;
+      cursor: pointer;
+      z-index: 5000;
+    }
+
+
+    
+
+        /* DESKTOP QUERIES */
+    @media screen and (min-width: 1024px) {
+      .gradient-box {
+        max-width: 800px;
+        margin: 40px auto;
+      }
+      .tab-container {
+        max-width: 800px;
+        margin: 30px auto; /* <--- CHANGED TO AUTO */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .grid-3 {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      .content-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+      .section-wrap,
+      .content-grid,
+      .faq-wrap {
+        max-width: 1100px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .footer-grid {
+        grid-template-columns: repeat(3, 1fr);
+        max-width: 1100px;
+        margin: 0 auto;
+      }
+      h2 {
+        font-size: 42px;
+      }
+      .gradient-box { margin: 40px auto; }
+      .tab-container { margin: 30px auto; }
+    }
+    
+    /* SPINNER */
+    #loader-stage {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+    .tiktok-spinner {
+      position: relative;
+      width: 50px;
+      height: 50px;
+      margin-bottom: 15px;
+    }
+    .tiktok-spinner div {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      opacity: 0.8;
+      mix-blend-mode: screen;
+    }
+    .cyan {
+      background-color: #25F4EE;
+      animation: move-cyan 1.5s infinite ease-in-out;
+    }
+    .pink {
+      background-color: #EE1D52;
+      animation: move-pink 1.5s infinite ease-in-out;
+      animation-delay: -0.75s;
+    }
+    @keyframes move-cyan {
+      0%, 100% { transform: translateX(-15px); }
+      50% { transform: translateX(15px); }
+    }
+    @keyframes move-pink {
+      0%, 100% { transform: translateX(15px); }
+      50% { transform: translateX(-15px); }
+    }
+  </style>
+
+  
+
+
+</head>
+
+<body>
+  <div id="page-preloader">
+    <div class="neon-loader">
+        <div class="neon-ring ring-1"></div>
+        <div class="neon-ring ring-2"></div>
+        <div class="neon-ring ring-3"></div>
+    </div>
+    <p class="loader-text-neon">TikTop</p>
+  </div>
+
+  <div id="index-content">
+
+  <div id="index-content">
+    <nav class="fcc-nav">
+      <a href="#" class="fcc-logo">
+        <img src="https://i.ibb.co/wZjXcKz9/file-00000000e22871fd9cb25a4586788b91.png" alt="TikTop Logo">
+        <span>TikTop</span>
+      </a>
+      <div class="nav-right">
+        <span class="lang-icon" onclick="toggleLangMenu()">🌐</span>
+        <span class="theme-icon" onclick="toggleTheme()" id="theme-icon">🌙</span>
+        <button class="menu-toggle" onclick="toggleMenu()">Menu ☰</button>
+      </div>
+
+      <div class="lang-menu" id="lang-menu">
+        <div onclick="changeLang('en')">English</div>
+        <div onclick="changeLang('fr')">Français</div>
+        <div onclick="changeLang('es')">Español</div>
+        <div onclick="changeLang('de')">Deutsch</div>
+        <div onclick="changeLang('it')">Italiano</div>
+        <div onclick="changeLang('pt')">Português</div>
+        <div onclick="changeLang('ar')">العربية</div>
+        <div onclick="changeLang('hi')">हिन्दी</div>
+        <div onclick="changeLang('sw')">Swahili</div>
+        <div onclick="changeLang('tr')">Türkçe</div>
+        <div onclick="changeLang('ru')">Русский</div>
+      </div>
+    </nav>
+
+    <div class="side-menu" id="side-menu">
+      <a href="#">Home</a>
+      <a href="#download">How to download</a>
+      <a href="#faq">FAQ</a>
+      <a href="./history.html">History</a>
+      <a href="./contact.html">Contact Us</a>
+    </div>
+
+    <div class="tab-container" id="tabs">
+      <button class="filter-button selected" onclick="switchTab(0)">Video</button>
+      <button class="filter-button" onclick="switchTab(1)">Mp3</button>
+      <button class="filter-button" onclick="switchTab(2)">Story</button>
+      <button class="filter-button" onclick="switchTab(3)">Slider</button>
+      <button class="filter-button" onclick="switchTab(4)">Multi</button>
+    </div>
+
+    <div class="gradient-box">
+      <div id="main-ui">
+        <h1 id="page-title" style="font-size: 20px;">Download TikTok Videos</h1>
+        <br>
+        <p id="page-desc" style="font-size: 13px;">Paste a TikTok link to start downloading.</p>
+        <br>
+        <div class="input-box" id="input-container">
+          <div id="error-toast">⚠️ INVALID TIKTOK LINK!</div>
+          <input type="text" id="main-input" placeholder="🔗 Paste a tiktok link" oninput="validateInput()">
+          <textarea id="multi-input" placeholder="🔗  Paste multiple links (one per line)" oninput="validateInput()"></textarea>
+          <button class="action-btn" id="paste-btn" onclick="handlePaste()">Paste</button>
+          <button class="action-btn" id="clear-btn" onclick="handleClear()">Clear</button>
+        </div>
+
+
+
+        
+        <div class="glow-wrapper">
+          <button id="pbtn-0" class="process-btn active" onclick="go('video-download.html')">Process Video Link</button>
+          <button id="pbtn-1" class="process-btn" onclick="go('mp3-download.html')">Process Link</button>
+          <button id="pbtn-2" class="process-btn" onclick="go('story-download.html')">Process Story Link</button>
+          <button id="pbtn-3" class="process-btn" onclick="go('slider-download.html')">Process Slider Link</button>
+          <button id="pbtn-4" class="process-btn" onclick="go('download.html')">Process Multi Links</button>
+        </div>
+<br>
+
+        
+      </div>
+    </div>
+
+    
+    
+    <section>
+      <div class="section-wrap seo-text">
+        <h2 style="text-align: center; color: var(--pink);">The Ultimate TikTok Downloader Experience</h2>
+        <p style="
+          text-align: left;
+          margin: 20px auto 30px;
+          font-size: 16px;
+          line-height: 1.8;
+          color: var(--text-dim);
+        ">
+          In our age, social media is used by most people. TikTok, hosts millions of creative videos, educational clips, and viral moments every day. However, the platform's saving features often come with limitations—most notably, watermarks and quality compression. <strong>TikTop.online</strong> was engineered to bridge this gap, providing a powerful, fast, and reliable TikTok downloader built with precision.
+        </p>
+        <p style="
+          text-align: left;
+          margin: 0 auto 30px;
+          font-size: 16px;
+          line-height: 1.8;
+          color: var(--text-dim);
+        ">
+          Whether you are a content creator, a student wanting to save your favorite lessons, or simply a user who wants to watch videos offline, our tool offers a seamless solution. We allow you to download videos, save disappearing stories, download photo slideshows, and even process multiple TikTok video links together. Designed for speed, simplicity, and high-definition quality, TikTop delivers clean downloads without watermarks while handling single and multiple  downloads smoothly across all devices, including iOS, Android, and Windows.
+        </p>
+        
+        <div style="margin-top: 40px; border-top: 1px solid #333; padding-top: 40px;">
+            <h2 style="text-align: center; font-size: 28px; color: var(--text-main);">Why Choose TikTop?</h2>
+            <div class="grid-3" style="margin-top: 30px; text-align: left;">
+                <div>
+                    <h3 style="color: var(--cyan); font-size: 18px;">HD quality videos</h3>
+                    <p>We ensure you get high quality videos. Unlike screen recording tools that capture a low quality of your video, our tiktok downloader fetches the source file directly from TikTok's Content Delivery Network (CDN). This ensures you receive the original 1080p or 720p resolution MP4 file.</p>
+                </div>
+                <div>
+                    <h3 style="color: var(--cyan); font-size: 18px;">Advanced Audio Extraction</h3>
+                    <p>Content creation often relies on trending audio. Our advanced parsing engine separates the AAC audio track from the video stream, allowing you to save trending sounds as high-bitrate MP3 files (up to 320kbps). This is essential for DJs, remixers, and video editors who need clean audio stems for their projects.</p>
+                </div>
+                <div>
+                    <h3 style="color: var(--cyan); font-size: 18px;">Total User Anonymity</h3>
+                    <p>In an era of data tracking, we believe in privacy. Our service requires no login, no API keys, and no software installation. All processing happens server-side, meaning your IP address and personal data remain secure. We act as a blind tunnel between you and the content, ensuring your download history remains private.</p>
+                </div>
+            </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="features">
+      <div class="section-wrap">
+        <h2 style="text-align:center; color:var(--pink);">Premium Features</h2>
+        <div class="grid-3">
+          <div class="feature-card" onclick="react(this)">
+            <h3>🚀 Multi-Download Engine</h3>
+            <p>Efficiency is key. Unlike other tiktok downloaders, Our website allows you to paste a list of links and process dozens of videos at the same time, thus saving you time.</p>
+          </div>
+          <div class="feature-card" onclick="react(this)">
+            <h3>💎 Watermark Removal</h3>
+            <p>Our algorithm identifies and strips the overlay layer containing the TikTok logo and username, leaving you with a clear, clean video file.</p>
+          </div>
+          <div class="feature-card" onclick="react(this)">
+            <h3>⚡ Ultra-Low Latency</h3>
+            <p>Our servers are optimized for speed, providing direct links to the source content to ensure the highest possible download bandwidth.</p>
+          </div>
+        </div>
+        <div class="seo-text" style="margin-top: 40px;">
+            <h3 style="text-align:center; color: var(--cyan);">Understanding the Technology</h3>
+            <p style="text-align:center;">
+               Many users ask how watermark removal works. When a video is uploaded to TikTok, the platform actually stores two versions: the one you see in the app (with the logo) and a "clean" version stored on their servers. TikTop does not "edit" the video to remove the logo; instead, our script locates the URL of the original, clean file and delivers it directly to your device. This guarantees that there is zero quality loss during the process.
+            </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="supported">
+      <h2 style="text-align:center; color:var(--cyan)">Supported Content Types</h2>
+      <p class="section-desc" style="text-align: center; margin: 0 auto 30px auto;">TikTok is more than just video. We support the entire ecosystem of media formats available on the platform.</p>
+      <div class="content-grid">
+        <div class="content-card">
+          <span>🎬</span>
+          <h3>Standard Videos</h3>
+          <p>Download standard public TikTok videos in HD MP4 format without the bouncing watermark overlay.</p>
+        </div>
+        <div class="content-card">
+          <span>🖼️</span>
+          <h3>Photo Sliders</h3>
+          <p>Automatically convert TikTok photo slideshows into MP4 video format or download individual images.</p>
+        </div>
+        <div class="content-card">
+          <span>📖</span>
+          <h3>TikTok Stories</h3>
+          <p>Save temporary stories before they expire after 24 hours. Perfect for archiving fleeting moments.</p>
+        </div>
+        <div class="content-card">
+          <span>🎵</span>
+          <h3>MP3 Audio</h3>
+          <p>Extract just the background music or voiceover track and save it as a universal MP3 audio file.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="download">
+      <div class="section-wrap">
+        <h2 style="text-align:center; color:var(--pink);">How To Download: A Quick Guide</h2>
+        <div class="grid-3">
+          <div class="step-card"><img src="https://cdn-icons-png.flaticon.com/512/1621/1621635.png" class="step-img" alt="copy icon">
+            <h3>1. Copy URL</h3>
+            <p>Open the TikTok app, find the video you wish to save, tap the "Share" arrow icon, and select "Copy Link" from the menu.</p>
+          </div>
+          <div class="step-card"><img src="https://cdn-icons-png.flaticon.com/512/7066/7066014.png" class="step-img" alt="paste icon">
+            <h3>2. Paste & Process</h3>
+            <p>Return to TikTop, paste the link into the input box above, and click the "Process" button to fetch the video data.</p>
+          </div>
+          <div class="step-card"><img src="https://cdn-icons-png.flaticon.com/512/2989/2989838.png" class="step-img" alt="download icon">
+            <h3>3. Save File</h3>
+            <p>Select your preferred format (HD Video, No Watermark, or MP3) and the file will save instantly to your device storage.</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="section-wrap seo-text">
+        <h2 style="text-align: center; color: var(--cyan); margin-bottom: 30px;">Comprehensive Device Guide</h2>
+        
+        <h3 style="color: var(--pink);">📥 Downloading on Android</h3>
+        <p>Android users have the most seamless experience. Simply open TikTop.online in Chrome, Firefox, or any mobile browser. Once you tap the download button, the file will automatically be saved to your "Downloads" folder. You can access these files via your Gallery app or the "Files" app on your device. Ensure you have granted your browser permission to save files to storage.</p>
+        
+        <h3 style="color: var(--pink);">🍎 Downloading on iOS (iPhone/iPad)</h3>
+        <p>Due to Apple's security protocols, the process varies slightly depending on your iOS version. 
+        <br><strong>iOS 13 and later:</strong> Safari now has a native download manager. When you tap "Download" on TikTop, a prompt will appear asking if you want to download the file. Tap "Download" again, and a small arrow icon will appear in the address bar. Tap that icon to see your video, then save it to your Photos app.
+        <br><strong>iOS 12 and older:</strong> You will need to install a free app called "Documents by Readdle" from the App Store. Open the built-in browser inside that app, navigate to TikTop, and download the video there. You can then move it to your Camera Roll.</p>
+        
+        <h3 style="color: var(--pink);">💻 Downloading on PC / Desktop</h3>
+        <p>For Windows, Mac, and Linux users, TikTop works instantly without additional software. Copy the link from your browser's address bar (e.g., https://www.tiktok.com/@user/video/...), paste it here, and download. Files usually save to your designated "Downloads" folder. For power users, our "Multi-Download" feature is best used on a desktop, allowing you to copy-paste a list of links from a text file and process them in bulk.</p>
+      </div>
+    </section>
+
+    <section id="articles">
+        <div class="section-wrap">
+          <h2 style="text-align:center; color:var(--cyan);">Content Creator's Corner</h2>
+          <p class="section-desc" style="text-align: center; margin: 0 auto 30px auto;">Maximize your potential with our guides on trends, audio usage, and troubleshooting.</p>
+          <div class="grid-3">
+              <a href="guide-viral.html" style="text-decoration:none;">
+                  <div class="article-card">
+                      <h3>📈 Mastering the Algorithm</h3>
+                      <p>Going viral isn't just luck; it's science. Learn about the best posting times, how to utilize trending hashtags, and the importance of using high-quality, watermark-free footage for reposting...</p>
+                      <span class="read-more">Read Full Guide &rarr;</span>
+                  </div>
+              </a>
+              <a href="guide-audio.html" style="text-decoration:none;">
+                  <div class="article-card">
+                      <h3>🎵 The Audio Remix Workflow</h3>
+                      <p>Musicians and editors often need clean stems. Discover how to extract MP3s using TikTop and import them into DAWs like Ableton or FL Studio for high-quality remixes...</p>
+                      <span class="read-more">Read Full Guide &rarr;</span>
+                  </div>
+              </a>
+              <a href="guide-troubleshoot.html" style="text-decoration:none;">
+                  <div class="article-card">
+                      <h3>🔧 Troubleshooting Hub</h3>
+                      <p>Encountering an "Invalid Link" error? This usually happens with private videos or region-locked content. Read our comprehensive guide on how to fix common download errors...</p>
+                      <span class="read-more">Read Full Guide &rarr;</span>
+                  </div>
+              </a>
+          </div>
+        </div>
+    </section>
+
+    <div class="section-wrap seo-text">
+        <h2 style="text-align:center; color: var(--pink);">Legal & Ethical Usage</h2>
+        <p>
+            At TikTop, we advocate for the responsible use of digital tools. While our downloader provides the technical capability to save videos, it is crucial to respect intellectual property rights.
+        </p>
+        <ul>
+            <li style="color:var(--text-dim); margin-bottom: 10px;"><strong>Personal Use Only:</strong> Downloading videos for offline viewing, archiving your own content, or educational analysis is generally considered acceptable.</li>
+            <li style="color:var(--text-dim); margin-bottom: 10px;"><strong>Credit the Creator:</strong> If you plan to repost a video to another platform (like Instagram Reels or YouTube Shorts), always credit the original creator. Removing a watermark does not transfer copyright ownership.</li>
+            <li style="color:var(--text-dim); margin-bottom: 10px;"><strong>Fair Use:</strong> Using short clips for commentary, criticism, or reaction videos may fall under "Fair Use" doctrines, but users should verify the laws in their specific jurisdiction.</li>
+        </ul>
+        <p>TikTop does not host any video content. All files are streamed directly from TikTok servers to your device. We do not support the downloading of copyrighted material for commercial gain without permission.</p>
+    </div>
+
+    <section id="faq">
+      <div class="section-wrap">
+        <h2 style="text-align:center; color:var(--pink);">Frequently Asked Questions</h2>
+        <p class="section-desc" style="text-align: center; margin: 0 auto 30px auto;">Common questions about functionality, privacy, and troubleshooting.</p>
+        <div class="faq-wrap">
+
+          <div class="faq-item" onclick="this.classList.toggle('active')">
+            <button class="faq-btn">1. Is TikTop completely free to use? <span>+</span></button>
+            <div class="faq-content">
+              ✅ <strong>Yes, absolutely.</strong> TikTop is a free utility supported by minimal ads. There are no subscription tiers, no hidden paywalls, and no requirement to register an account. You can download unlimited videos 24/7 without ever paying a cent.
+            </div>
+          </div>
+
+          <div class="faq-item" onclick="this.classList.toggle('active')">
+            <button class="faq-btn">2. Why does the video play instead of downloading? <span>+</span></button>
+            <div class="faq-content">
+              🎥 This is a common behavior in some browsers (especially Chrome on Desktop). If the video opens in a new tab and starts playing, simply <strong>right-click</strong> on the video and select <strong>"Save Video As..."</strong> to save it to your computer. On mobile, press and hold the video to see the save option.
+            </div>
+          </div>
+
+          <div class="faq-item" onclick="this.classList.toggle('active')">
+            <button class="faq-btn">3. Does TikTop store copies of downloaded videos? <span>+</span></button>
+            <div class="faq-content">
+              🔐 <strong>No.</strong> We do not host or store any videos on our servers. When you paste a link, our system parses the direct URL from TikTok and facilitates the download directly to your device. This ensures that user privacy is maintained and copyright remains with the platform.
+            </div>
+          </div>
+
+          <div class="faq-item" onclick="this.classList.toggle('active')">
+            <button class="faq-btn">4. Can I download videos from private accounts? <span>+</span></button>
+            <div class="faq-content">
+              🔒 <strong>No.</strong> TikTop respects user privacy settings. We can only process links from <strong>public</strong> TikTok accounts. If an account is set to private, our servers cannot access the video data, and the download will fail.
+            </div>
+          </div>
+
+          <div class="faq-item" onclick="this.classList.toggle('active')">
+            <button class="faq-btn">5. Where are files saved on my device? <span>+</span></button>
+            <div class="faq-content">
+              📂 This depends on your operating system. On <strong>PC/Mac</strong>, files usually go to the "Downloads" folder. on <strong>Android</strong>, they appear in the Gallery or "Files" app under Downloads. On <strong>iOS</strong>, they are saved to the "Files" app, but you can move them to your Photos roll by tapping the "Share" button and selecting "Save Video."
+            </div>
+          </div>
+
+          <div class="faq-item" onclick="this.classList.toggle('active')">
+            <button class="faq-btn">6. Does this tool work for TikTok Lite? <span>+</span></button>
+            <div class="faq-content">
+              ⚡ <strong>Yes.</strong> Links generated from the TikTok Lite app work exactly the same way. Simply copy the link via the Share button and paste it into TikTop.
+            </div>
+          </div>
+
+          <div class="faq-item" onclick="this.classList.toggle('active')">
+            <button class="faq-btn">7. Can I download just the audio (MP3)? <span>+</span></button>
+            <div class="faq-content">
+              🎵 <strong>Yes.</strong> After pasting the link, you will see a specific button for "Download MP3." This extracts the audio track in high quality, stripping away the video component entirely.
+            </div>
+          </div>
+
+          <div class="faq-item" onclick="this.classList.toggle('active')">
+            <button class="faq-btn">8. Why do I get a "Link Expired" error? <span>+</span></button>
+            <div class="faq-content">
+              ⚠️ TikTok download links are temporary. If you leave a download page open for too long without clicking the button, the link may expire. simply refresh the page and paste the link again to generate a fresh download token.
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+    
+    <section class="disclaimer">
+      <h2 style="text-align:center; color:var(--pink)">Disclaimer</h2>
+      <p>
+        TikTop.online is an independent utility tool and is not affiliated, associated, authorized, endorsed by, or in any way officially connected with TikTok, ByteDance, or any of their subsidiaries or affiliates. The name "TikTok" as well as related names, marks, emblems, and images are registered trademarks of their respective owners.
+      </p>
+      <p>
+        This website does not host any TikTok videos on its servers. All content is delivered directly from TikTok servers.
+        Users are responsible for how they use downloaded content. This service is intended for personal and educational use only.
+      </p>
+    </section>
+    
+    <footer class="footer">
+      <div class="footer-grid">
+        <div>
+          <h3>TikTop</h3>
+          <p>Fast and simple TikTok downloader</p>
+          <p>with no watermark.</p>
+        </div>
+        <div>
+          <h4>Tools</h4>
+          <a href="./instagram.html">Instagram Downloader</a>
+          <a href="./youtube.html">Youtube Downloader</a>
+          <a href="./facebook.html">Facebook Downloader</a>
+          <a href="./twitter.html">Twitter Downloader</a>
+        </div>
+        <div>
+          <h4>Legal & Info</h4>
+          <a href="./about.html">About Us</a>
+          <a href="./privacy.html">Privacy Policy</a>
+          <a href="./terms.html">Terms of Service</a>
+          <a href="./dmca.html">DMCA / Copyright</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        © 2025 TikTop. All rights reserved.
+      </div>
+    </footer>
+  </div>
+
+  <div id="scrollTop" onclick="scrollToTop()">🚀</div>
+
+  <script>
+    const tabConfigs = [{
+        title: "Download TikTok Videos",
+        desc: "Paste a TikTok link to start downloading."
+      },
+      {
+        title: "TikTok MP3 Downloader",
+        desc: "Download audio for your tiktok video."
+      },
+      {
+        title: "Free TikTok Story Saver",
+        desc: "Save TikTok stories before they disappear."
+      },
+      {
+        title: "TikTok Slider Downloader",
+        desc: "Convert photo sliders into video format."
+      },
+      {
+        title: "TikTok Multi Downloader",
+        desc: "Paste multiple links (one per line) to batch process."
+      }
+    ];
+    let activeTab = 0;
+    const isTikTokLink = (url) => /tiktok\.com/.test(url);
+
+    function react(el) {
+      document.querySelectorAll('.feature-card').forEach(card => {
+        card.classList.remove('pop');
+      });
+      el.classList.add('pop');
+    }
+
+    // === THEME LOGIC ===
+    function toggleTheme() {
+      document.body.classList.toggle('light-mode');
+      const isLight = document.body.classList.contains('light-mode');
+      // Save to LocalStorage
+      localStorage.setItem('theme', isLight ? 'light' : 'dark');
+      document.getElementById('theme-icon').textContent = isLight ? "☀️" : "🌙";
+    }
+
+    function toggleMenu() {
+      document.getElementById('side-menu').classList.toggle('open');
+    }
+
+    function switchTab(idx) {
+      activeTab = idx;
+      document.querySelectorAll('.filter-button').forEach((b, i) => b.classList.toggle('selected', i === idx));
+      document.querySelectorAll('.process-btn').forEach((p, i) => p.classList.toggle('active', i === idx));
+      document.getElementById('page-title').textContent = tabConfigs[idx].title;
+      document.getElementById('page-desc').textContent = tabConfigs[idx].desc;
+      const isMulti = idx === 4;
+      document.getElementById('main-input').style.display = isMulti ? 'none' : 'block';
+      document.getElementById('multi-input').style.display = isMulti ? 'block' : 'none';
+      handleClear();
+    }
+
+    function triggerError() {
+      const container = document.getElementById('input-container');
+      const toast = document.getElementById('error-toast');
+      container.classList.add('error-shake');
+      toast.classList.add('show');
+      setTimeout(() => container.classList.remove('error-shake'), 500);
+      setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+
+    async function handlePaste() {
+      try {
+        const text = await navigator.clipboard.readText();
+        if (!isTikTokLink(text)) {
+          // If in multi tab, we might want to allow it still, but for now strict check:
+          if (activeTab !== 4) {
+             triggerError();
+             return;
+          }
+        }
+        const input = activeTab === 4 ? document.getElementById('multi-input') : document.getElementById('main-input');
+        input.value = text;
+        validateInput();
+      } catch (err) {
+        console.log("Clipboard error");
+      }
+    }
+
+    function validateInput() {
+      const input = activeTab === 4 ? document.getElementById('multi-input') : document.getElementById('main-input');
+      const val = input.value.trim();
+      document.getElementById('paste-btn').style.display = val ? 'none' : 'block';
+      document.getElementById('clear-btn').style.display = val ? 'block' : 'none';
+    }
+
+    function handleClear() {
+      document.getElementById('main-input').value = "";
+      document.getElementById('multi-input').value = "";
+      validateInput();
+    }
+
+    function go(targetFile) {
+      // 1. Determine which input to read
+      const isMulti = activeTab === 4;
+      const input = isMulti ? document.getElementById('multi-input') : document.getElementById('main-input');
+      const val = input.value.trim();
+
+      // 2. Validate
+      if (!val) {
+        triggerError();
+        return;
+      }
+
+      let history = JSON.parse(localStorage.getItem("tiktopHistory")) || [];
+
+      // 3. Handle History Saving
+      if (isMulti) {
+        // Split lines, filter empty or invalid, and save each one individually
+        const lines = val.split(/\r?\n/);
+        lines.forEach(line => {
+          const cleanLink = line.trim();
+          if (isTikTokLink(cleanLink)) {
+            // Extract username if possible
+            let userHandle = "TikTok User";
+            if (cleanLink.includes('@')) {
+              try { userHandle = "@" + cleanLink.split('@')[1].split('/')[0].split('?')[0]; } catch (e) {}
+            }
+
+            // Add to history as Category 0 (Video) so it shows up in the main list
+            history.unshift({
+              url: cleanLink,
+              category: 0, // Force to Video category
+              username: userHandle,
+              description: "Batch Download",
+              thumb: "https://cdn-icons-png.flaticon.com/512/3046/3046121.png",
+              date: new Date().toLocaleDateString()
+            });
+          }
+        });
+      } else {
+        // Single Link Logic (Existing)
+        if (!isTikTokLink(val)) {
+          triggerError();
+          return;
+        }
+        
+        let userHandle = "TikTok User";
+        if (val.includes('@')) {
+          try { userHandle = "@" + val.split('@')[1].split('/')[0].split('?')[0]; } catch (e) {}
+        }
+
+        history.unshift({
+          url: val,
+          category: activeTab,
+          username: userHandle,
+          description: "Processing...",
+          thumb: "https://cdn-icons-png.flaticon.com/512/3046/3046121.png",
+          date: new Date().toLocaleDateString()
+        });
+      }
+
+      // 4. Save to LocalStorage (Limit to 50 items)
+      localStorage.setItem("tiktopHistory", JSON.stringify(history.slice(0, 50)));
+
+      // 5. Redirect
+      window.location.href = targetFile + "?links=" + encodeURIComponent(val);
+
+    }
+
+
+    function scrollToTop() {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    }
+
+    window.onscroll = () => {
+      document.getElementById('scrollTop').style.display = window.pageYOffset > 400 ? 'flex' : 'none';
+    }
+
+    // === INIT THEME ON LOAD ===
+    (function() {
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme === 'light') {
+        document.body.classList.add('light-mode');
+        const icon = document.getElementById('theme-icon');
+        if(icon) icon.textContent = "☀️";
+      }
+    })();
+    
+  </script>
+    <script>
+    // Hide preloader when the page fully loads
+    window.addEventListener('load', function() {
+      const preloader = document.getElementById('page-preloader');
+      setTimeout(() => {
+        // Start the fade out
+        preloader.classList.add('hidden');
+        
+        // Wait 500ms for the fade to finish, then completely delete the space
+        setTimeout(() => {
+          preloader.style.display = 'none';
+        }, 500);
+        
+      }, 500); 
+    });
+  </script>
+
+
+</body>
+</html>

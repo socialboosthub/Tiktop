@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Youtube Downloader | Upcoming Features & Tech Guide</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="canonical" href="https://tiktop.online/youtube.html">
+    <meta name="description" content="Our YouTube Downloader is coming soon. Read our comprehensive guide on video formats, MP4 conversion technology, and copyright safety while you wait.">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2519560330194817"
+     crossorigin="anonymous"></script>
+    
+    <style>
+        /* ================= CORE STYLES ================= */
+        :root {
+            --pink: #EE1D52;
+            --cyan: #25F4EE;
+            --bg-dark: #000;
+            --text-light: #fff;
+            --text-gray: #b0b0b0;
+        }
+        body { 
+            font-family: 'Segoe UI', system-ui, sans-serif; 
+            background: var(--bg-dark); 
+            text-align: center; 
+            padding: 0; 
+            margin: 0; 
+            color: var(--text-light); 
+            transition: background 0.3s, color 0.3s;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+        
+        /* Layout Containers */
+        .main-content {
+            padding: 60px 20px 20px;
+            min-height: 40vh;
+            max-width: 1000px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Long Form Content Styling for AdSense */
+        .article-container {
+            max-width: 850px;
+            margin: 50px auto;
+            padding: 0 25px;
+            text-align: left; /* Essential for readability */
+        }
+        .article-container h2 { color: var(--cyan); margin-top: 40px; font-size: 1.8rem; border-bottom: 1px solid #333; padding-bottom: 10px; }
+        .article-container h3 { color: var(--pink); margin-top: 30px; font-size: 1.4rem; }
+        .article-container p, .article-container li { color: var(--text-gray); font-size: 1.05rem; margin-bottom: 18px; line-height: 1.8; }
+        .article-container ul { margin-left: 20px; margin-bottom: 20px; }
+        .highlight-box {
+            background: rgba(37, 244, 238, 0.05);
+            border-left: 4px solid var(--cyan);
+            padding: 20px;
+            margin: 30px 0;
+            border-radius: 4px;
+        }
+        
+        /* ================= NEON LOADER ================= */
+        #loader-stage { display: flex; flex-direction: column; align-items: center; margin-top: 20px; }
+        .neon-loader { position: relative; width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; }
+        .neon-ring { position: absolute; border: 4px solid transparent; border-radius: 50%; animation: ring-pulse 2s cubic-bezier(0.455, 0.03, 0.515, 0.955) infinite; }
+        .ring-1 { width: 100%; height: 100%; border-top-color: var(--cyan); border-bottom-color: var(--cyan); animation-delay: 0s; }
+        .ring-2 { width: 70%; height: 70%; border-left-color: var(--pink); border-right-color: var(--pink); animation-delay: 0.5s; }
+        .ring-3 { width: 40%; height: 40%; border-top-color: #fff; border-bottom-color: #fff; animation-delay: 1s; }
+        @keyframes ring-pulse {
+            0% { transform: rotate(0deg) scale(1); opacity: 1; }
+            50% { transform: rotate(180deg) scale(1.2); opacity: 0.5; }
+            100% { transform: rotate(360deg) scale(1); opacity: 1; }
+        }
+        
+        .coming-soon-text { margin-top: 30px; }
+        .coming-soon-text h1 { font-size: 2.5rem; margin-bottom: 10px; background: linear-gradient(to right, var(--pink), var(--cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .coming-soon-text p { font-size: 1.1rem; opacity: 0.8; margin-bottom: 30px; }
+
+        /* ================= BUTTON STYLE ================= */
+        .btn-home-large { 
+            background: #fff; 
+            color: #000; 
+            padding: 15px 40px; 
+            border: none; 
+            border-radius: 50px; 
+            font-weight: bold; 
+            cursor: pointer; 
+            text-decoration: none;
+            transition: transform 0.2s;
+            display: inline-block;
+        }
+        .btn-home-large:hover { transform: scale(1.05); }
+
+        /* ================= NAVBAR ================= */
+        .fcc-nav { background: #0a0a23; height: 70px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; position: sticky; top: 0; z-index: 10000; }
+        /* Updated container to align Icon + Text */
+.fcc-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* Space between the icon and text */
+  text-decoration: none;
+}
+
+/* Style for the new Icon */
+.fcc-logo img {
+  height: 32px; /* Fits perfectly inside your 50px nav */
+  width: auto;
+  display: block;
+}
+
+/* Moved the Gradient Text styles to the span so it doesn't hide the image */
+.fcc-logo span {
+  background: linear-gradient(to bottom right, var(--pink), var(--cyan));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: bold;
+  font-size: 20px; /* Increased slightly for better balance with the icon */
+}
+
+        .nav-right { display: flex; align-items: center; gap: 15px; }
+        .theme-icon { cursor: pointer; font-size: 20px; color: #fff; }
+        .menu-toggle { background: #3b3b4f; border: 1px solid #fff; color: #fff; padding: 5px 10px; cursor: pointer; border-radius: 4px; }
+
+        /* ================= LIGHT MODE ================= */
+        body.light-mode { background: #f5f5f7; color: #000; }
+        body.light-mode .btn-home-large { background: #000; color: #fff; }
+        body.light-mode .article-container p, body.light-mode .article-container li { color: #333; }
+        body.light-mode .article-container h2 { border-bottom: 1px solid #ccc; }
+        body.light-mode .highlight-box { background: rgba(37, 244, 238, 0.15); border-left: 4px solid #000; }
+        
+        /* SIDE MENU */
+        .side-menu { position: fixed; top: 50px; right: -100%; width: 250px; height: 100vh; background: #0a0a23; transition: 0.4s; z-index: 9999; padding: 20px; display: flex; flex-direction: column; gap: 20px; text-align: left;}
+        .side-menu.open { right: 0; }
+        .side-menu a { color: #fff; text-decoration: none; border-bottom: 1px solid #333; padding-bottom: 10px; }
+        
+        body.light-mode .side-menu { background: #0a0a23; }
+        body.light-mode .side-menu a { color: #fff; }
+
+        /* ================= FOOTER ================= */
+        .footer { padding: 60px 6% 40px; background: var(--pink); border-radius: 12px; margin-top: 50px; text-align: left; color: #000; }
+        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 30px; max-width: 1100px; margin: 0 auto; }
+        .footer h3, .footer h4 { margin-bottom: 12px; }
+        .footer a { color: #000; text-decoration: none; display: block; margin-bottom: 8px; font-size: 14px; }
+        .footer-bottom { margin-top: 40px; text-align: center; font-size: 13px; opacity: 0.7; border-top: 1px solid rgba(0,0,0,0.1); padding-top: 20px; }
+        .lang-icon {
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.lang-menu {
+  position: fixed;
+  top: 55px;
+  right: 80px;
+  background: #0a0a23;
+  border: 1px solid #3b3b4f;
+  border-radius: 10px;
+  display: none;
+  z-index: 10002;
+  overflow: hidden;
+}
+
+.lang-menu div {
+  padding: 10px 16px;
+  color: #fff;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.lang-menu div:hover {
+  background: #EE1D52;
+    }
+
+/* === FULLY REMOVE GOOGLE TRANSLATE BAR & FIX LAYOUT === */
+
+/* 1. Hide the top iframe banner */
+iframe.goog-te-banner-frame {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+}
+
+/* 2. Hide the wrapper div that sometimes appears */
+body > .skiptranslate {
+    display: none !important;
+}
+
+/* 3. FORCE the body and html to stay at the top */
+body {
+    top: 0px !important; 
+    position: static !important; 
+    margin-top: 0px !important;
+}
+
+html {
+    margin-top: 0px !important;
+    height: 100% !important;
+}
+
+/* 4. Hide tooltips and hover highlights */
+.goog-tooltip,
+.goog-tooltip:hover,
+.goog-text-highlight {
+    display: none !important;
+    box-shadow: none !important;
+    background: none !important;
+}
+
+/* 5. Ensure your Nav stays on top */
+.fcc-nav {
+    top: 0 !important;
+}
+    </style>
+</head>
+<body>
+      <nav class="fcc-nav">
+  <a href="#" class="fcc-logo">
+    <img src="https://tiktop.online/assets/Logo.png" alt="TikTop Logo">
+    <span>TikTop</span>
+  </a>
+  <div class="nav-right">
+
+  <span class="lang-icon" onclick="toggleLangMenu()">🌐</span>
+
+  <span class="theme-icon" onclick="toggleTheme()" id="theme-icon">🌙</span>
+
+  <button class="menu-toggle" onclick="toggleMenu()">Menu ☰</button>
+</div>
+
+<div class="lang-menu" id="lang-menu">
+  <div onclick="changeLang('en')">English</div>
+  <div onclick="changeLang('fr')">Français</div>
+  <div onclick="changeLang('es')">Español</div>
+  <div onclick="changeLang('de')">Deutsch</div>
+  <div onclick="changeLang('it')">Italiano</div>
+  <div onclick="changeLang('pt')">Português</div>
+  <div onclick="changeLang('ar')">العربية</div>
+  <div onclick="changeLang('hi')">हिन्दी</div>
+  <div onclick="changeLang('sw')">Swahili</div>
+  <div onclick="changeLang('tr')">Türkçe</div>
+  <div onclick="changeLang('ru')">Русский</div>
+</div>
+      </nav>
+
+    <div class="side-menu" id="side-menu">
+        <a href="./index.html">Home</a>
+        <a href="./index.html#download">How to download</a>
+        <a href="./index.html#faq">FAQ</a>
+        <a href="index.html#history">History</a>
+        <a href="./contact.html">Contact Us</a>
+    </div>
+
+    <div class="main-content">
+        <div id="loader-stage">
+            <div class="neon-loader">
+                <div class="neon-ring ring-1"></div>
+                <div class="neon-ring ring-2"></div>
+                <div class="neon-ring ring-3"></div>
+            </div>
+        </div>
+        <div class="coming-soon-text">
+            <h1>Youtube Downloader</h1>
+            <p>Our automated tool is currently being upgraded, but here is how Youtube video archiving works</p>
+            <a href="index.html" class="btn-home-large">Go Back Home</a>
+        </div>
+    </div>
+
+    <div class="article-container">
+        <h2>What to Expect: The Future of High-Quality Downloading</h2>
+        <p>While our team finalizes the code for the new YouTube Downloader, we want to be transparent about what we are building. The internet is flooded with tools that are slow, filled with aggressive pop-ups, or simply unsafe. At TikTop, our mission has always been different: cleanliness, speed, and privacy. We are taking the time to ensure this new tool meets the high standards we set with our TikTok downloader.</p>
+        <p>We are building a system that processes requests on the fly, meaning you won't have to wait for queues or deal with corrupted files. The goal is to create a seamless bridge between the content you love and your offline library, all while respecting digital rights and user safety.</p>
+
+        <div class="highlight-box">
+            <h3>Why Is This Tool Taking Time?</h3>
+            <p>Quality takes time. Unlike short-form video platforms, YouTube hosts complex data streams. Videos are often split into separate "video" and "audio" tracks that need to be merged (muxed) instantly before you download them. We are perfecting a server-side merging technology that does this in seconds, ensuring you get a single, high-quality MP4 file rather than broken parts.</p>
+        </div>
+
+        <h2>Understanding Video Formats: MP4 vs. WebM</h2>
+        <p>When our tool launches, you will notice options for different file formats. It is important to understand the difference so you can choose the right one for your device.</p>
+        
+        <h3>The MP4 Standard (H.264)</h3>
+        <p>MP4 is the gold standard for compatibility. Whether you are using an iPhone, an Android tablet, a Windows PC, or a Smart TV, MP4 files just work. They offer a perfect balance between file size and video quality. Our upcoming downloader prioritizes MP4 conversion to ensure that when you save a video, it plays anywhere without needing extra software like VLC.</p>
+
+        <h3>The WebM Alternative (VP9/AV1)</h3>
+        <p>You might occasionally see WebM formats. These are modern, open-source formats developed by Google specifically for the web. They are incredibly efficient and often provide higher quality at smaller file sizes than MP4, especially for 4K and 8K resolutions. However, they are less compatible with older devices (like older iPhones). We plan to offer both, giving you the power to choose between maximum compatibility (MP4) and maximum efficiency (WebM).</p>
+
+        <h2>Audio Extraction: High-Fidelity MP3</h2>
+        <p>A major request we have received is for a reliable YouTube to MP3 converter. Many users want to listen to podcasts, lectures, or royalty-free music offline. The challenge with most converters is that they compress the audio too much, resulting in a "tinny" or metallic sound.</p>
+        <p>Our engineers are working on a direct stream extraction method. This means we won't re-encode the audio if we don't have to. We will simply "peel" the audio track from the video container and serve it to you in its original quality (often 128kbps or 256kbps AAC/MP3). This ensures that the voice in your lecture remains crisp and the bass in your music remains deep.</p>
+
+        <h2>Safety First: Avoiding Malware</h2>
+        <p>One of the biggest risks in the "downloader" industry is malware. Many sites ask you to install suspicious browser extensions or desktop software "handlers" just to save a video. This is dangerous. Extensions can read your browsing history, and installed software can contain viruses.</p>
+        <p><strong>Our Promise:</strong> TikTop will always be 100% web-based. We will never ask you to install an .exe file, an APK, or a Chrome extension. All the heavy lifting is done on our cloud servers, not your device. This "Sandbox" approach guarantees that your phone or computer remains safe from malicious code. When our YouTube tool goes live, it will follow this exact same safety protocol.</p>
+
+        <h2>Copyright Education and Fair Use</h2>
+        <p>At TikTop, we believe in the importance of intellectual property. It is crucial to understand the legal landscape of downloading content from the internet. Just because a video is online does not mean it is free to use however you like.</p>
+
+        <h3>What is Fair Use?</h3>
+        <p>In many jurisdictions, including the United States, "Fair Use" is a legal doctrine that promotes freedom of expression by permitting the unlicensed use of copyright-protected works in certain circumstances. Common examples include:</p>
+        <ul>
+            <li><strong>Criticism and Commentary:</strong> Using a clip to review a movie or discuss a news event.</li>
+            <li><strong>Education:</strong> Teachers using clips in a classroom setting.</li>
+            <li><strong>Parody:</strong> Creating a spoof of an existing work.</li>
+        </ul>
+        <p>However, downloading a music video to avoid paying for a streaming service or to re-upload it to your own channel is generally <strong>not</strong> considered Fair Use. It is a violation of copyright.</p>
+
+        <h3>Creative Commons and Public Domain</h3>
+        <p>The safest content to download is content licensed under "Creative Commons" (CC) or content that is in the Public Domain. Many creators on YouTube explicitly allow their work to be reused and remixed. Our tool is designed to help creators and archivists access this specific type of content. We strongly advise all users to check the license type in the video description before downloading.</p>
+
+        <h2>The Technical Challenge of 4K and 60FPS</h2>
+        <p>We are also aiming to support high-resolution downloads. YouTube uses a technology called "Adaptive Bitrate Streaming." This means the player breaks a 4K video into tiny chunks and serves them one by one. To download a 4K video as a single file, our servers have to grab all these thousands of chunks and stitch them back together perfectly.</p>
+        <p>This is computationally expensive, which is why many free tools cap downloads at 720p. We are optimizing our backend infrastructure to handle 1080p and 4K resolutions without crashing. We want your offline viewing experience to be just as stunning as the online one.</p>
+
+        <h2>Stay Tuned</h2>
+        <p>We are in the final stages of testing. We are running stress tests to ensure that when we open the doors, the site doesn't crash under high traffic. We appreciate your patience and your loyalty to TikTop. In the meantime, feel free to use our other tools listed in the menu, and check back here soon for the launch of the most robust, private, and fast YouTube downloader on the web.</p>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-grid">
+            <div>
+                <h2>TikTop</h2>
+                <p>Fast and simple TikTok downloader with no watermark.</p>
+            </div>
+            <div>
+                <h3>Tools</h3>
+                <a href="./instagram.html">Instagram Downloader</a>
+                <a href="./youtube.html">YouTube Downloader</a>
+                <a href="./facebook.html">Facebook Downloader</a>
+              <a href="./twitter.html">Twitter Downloader</a>
+            </div>
+            <div>
+                <h3>Legal & Info</h3>
+                <a href="./about.html">About Us</a>
+                <a href="./privacy.html">Privacy Policy</a>
+                <a href="./terms.html">Terms of Service</a>
+              <a href="./dmca.html">DMCA</a>
+            </div>
+        </div>
+        <div class="footer-bottom">© 2025 TikTop. All rights reserved.</div>
+    </footer>
+
+    <script>
+        function toggleMenu() { document.getElementById('side-menu').classList.toggle('open'); }
+        function toggleTheme() {
+            document.body.classList.toggle('light-mode');
+            const isLight = document.body.classList.contains('light-mode');
+            localStorage.setItem('theme', isLight ? 'light' : 'dark');
+            document.getElementById('theme-icon').textContent = isLight ? "☀️" : "🌙";
+        }
+        (function() {
+            if (localStorage.getItem('theme') === 'light') {
+                document.body.classList.add('light-mode');
+                document.getElementById('theme-icon').textContent = "☀️";
+            }
+        })();
+    </script>
+      <div id="google_translate_element" style="display:none;"></div>
+
+<script>
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement({
+    pageLanguage: 'en',
+    autoDisplay: false
+  }, 'google_translate_element');
+}
+</script>
+
+<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+  <script>
+function toggleLangMenu() {
+  const menu = document.getElementById('lang-menu');
+  menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+}
+
+function setLanguage(lang) {
+  const current = getCurrentLang();
+  if (current === lang) return; // 🚫 stop reload loop
+
+  document.cookie = "googtrans=/en/" + lang + ";path=/";
+  document.cookie = "googtrans=/en/" + lang + ";domain=" + window.location.hostname + ";path=/";
+
+  location.reload();
+}
+
+function changeLang(lang) {
+  localStorage.setItem('site_lang', lang);
+  setLanguage(lang);
+  document.getElementById('lang-menu').style.display = 'none';
+}
+
+function getCurrentLang() {
+  const match = document.cookie.match(/googtrans=\/en\/([^;]+)/);
+  return match ? match[1] : 'en';
+}
+
+// ✅ Apply saved language ONLY if different
+window.addEventListener('load', () => {
+  const savedLang = localStorage.getItem('site_lang');
+  const currentLang = getCurrentLang();
+
+  if (savedLang && savedLang !== currentLang) {
+    setLanguage(savedLang);
+  }
+});
+  </script>
+
+  <script>
+
+  /* === FORCE REMOVE GOOGLE TOP BAR SHIFT === */
+(function() {
+    function fixGoogleTranslateLayout() {
+        // Force the body top to 0
+        document.body.style.top = "0px";
+        document.body.style.marginTop = "0px";
+        
+        // Force the html top to 0 (Google puts the margin here usually)
+        document.documentElement.style.marginTop = "0px";
+        document.documentElement.style.height = "100%";
+        
+        // Hide the banner frame
+        const banner = document.querySelector('.goog-te-banner-frame');
+        if (banner) {
+            banner.style.display = "none";
+        }
+    }
+
+    // Run immediately
+    fixGoogleTranslateLayout();
+
+    // Run whenever the DOM changes (because Google loads the banner asynchronously)
+    const observer = new MutationObserver(fixGoogleTranslateLayout);
+    observer.observe(document.documentElement, {
+        attributes: true,
+        childList: true,
+        subtree: true,
+        attributeFilter: ['style'] // Only trigger when styles change
+    });
+})();
+  </script>
+</body>
+    </html>

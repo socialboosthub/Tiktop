@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Privacy Policy & Data Protection | TikTop</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="canonical" href="https://tiktop.online/privacy.html">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root { --bg: #000; --box-bg: #111; --text-main: #fff; --text-dim: #b0b0b0; --pink: #EE1D52; --cyan: #25F4EE; --nav-bg: #0a0a23; }
+    body.light-mode { --bg: #f5f5f7; --box-bg: #ffffff; --text-main: #000; --text-dim: #333; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text-main); margin: 0; transition: 0.4s; line-height: 1.8; }
+    /*nav*/
+    .fcc-nav {
+      background: var(--nav-bg);
+      height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      position: sticky;
+      top: 0;
+      z-index: 10000;
+    }
+    /* Updated container to align Icon + Text */
+.fcc-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* Space between the icon and text */
+  text-decoration: none;
+}
+
+/* Style for the new Icon */
+.fcc-logo img {
+  height: 32px; /* Fits perfectly inside your 50px nav */
+  width: auto;
+  display: block;
+}
+
+/* Moved the Gradient Text styles to the span so it doesn't hide the image */
+.fcc-logo span {
+  background: linear-gradient(to bottom right, var(--pink), var(--cyan));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: bold;
+  font-size: 20px; /* Increased slightly for better balance with the icon */
+}
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    .theme-icon {
+      cursor: pointer;
+      font-size: 20px;
+      transition: 0.3s;
+    }
+    .menu-toggle {
+      background: #3b3b4f;
+      border: 1px solid #fff;
+      color: #fff;
+      padding: 5px 10px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+    .side-menu {
+      position: fixed;
+      top: 50px;
+      right: -100%;
+      width: 250px;
+      height: calc(100vh - 50px);
+      background: var(--nav-bg);
+      transition: 0.4s;
+      z-index: 9999;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      border-left: 1px solid #3b3b4f;
+    }
+    .side-menu.open {
+      right: 0;
+    }
+    .side-menu a {
+      color: #fff;
+      text-decoration: none;
+      font-size: 18px;
+      border-bottom: 1px solid #3b3b4f;
+      padding-bottom: 10px;
+    }
+    .container { max-width: 900px; margin: 40px auto; padding: 30px; background: var(--box-bg); border-radius: 12px; border: 1px solid #333; }
+    body.light-mode .container { border: 1px solid #ddd; }
+
+    h1 { color: var(--pink); border-bottom: 2px solid var(--cyan); padding-bottom: 10px; margin-bottom: 30px; }
+    h2 { color: var(--cyan); margin-top: 40px; margin-bottom: 15px; font-size: 1.6rem; }
+    h3 { color: var(--text-main); margin-top: 25px; margin-bottom: 10px; font-size: 1.3rem; }
+    p, li { color: var(--text-dim); margin-bottom: 15px; text-align: justify; }
+    body.light-mode p, body.light-mode li { color: #444; }
+    
+    ul { padding-left: 20px; }
+    
+    /* FOOTER */
+    .footer {
+      padding: 60px 6% 40px;
+      background: var(--pink);
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+    .footer h3,
+    .footer h4 {
+      margin-bottom: 12px;
+    }
+    .footer p,
+    .footer a {
+      color: black;
+      font-size: 14px;
+      text-decoration: none;
+      display: block;
+      margin-bottom: 8px;
+    }
+    .footer a:hover {
+      color: var(--text);
+    }
+    .footer-bottom {
+      margin-top: 40px;
+      text-align: center;
+      font-size: 13px;
+      color: var(--muted);
+    }
+    
+    /*DESKTOP*/
+    @media screen and (min-width: 1024px) {
+      .footer-grid {
+            grid-template-columns: repeat(3, 1fr);
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        h2 { font-size: 32px; }
+    }
+    .lang-icon {
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.lang-menu {
+  position: fixed;
+  top: 55px;
+  right: 80px;
+  background: #0a0a23;
+  border: 1px solid #3b3b4f;
+  border-radius: 10px;
+  display: none;
+  z-index: 10002;
+  overflow: hidden;
+}
+
+.lang-menu div {
+  padding: 10px 16px;
+  color: #fff;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.lang-menu div:hover {
+  background: #EE1D52;
+    }
+
+/* === FULLY REMOVE GOOGLE TRANSLATE BAR & FIX LAYOUT === */
+
+/* 1. Hide the top iframe banner */
+iframe.goog-te-banner-frame {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+}
+
+/* 2. Hide the wrapper div that sometimes appears */
+body > .skiptranslate {
+    display: none !important;
+}
+
+/* 3. FORCE the body and html to stay at the top */
+body {
+    top: 0px !important; 
+    position: static !important; 
+    margin-top: 0px !important;
+}
+
+html {
+    margin-top: 0px !important;
+    height: 100% !important;
+}
+
+/* 4. Hide tooltips and hover highlights */
+.goog-tooltip,
+.goog-tooltip:hover,
+.goog-text-highlight {
+    display: none !important;
+    box-shadow: none !important;
+    background: none !important;
+}
+
+/* 5. Ensure your Nav stays on top */
+.fcc-nav {
+    top: 0 !important;
+}
+  </style>
+</head>
+<body>
+    <nav class="fcc-nav">
+  <a href="#" class="fcc-logo">
+    <img src="https://tiktop.online/assets/Logo.png" alt="TikTop Logo">
+    <span>TikTop</span>
+  </a>
+  <div class="nav-right">
+
+  <span class="lang-icon" onclick="toggleLangMenu()">🌐</span>
+
+  <span class="theme-icon" onclick="toggleTheme()" id="theme-icon">🌙</span>
+
+  <button class="menu-toggle" onclick="toggleMenu()">Menu ☰</button>
+</div>
+
+<div class="lang-menu" id="lang-menu">
+  <div onclick="changeLang('en')">English</div>
+  <div onclick="changeLang('fr')">Français</div>
+  <div onclick="changeLang('es')">Español</div>
+  <div onclick="changeLang('de')">Deutsch</div>
+  <div onclick="changeLang('it')">Italiano</div>
+  <div onclick="changeLang('pt')">Português</div>
+  <div onclick="changeLang('ar')">العربية</div>
+  <div onclick="changeLang('hi')">हिन्दी</div>
+  <div onclick="changeLang('sw')">Swahili</div>
+  <div onclick="changeLang('tr')">Türkçe</div>
+  <div onclick="changeLang('ru')">Русский</div>
+</div>
+    </nav>
+  
+  <div class="side-menu" id="side-menu">
+    <a href="./index.html">Home</a>
+    <a href="./index.html#download">How to download</a>
+    <a href="./index.html#faq">FAQ</a>
+    <a href="index.html#history">History</a>
+    <a href="./contact.html">Contact Us</a>
+  </div>
+  
+  <div class="container">
+    <h1>Privacy Policy & Data Protection Framework</h1>
+    <p><strong>Effective Date:</strong> January 1, 2026</p>
+    
+    <p>Welcome to TikTop (TikTop.online). We appreciate the trust you place in us when you use our digital tools. We understand that in the modern internet landscape, data privacy is a primary concern for users. This comprehensive Privacy Policy is designed not just to meet legal requirements, but to explain clearly and transparently how our technology works, what happens to the data you input (specifically URLs), and why our "No-Log" architecture is designed to protect your anonymity.</p>
+
+    <p>This policy applies to our online video downloading tools, our website interface, and any related services. By accessing or using TikTop, you agree to the practices described in this policy.</p>
+
+    <h2>1. The Core Philosophy: Minimization of Data</h2>
+    <p>Our service operates on a principle of "Data Minimization." We do not require you to create an account, sign up for a newsletter, or provide your name to use our primary features. We believe that simple utility tools should remain simple and private. Because we do not have user accounts, we do not hold a database of user profiles, passwords, or personal histories.</p>
+
+    <h2>2. Technical Information We Collect</h2>
+    <p>While we do not collect personal identifiers like names or emails, standard web technologies do generate technical data when you interact with the internet. Here is a breakdown of what is processed:</p>
+    
+    <h3>A. URL Processing Data</h3>
+    <p>When you paste a link from TikTok, Instagram, or another platform into our search box, our server receives that URL. This is necessary to fetch the video for you. However, this data is processed in ephemeral memory (RAM) and is not permanently stored in a database linked to your identity. Once the download link is generated and the session ends, the association between your request and the specific URL is discarded from our active processing logs.</p>
+
+    <h3>B. Server Log Files</h3>
+    <p>Like almost every website on the internet, our hosting servers automatically record events in log files. These logs are used strictly for site maintenance, security (DDoS protection), and performance analysis. The information inside these logs includes:</p>
+    <ul>
+        <li><strong>Internet Protocol (IP) Address:</strong> Used to identify the country of origin for language settings and to block spam bots.</li>
+        <li><strong>Browser Type and Version:</strong> Helps us ensure our website renders correctly on Chrome, Safari, Firefox, etc.</li>
+        <li><strong>Time Stamps:</strong> The date and time of your visit.</li>
+        <li><strong>Referrer Headers:</strong> Which page you came from before landing on TikTop.</li>
+    </ul>
+    <p><strong>Crucial Note:</strong> These server logs are not cross-referenced with personal information. We cannot look at a log file and say, "John Smith downloaded this video."</p>
+
+    <h2>3. Cookies and Tracking Technologies</h2>
+    <p>TikTop uses "cookies" to enhance the user experience and to support the free nature of our tool through advertising. A cookie is a small text file stored on your device.</p>
+
+    <h3>A. Functional Cookies</h3>
+    <p>These are essential for the site to work. For example, we use a local storage cookie to remember if you prefer "Dark Mode" or "Light Mode." Without this, the site would reset to the default theme every time you refreshed the page.</p>
+
+    <h3>B. Advertising Cookies (Google AdSense)</h3>
+    <p>To keep TikTop free for everyone, we partner with third-party advertising networks, primarily Google AdSense. Google uses cookies (such as the DoubleClick DART cookie) to serve ads to our users based on their visit to our site and other sites on the Internet.</p>
+    <ul>
+        <li>Google and its partners use these cookies to display relevant advertisements that might interest you.</li>
+        <li>You may opt-out of the use of the DART cookie by visiting the Google Ad and Content Network Privacy Policy at <a href="https://policies.google.com/technologies/ads" target="_blank" style="color:var(--cyan);">https://policies.google.com/technologies/ads</a>.</li>
+    </ul>
+
+    <h3>C. Analytics Cookies</h3>
+    <p>We may use aggregated analytics tools (like Google Analytics) to understand how many people visit our site and which pages are most popular. This data is anonymized. We look at trends (e.g., "traffic from Brazil increased by 10%") rather than individual user actions.</p>
+
+    <h2>4. How We Use the Information</h2>
+    <p>The limited technical data we collect is used for specific, operational purposes:</p>
+    <ul>
+        <li><strong>Service Delivery:</strong> To convert the social media URL you provide into a downloadable MP4 or MP3 file.</li>
+        <li><strong>Security:</strong> To detect and block malicious scripts, bots, or scrapers that attempt to overload our servers.</li>
+        <li><strong>Optimization:</strong> To analyze server load times and improve the speed of our downloader.</li>
+        <li><strong>Advertising:</strong> To display ads that pay for the server costs, ensuring the tool remains free for you.</li>
+    </ul>
+
+    <h2>5. Third-Party Data Sharing</h2>
+    <p>We do not sell, trade, or rent your personal identification information to others. However, visitor information may be shared with the following parties for the specific reasons listed:</p>
+    <ul>
+        <li><strong>Ad Partners:</strong> As mentioned, ad networks see your IP address to serve geo-targeted ads (e.g., showing a German ad to a user in Berlin).</li>
+        <li><strong>Legal Compliance:</strong> We may disclose information if required to do so by law or in response to valid requests by public authorities (e.g., a court order or subpoena).</li>
+    </ul>
+    <p>Please note that when you click a link to download a video, the content is often streamed directly from the source platform's CDN (Content Delivery Network). This means your browser is making a request to TikTok or Instagram's servers to get the file. Those platforms have their own privacy policies which govern that interaction.</p>
+
+    <h2>6. GDPR and Data Rights (European Users)</h2>
+    <p>If you are accessing TikTop from the European Economic Area (EEA), you have specific rights under the General Data Protection Regulation (GDPR). We act as a Data Controller for the minimal data we process. Your rights include:</p>
+    <ul>
+        <li><strong>The Right to Access:</strong> You have the right to request copies of your personal data (though, as stated, we hold almost none).</li>
+        <li><strong>The Right to Erasure:</strong> You have the right to request that we delete any personal data we hold about you ("Right to be Forgotten").</li>
+        <li><strong>The Right to Restrict Processing:</strong> You have the right to request that we restrict the processing of your personal data.</li>
+        <li><strong>The Right to Object:</strong> You have the right to object to our processing of your personal data.</li>
+    </ul>
+    <p>To exercise any of these rights, please contact us via our Contact Page. Since we do not verify user identities via login, we may ask for specific technical details (like your current IP) to assist with your request.</p>
+
+    <h2>7. CCPA Privacy Rights (California Consumers)</h2>
+    <p>Under the California Consumer Privacy Act (CCPA), California residents have specific rights regarding their personal information:</p>
+    <ul>
+        <li>Request that a business disclose the categories and specific pieces of personal data that it has collected.</li>
+        <li>Request that a business delete any personal data about the consumer that the business has collected.</li>
+        <li>Request that a business that sells a consumer's personal data, not sell the consumer's personal data.</li>
+    </ul>
+    <p>TikTop does not "sell" personal data in the traditional sense (we do not sell user lists). However, the use of advertising cookies can sometimes be classified as "selling" under broad legal definitions. You can manage your cookie preferences through your browser settings to opt-out.</p>
+
+    <h2>8. Children's Privacy (COPPA)</h2>
+    <p>TikTop is a general audience site and is not directed at children under the age of 13. We do not knowingly collect any Personal Identifiable Information from children under the age of 13. If you think that your child has provided this kind of information on our website, we strongly encourage you to contact us immediately. We will do our best efforts to promptly remove such information from our records.</p>
+
+    <h2>9. Data Security and SSL</h2>
+    <p>We take the security of your connection seriously. TikTop employs Secure Socket Layer (SSL) encryption technology. You can verify this by looking for the "padlock" icon in your browser's address bar. This ensures that the URL you paste and the data sent between your device and our server is encrypted and cannot be intercepted by third parties, such as hackers or your internet service provider, while in transit.</p>
+
+    <h2>10. Changes to This Privacy Policy</h2>
+    <p>The digital world evolves rapidly, and our Privacy Policy may change to reflect updates in our technology or legal requirements. We advise you to review this page periodically for any changes. We will notify users of significant changes by updating the "Last Updated" date at the top of this policy. Your continued use of the Service after such modifications will constitute your acknowledgment of the modified Privacy Policy and agreement to abide by it.</p>
+
+    <h2>11. Contact Us</h2>
+    <p>If you have questions about this Privacy Policy, the practices of this site, or your dealings with this site, please contact us via our <strong><a href="contact.html" style="color:var(--cyan);">Contact Page</a></strong>.</p>
+  </div>
+
+  <footer class="footer">
+    <div class="footer-grid">
+      <div>
+        <h3>TikTop</h3>
+        <p>Fast and simple TikTok downloader</p>
+        <p>with no watermark.</p>
+      </div>
+      <div>
+        <h4>Tools</h4>
+        <a href="./instagram.html">Instagram Downloader</a>
+        <a href="./youtube.html">Youtube Downloader</a>
+        <a href="./facebook.html">Facebook Downloader</a>
+        <a href="./twitter.html">Twitter Downloader</a>
+      </div>
+      <div>
+        <h4>Legal & Info</h4>
+        <a href="./about.html">About Us</a>
+        <a href="./privacy.html">Privacy Policy</a>
+        <a href="./terms.html">Terms of Service</a>
+        <a href="./dmca.html">DMCA / Copyright</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      © 2025 TikTop. All rights reserved.
+    </div>
+  </footer>
+  <script>
+    function toggleTheme() {
+      document.body.classList.toggle('light-mode');
+      const isLight = document.body.classList.contains('light-mode');
+      localStorage.setItem('theme', isLight ? 'light' : 'dark');
+      document.getElementById('theme-icon').textContent = isLight ? "☀️" : "🌙";
+    }
+    function toggleMenu() {
+        document.getElementById('side-menu').classList.toggle('open');
+    }
+    (function() {
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme === 'light') { document.body.classList.add('light-mode'); document.getElementById('theme-icon').textContent = "☀️"; }
+    })();
+  </script>
+    <div id="google_translate_element" style="display:none;"></div>
+
+<script>
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement({
+    pageLanguage: 'en',
+    autoDisplay: false
+  }, 'google_translate_element');
+}
+</script>
+
+<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+  <script>
+function toggleLangMenu() {
+  const menu = document.getElementById('lang-menu');
+  menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+}
+
+function setLanguage(lang) {
+  const current = getCurrentLang();
+  if (current === lang) return; // 🚫 stop reload loop
+
+  document.cookie = "googtrans=/en/" + lang + ";path=/";
+  document.cookie = "googtrans=/en/" + lang + ";domain=" + window.location.hostname + ";path=/";
+
+  location.reload();
+}
+
+function changeLang(lang) {
+  localStorage.setItem('site_lang', lang);
+  setLanguage(lang);
+  document.getElementById('lang-menu').style.display = 'none';
+}
+
+function getCurrentLang() {
+  const match = document.cookie.match(/googtrans=\/en\/([^;]+)/);
+  return match ? match[1] : 'en';
+}
+
+// ✅ Apply saved language ONLY if different
+window.addEventListener('load', () => {
+  const savedLang = localStorage.getItem('site_lang');
+  const currentLang = getCurrentLang();
+
+  if (savedLang && savedLang !== currentLang) {
+    setLanguage(savedLang);
+  }
+});
+  </script>
+
+  <script>
+
+  /* === FORCE REMOVE GOOGLE TOP BAR SHIFT === */
+(function() {
+    function fixGoogleTranslateLayout() {
+        // Force the body top to 0
+        document.body.style.top = "0px";
+        document.body.style.marginTop = "0px";
+        
+        // Force the html top to 0 (Google puts the margin here usually)
+        document.documentElement.style.marginTop = "0px";
+        document.documentElement.style.height = "100%";
+        
+        // Hide the banner frame
+        const banner = document.querySelector('.goog-te-banner-frame');
+        if (banner) {
+            banner.style.display = "none";
+        }
+    }
+
+    // Run immediately
+    fixGoogleTranslateLayout();
+
+    // Run whenever the DOM changes (because Google loads the banner asynchronously)
+    const observer = new MutationObserver(fixGoogleTranslateLayout);
+    observer.observe(document.documentElement, {
+        attributes: true,
+        childList: true,
+        subtree: true,
+        attributeFilter: ['style'] // Only trigger when styles change
+    });
+})();
+  </script>
+</body>
+</html>

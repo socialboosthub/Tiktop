@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="googlebot" content="noindex">
+<meta name="googlebot" content="noads">
+  <meta name="robots" content="noindex, nofollow">
+  <meta charset="UTF-8">
+  <title>TikTop | History</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="canonical" href="https://tiktop.online/history.html">
+  <style>
+    :root { --pink: #EE1D52; --cyan: #25F4EE; --bg: #000; --text: #fff; --nav-bg: #0a0a23; }
+    body.light-mode { --bg: #f5f5f7; --text: #000; }
+    
+    body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); margin: 0; transition: 0.3s; overflow-x: hidden;}
+
+    /* NAV & SIDE MENU */
+    .fcc-nav {
+      background: var(--nav-bg);
+      height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      position: sticky;
+      top: 0;
+      z-index: 10000;
+    }
+    
+    /* Updated container to align Icon + Text */
+.fcc-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* Space between the icon and text */
+  text-decoration: none;
+}
+
+/* Style for the new Icon */
+.fcc-logo img {
+  height: 32px; /* Fits perfectly inside your 50px nav */
+  width: auto;
+  display: block;
+}
+
+/* Moved the Gradient Text styles to the span so it doesn't hide the image */
+.fcc-logo span {
+  background: linear-gradient(to bottom right, var(--pink), var(--cyan));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: bold;
+  font-size: 20px; /* Increased slightly for better balance with the icon */
+}
+
+    .nav-right { display: flex; align-items: center; gap: 15px; }
+    .theme-icon { cursor: pointer; font-size: 20px; color: #fff; }
+    .menu-toggle { background: #3b3b4f; border: 1px solid #fff; color: #fff; padding: 5px 10px; cursor: pointer; border-radius: 4px; }
+    
+    .side-menu { position: fixed; top: 50px; right: -100%; width: 250px; height: 100vh; background: #0a0a23; transition: 0.4s; z-index: 9999; padding: 20px; display: flex; flex-direction: column; gap: 20px; text-align: left;}
+    .side-menu.open { right: 0; }
+    .side-menu a { color: #fff; text-decoration: none; border-bottom: 1px solid #333; padding-bottom: 10px; }
+
+    /* NEON LOADER */
+    #loader-stage { display: flex; flex-direction: column; align-items: center; padding: 40px 20px; }
+    .neon-loader { position: relative; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; }
+    .neon-ring { position: absolute; border: 3px solid transparent; border-radius: 50%; animation: ring-pulse 2s cubic-bezier(0.455, 0.03, 0.515, 0.955) infinite; }
+    .ring-1 { width: 100%; height: 100%; border-top-color: var(--cyan); border-bottom-color: var(--cyan); }
+    .ring-2 { width: 70%; height: 70%; border-left-color: var(--pink); border-right-color: var(--pink); animation-delay: 0.5s; }
+    @keyframes ring-pulse { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+    /* TABS */
+    .tab-container { display: flex; max-width: 500px; margin: 20px auto; gap: 8px; padding: 0 10px; }
+    .filter-button { flex: 1; padding: 12px 0; border: none; border-radius: 8px; cursor: pointer; color: white; font-size: 11px; font-weight: bold; background: linear-gradient(to bottom, #EE1D52 50%, #25F4EE 50%); background-size: 100% 200%; background-position: top; transition: 0.4s ease; }
+    .filter-button.selected { background-position: bottom; color: #000; }
+
+    /* CONTAINER */
+    .gradient-box { background: linear-gradient(180deg, #EE1D52 0%, #25F4EE 100%); padding: 30px 15px; border-radius: 12px; max-width: 500px; margin: 20px auto; min-height: 400px; }
+    
+    /* FILTERS INPUTS */
+    .filter-controls { display: flex; gap: 10px; margin-bottom: 15px; }
+    .search-input { flex: 2; padding: 10px; border-radius: 8px; border: none; font-size: 14px; outline: none; }
+    .date-input { flex: 1; padding: 10px; border-radius: 8px; border: none; font-size: 14px; outline: none; font-family: inherit; }
+
+    /* CARDS */
+    .history-card, .skeleton-card { background: #111; color: #fff; border-radius: 14px; padding: 12px; margin-bottom: 12px; display: flex; flex-direction: column; gap: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); border: none; }
+    .card-top { display: flex; gap: 12px; align-items: flex-start; }
+    .card-thumb { width: 75px; height: 75px; border-radius: 8px; object-fit: cover; background: #eee; border: 1px solid #ddd; }
+    body.light-mode .card-user, body.light-mode .card-date {color: #000;}
+    body.light-mode .skeleton-card, body.light-mode .history-card {background : #fff;}
+    .card-meta { flex: 1; text-align: left; overflow: hidden; }
+    .card-user { font-weight: 800; font-size: 14px; color: #fff; display: block; }
+    .card-desc { font-weight: 500; font-size: 13px; color: #aaa; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.4; }
+
+    /* SKELETON SHIMMER */
+    .shimmer { background: #eee; background-image: linear-gradient(to right, #eee 0%, #f9f9f9 20%, #eee 40%, #eee 100%); background-repeat: no-repeat; background-size: 800px 100%; animation: shimmer 1.5s infinite linear forwards; }
+    @keyframes shimmer { 0% { background-position: -450px 0; } 100% { background-position: 450px 0; } }
+    .sk-thumb { width: 75px; height: 75px; border-radius: 8px; }
+    .sk-text { height: 10px; margin-top: 8px; border-radius: 4px; }
+
+    /* MP3 CARD */
+    .mp3-history-card { background: #111; color: #fff; border-radius: 20px; padding: 20px; margin-bottom: 12px; text-align: center; }
+    .music-disk { width: 80px; height: 80px; margin: 0 auto 10px; border-radius: 50%; border: 3px solid #333; animation: rotate 5s linear infinite; object-fit: cover; }
+    body.light-mode .mp3-history-card {background: #fff; color:#111;}
+    @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+    /* BUTTONS */
+    .dl-btn { background: var(--cyan); color: #000; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; }
+    .dl-btn-round { background: var(--pink); color: white; border: none; padding: 12px; border-radius: 50px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 10px; }
+    .clear-btn { background: var(--pink); border: none; color: #000; padding: 15px; width: 100%; border-radius: 12px; margin-top: 15px; cursor: pointer; font-weight: bold; font-size: 16px; }
+    .load-more-btn { background: rgba(0,0,0,0.2); border: 2px solid #fff; color: #fff; padding: 10px; width: 50%; border-radius: 20px; margin: 20px auto; cursor: pointer; display: block; font-weight: bold; }
+    
+    /* UTILITY BTNS */
+    .utility-btns { display: flex; gap: 10px; margin-top: 10px; }
+    .util-btn { flex: 1; background: rgba(255,255,255,0.3); border: none; padding: 10px; border-radius: 8px; color: #000; font-size: 12px; font-weight: bold; cursor: pointer; }
+
+    /* FOOTER */
+    .footer { padding: 60px 6% 40px; background: var(--pink); border-radius: 12px; margin: 50px 10px 10px; text-align: left; color: #000; }
+    .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 30px; max-width: 1100px; margin: 0 auto; }
+    .footer a { color: #000; text-decoration: none; display: block; margin-bottom: 8px; font-size: 14px; }
+    .footer-bottom { margin-top: 40px; text-align: center; font-size: 13px; opacity: 0.7; border-top: 1px solid rgba(0,0,0,0.1); padding-top: 20px; }
+
+    #toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #333; color: #fff; padding: 10px 20px; border-radius: 20px; font-size: 13px; opacity: 0; transition: 0.3s; z-index: 20000; pointer-events: none; }
+    #toast.show { opacity: 1; bottom: 40px; }
+    
+    /* Hidden file input for import */
+    #import-file { display: none; }
+    
+    /* Container helps keep the inputs aligned */
+.date-container {
+  display: flex;
+  position: relative;
+}
+
+/* Ensure both inputs look identical to your search bar */
+.fake-date, .real-date {
+  font-family: inherit;
+  cursor: pointer;
+  background: #fff; /* Matches your search bar background */
+  color: #000;
+}
+
+/* Specific fix for mobile to ensure the date input behaves correctly */
+.real-date::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+}
+.tip { 
+    font-size: 12px; 
+    color: #000; 
+    margin-top: 15px; 
+    font-weight: 500; 
+    text-align: center; 
+    line-height: 1.4; 
+    padding: 0 10px;
+}
+.lang-icon {
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.lang-menu {
+  position: fixed;
+  top: 55px;
+  right: 80px;
+  background: #0a0a23;
+  border: 1px solid #3b3b4f;
+  border-radius: 10px;
+  display: none;
+  z-index: 10002;
+  overflow: hidden;
+}
+
+.lang-menu div {
+  padding: 10px 16px;
+  color: #fff;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.lang-menu div:hover {
+  background: #EE1D52;
+    }
+
+/* === FULLY REMOVE GOOGLE TRANSLATE BAR & FIX LAYOUT === */
+
+/* 1. Hide the top iframe banner */
+iframe.goog-te-banner-frame {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+}
+
+/* 2. Hide the wrapper div that sometimes appears */
+body > .skiptranslate {
+    display: none !important;
+}
+
+/* 3. FORCE the body and html to stay at the top */
+body {
+    top: 0px !important; 
+    position: static !important; 
+    margin-top: 0px !important;
+}
+
+html {
+    margin-top: 0px !important;
+    height: 100% !important;
+}
+
+/* 4. Hide tooltips and hover highlights */
+.goog-tooltip,
+.goog-tooltip:hover,
+.goog-text-highlight {
+    display: none !important;
+    box-shadow: none !important;
+    background: none !important;
+}
+
+/* 5. Ensure your Nav stays on top */
+.fcc-nav {
+    top: 0 !important;
+}
+  </style>
+</head>
+<body>
+
+    <nav class="fcc-nav">
+  <a href="#" class="fcc-logo">
+    <img src="https://tiktop.online/assets/Logo.png" alt="TikTop Logo">
+    <span>TikTop</span>
+  </a>
+  <div class="nav-right">
+
+  <span class="lang-icon" onclick="toggleLangMenu()">🌐</span>
+
+  <span class="theme-icon" onclick="toggleTheme()" id="theme-icon">🌙</span>
+
+  <button class="menu-toggle" onclick="toggleMenu()">Menu ☰</button>
+</div>
+
+<div class="lang-menu" id="lang-menu">
+  <div onclick="changeLang('en')">English</div>
+  <div onclick="changeLang('fr')">Français</div>
+  <div onclick="changeLang('es')">Español</div>
+  <div onclick="changeLang('de')">Deutsch</div>
+  <div onclick="changeLang('it')">Italiano</div>
+  <div onclick="changeLang('pt')">Português</div>
+  <div onclick="changeLang('ar')">العربية</div>
+  <div onclick="changeLang('hi')">हिन्दी</div>
+  <div onclick="changeLang('sw')">Swahili</div>
+  <div onclick="changeLang('tr')">Türkçe</div>
+  <div onclick="changeLang('ru')">Русский</div>
+</div>
+    </nav>
+
+  <div class="side-menu" id="side-menu">
+    <a href="./index.html">Home</a>
+    <a href="./index.html#download">How to download</a>
+    <a href="./index.html#faq">FAQ</a>
+    <a href="index.html#history">History</a>
+    <a href="./contact.html">Contact Us</a>
+  </div>
+
+  <div class="tab-container">
+    <button class="filter-button selected" onclick="switchTab(0)">Video</button>
+    <button class="filter-button" onclick="switchTab(1)">Mp3</button>
+    <button class="filter-button" onclick="switchTab(2)">Story</button>
+    <button class="filter-button" onclick="switchTab(3)">Slider</button>
+  </div>
+
+  <div class="gradient-box">
+    <div class="filter-controls">
+  <input type="text" id="search-bar" class="search-input" placeholder="Search title or user..." onkeyup="resetAndRender()">
+  
+  <div class="date-container" style="flex: 1;">
+    <input type="text" class="fake-date search-input" placeholder="Select Date" style="width: 100%;">
+    <input type="date" id="date-filter" class="real-date search-input" onchange="resetAndRender()" style="display: none; width: 100%;">
+  </div>
+</div>
+
+<div style="color: white; margin-bottom: 20px; padding: 10px; text-align: center;">
+    <h3>Your Download History</h3>
+    <p>Manage your recent TikTok, MP3, and Video downloads here. 
+    This tool helps you keep track of content for personal use.</p>
+</div>
+    <div id="history-list">
+    </div>
+    
+    <button id="load-more" class="load-more-btn" onclick="loadMore()" style="display:none;">Load More</button>
+    <button class="clear-btn" id="btn-clear" onclick="confirmClear()">Clear Video History</button>
+    
+    <div class="utility-btns">
+      <button class="util-btn" id="btn-export" onclick="exportHistory()">📤 Backup Video</button>
+      <button class="util-btn" onclick="document.getElementById('import-file').click()">📥 Restore</button>
+    </div>
+    <input type="file" id="import-file" accept=".json" onchange="importHistory(this)">
+    <h2 class="tip">Tip: To restore your download history later, you must back it up and then select that file.</h2>
+  </div>
+  <footer class="footer">
+    <div class="footer-grid">
+      <div>
+        <h3>TikTop</h3>
+        <p>Fast and simple TikTok downloader with no watermark.</p>
+      </div>
+      <div>
+        <h4>Tools</h4>
+        <a href="./instagram.html">Instagram Downloader</a>
+        <a href="./youtube.html">Youtube Downloader</a>
+        <a href="./facebook.html">Facebook Downloader</a>
+        <a href="./twitter.html">Twitter Downloader</a>
+      </div>
+      <div>
+        <h4>Legal & Info</h4>
+        <a href="./about.html">About Us</a>
+        <a href="./privacy.html">Privacy Policy</a>
+        <a href="./terms.html">Terms of Service</a>
+        <a href="./dmca.html">DMCA</a>
+      </div>
+    </div>
+    <div class="footer-bottom">© 2025 TikTop. All rights reserved.</div>
+  </footer>
+
+  <div id="toast">Downloading...</div>
+
+  <script>
+    let activeCat = 0;
+    const MAX_HISTORY_ITEMS = 250;
+    let currentPage = 1;
+    const itemsPerPage = 10;
+    let currentFilteredData = []; 
+
+    const catNames = ["Video", "Mp3", "Story", "Slider"];
+
+    function initStorage() {
+        let history = JSON.parse(localStorage.getItem("tiktopHistory")) || [];
+        if (history.length > MAX_HISTORY_ITEMS) {
+            history = history.slice(0, MAX_HISTORY_ITEMS);
+            localStorage.setItem("tiktopHistory", JSON.stringify(history));
+        }
+    }
+
+    function toggleMenu() { document.getElementById('side-menu').classList.toggle('open'); }
+    
+    function applyTheme() {
+      const theme = localStorage.getItem('theme');
+      if (theme === 'light') { document.body.classList.add('light-mode'); document.getElementById('theme-icon').textContent = "☀️"; }
+    }
+
+    function toggleTheme() {
+      const isLight = document.body.classList.toggle('light-mode');
+      localStorage.setItem('theme', isLight ? 'light' : 'dark');
+      document.getElementById('theme-icon').textContent = isLight ? "☀️" : "🌙";
+    }
+
+    function switchTab(idx) {
+      activeCat = idx;
+      document.querySelectorAll('.filter-button').forEach((b, i) => b.classList.toggle('selected', i === idx));
+      document.getElementById('btn-clear').innerText = `Clear ${catNames[idx]} History`;
+      document.getElementById('btn-export').innerText = `📤 Backup ${catNames[idx]}`;
+      resetAndRender();
+    }
+
+    function resetAndRender() {
+        currentPage = 1;
+        render();
+    }
+
+    function loadMore() {
+        currentPage++;
+        render(true);
+    }
+
+    // Fixed Date Logic using string comparison to avoid timezone issues
+    function isSameDate(itemDateStr, filterDateStr) {
+        if (!itemDateStr || !filterDateStr) return false;
+        
+        // filterDateStr from <input type="date"> is always "YYYY-MM-DD"
+        const filter = filterDateStr;
+
+        let itemDatePart = "";
+        if (itemDateStr.includes('/')) {
+            // Logic for "DD/MM/YYYY" format seen in recording
+            const parts = itemDateStr.split('/');
+            if (parts[0].length <= 2) {
+                // Reformats "28/12/2025" to "2025-12-28"
+                itemDatePart = `${parts[2]}-${parts[1].padStart(2, '0')}-${parts[0].padStart(2, '0')}`;
+            } else {
+                // Reformats "YYYY/MM/DD"
+                itemDatePart = `${parts[0]}-${parts[1].padStart(2, '0')}-${parts[2].padStart(2, '0')}`;
+            }
+        } else {
+            // Assumes ISO "2025-12-28"
+            itemDatePart = itemDateStr.substring(0, 10);
+        }
+
+        return itemDatePart === filter;
+    }
+
+    function render(append = false) {
+      const list = document.getElementById('history-list');
+      const loadMoreBtn = document.getElementById('load-more');
+      const searchVal = document.getElementById('search-bar').value.toLowerCase();
+      const dateVal = document.getElementById('date-filter').value; 
+
+      let history = JSON.parse(localStorage.getItem("tiktopHistory")) || [];
+
+      currentFilteredData = history.filter(item => {
+        if (item.category !== activeCat) return false;
+        
+        const matchSearch = !searchVal || 
+                            (item.description && item.description.toLowerCase().includes(searchVal)) ||
+                            (item.username && item.username.toLowerCase().includes(searchVal));
+
+        let matchDate = true;
+        if (dateVal) {
+             matchDate = isSameDate(item.date, dateVal);
+        }
+
+        return matchSearch && matchDate;
+      });
+
+      if (currentFilteredData.length === 0) {
+        if (!append) list.innerHTML = `<p style='text-align:center; color:white; margin-top:50px;'>No ${catNames[activeCat].toLowerCase()} history found.</p>`;
+        loadMoreBtn.style.display = 'none';
+        return;
+      }
+
+      const start = 0;
+      const end = currentPage * itemsPerPage;
+      const visibleItems = currentFilteredData.slice(start, end);
+
+      loadMoreBtn.style.display = (visibleItems.length < currentFilteredData.length) ? 'block' : 'none';
+
+      const html = visibleItems.map((item, idx) => {
+        if (item.description === "Processing..." || item.description === "Batch Download") {
+          return `<div id="card-${idx}" class="skeleton-card"><div class="card-top"><div class="shimmer sk-thumb"></div><div class="card-meta"><div class="shimmer sk-text" style="width:40%"></div><div class="shimmer sk-text" style="width:100%"></div><div class="shimmer sk-text" style="width:100%"></div></div></div></div>`;
+        }
+
+        if (activeCat === 1) {
+          return `<div class="mp3-history-card"><img src="${item.thumb || 'https://cdn-icons-png.flaticon.com/512/3046/3046121.png'}" class="music-disk"><div class="mp3-title">${item.description}</div><div style="font-size:12px; color:#666; margin-bottom:10px;">${item.username}</div><button class="dl-btn-round" onclick="handleDownload('${item.url}', ${idx})">🎵 Download MP3</button></div>`;
+        }
+        
+        return `<div class="history-card"><div class="card-top"><img src="${item.thumb || 'https://cdn-icons-png.flaticon.com/512/3046/3046121.png'}" class="card-thumb"><div class="card-meta"><span class="card-user">${item.username || 'TikTok User'}</span><div class="card-desc">${item.description}</div><div style="font-size:10px; margin-top:4px;" class="card-date">${item.date || ''}</div></div></div><button class="dl-btn" onclick="handleDownload('${item.url}', ${idx})">${activeCat === 3 ? '🖼️ View Slideshow' : '📥 Download Again'}</button></div>`;
+      }).join('');
+
+      if (!append) list.innerHTML = html; else list.innerHTML += html;
+      
+      visibleItems.forEach((item, idx) => {
+        if (item.description === "Processing..." || item.description === "Batch Download") {
+          fetchDetails(item.url, idx);
+        }
+      });
+    }
+
+    async function fetchDetails(url, uiIdx) {
+      try {
+        const res = await fetch(`/api?url=${encodeURIComponent(url)}`);
+        const json = await res.json();
+        if (json.data) {
+          const d = json.data;
+          const user = "@" + (d.author.unique_id || "User");
+          const title = d.title || (activeCat === 1 ? d.music_info.title : "TikTok Video");
+          const thumb = activeCat === 1 ? (d.music_info.cover || d.cover) : (d.cover || d.origin_cover);
+
+          let history = JSON.parse(localStorage.getItem("tiktopHistory")) || [];
+          history.forEach(item => {
+            if(item.url === url) { 
+              item.username = user; 
+              item.description = title; 
+              item.thumb = thumb; 
+            }
+          });
+          localStorage.setItem("tiktopHistory", JSON.stringify(history));
+          render(); 
+        }
+      } catch (e) {}
+    }
+
+    async function handleDownload(url, idx) {
+      showToast("Connecting...");
+      try {
+        const res = await fetch(`/api?url=${encodeURIComponent(url)}`);
+        const json = await res.json();
+        const data = json.data;
+        if (!data) throw new Error();
+
+        if (activeCat === 1) {
+          window.location.href = `/mp3?url=${encodeURIComponent(data.music)}&id=${data.id}`;
+        } else if (activeCat === 3) {
+          window.location.href = `slider-download.html?links=${encodeURIComponent(url)}`;
+        } else {
+          window.location.href = `/download?url=${encodeURIComponent(data.play)}&id=${data.id}`;
+        }
+      } catch (e) {
+        showToast("Error: Link expired or invalid.");
+      }
+    }
+
+    function exportHistory() {
+      const history = JSON.parse(localStorage.getItem("tiktopHistory")) || [];
+      const categoryData = history.filter(item => item.category === activeCat);
+      if(categoryData.length === 0) return showToast(`No ${catNames[activeCat]} history.`);
+      const blob = new Blob([JSON.stringify(categoryData)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `tiktop_${catNames[activeCat].toLowerCase()}_backup.json`;
+      a.click();
+      showToast(`${catNames[activeCat]} history exported!`);
+    }
+
+    function importHistory(input) {
+      const file = input.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const imported = JSON.parse(e.target.result);
+          if (Array.isArray(imported)) {
+            const current = JSON.parse(localStorage.getItem("tiktopHistory")) || [];
+            const merged = [...imported, ...current];
+            const unique = Array.from(new Map(merged.map(item => [item.url, item])).values());
+            localStorage.setItem("tiktopHistory", JSON.stringify(unique));
+            showToast("History restored!");
+            render();
+          }
+        } catch(err) { showToast("Invalid file."); }
+      };
+      reader.readAsText(file);
+    }
+
+    function confirmClear() { 
+      const name = catNames[activeCat];
+      if (confirm(`Delete all ${name} history?`)) { 
+          let history = JSON.parse(localStorage.getItem("tiktopHistory")) || [];
+          const remaining = history.filter(item => item.category !== activeCat);
+          localStorage.setItem("tiktopHistory", JSON.stringify(remaining));
+          render();
+          showToast(`${name} history cleared.`);
+      } 
+    }
+
+    function showToast(msg) { const t = document.getElementById('toast'); t.innerText = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 3000); }
+
+    initStorage();
+    applyTheme();
+    document.getElementById('btn-clear').innerText = `Clear ${catNames[activeCat]} History`;
+    document.getElementById('btn-export').innerText = `📤 Backup ${catNames[activeCat]}`;
+    render();
+    function isMobile() {
+  try { document.createEvent("TouchEvent"); return true; }
+  catch(e) { return false; }
+}
+
+var deviceIsMobile = isMobile();
+
+function mouseEnterListener(event) {
+  var realDate = this.querySelector('.real-date');
+  if(!realDate.value) {
+    this.querySelector('.fake-date').style.display = 'none';
+    realDate.style.display = 'block';
+  }
+}
+
+function mouseLeaveListener(event) {
+  var realDate = this.querySelector('.real-date');
+  // If no date is chosen, show the "fake" placeholder again
+  if((deviceIsMobile || document.activeElement !== realDate) && !realDate.value) {
+    realDate.style.display = 'none';
+    this.querySelector('.fake-date').style.display = 'block';
+  }
+}
+
+function fakeFieldActionListener(event) {
+  event.preventDefault();
+  const container = this.parentElement;
+  container.querySelector('.fake-date').style.display = 'none';
+  const realDate = container.querySelector('.real-date');
+  realDate.style.display = 'block';
+  realDate.focus();
+  if (deviceIsMobile) realDate.click();
+}
+
+// Initialize the listeners
+var containers = document.getElementsByClassName('date-container');
+for(var i = 0; i < containers.length; ++i) {
+  var container = containers[i];
+  
+  container.addEventListener('mouseenter', mouseEnterListener);
+  container.addEventListener('mouseleave', mouseLeaveListener);
+  
+  var fakeDate = container.querySelector('.fake-date');
+  fakeDate.addEventListener('click', fakeFieldActionListener);
+  fakeDate.addEventListener('focus', fakeFieldActionListener);
+  
+  var realDate = container.querySelector('.real-date');
+  realDate.addEventListener('change', function() {
+    // This triggers your existing filter logic
+    resetAndRender(); 
+    this.parentElement.dispatchEvent(new Event('mouseleave'));
+  });
+  
+  realDate.addEventListener('blur', function() {
+    this.parentElement.dispatchEvent(new Event('mouseleave'));
+  });
+}
+
+  </script>
+
+    <div id="google_translate_element" style="display:none;"></div>
+
+<script>
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement({
+    pageLanguage: 'en',
+    autoDisplay: false
+  }, 'google_translate_element');
+}
+</script>
+
+<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+  <script>
+function toggleLangMenu() {
+  const menu = document.getElementById('lang-menu');
+  menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+}
+
+function setLanguage(lang) {
+  const current = getCurrentLang();
+  if (current === lang) return; // 🚫 stop reload loop
+
+  document.cookie = "googtrans=/en/" + lang + ";path=/";
+  document.cookie = "googtrans=/en/" + lang + ";domain=" + window.location.hostname + ";path=/";
+
+  location.reload();
+}
+
+function changeLang(lang) {
+  localStorage.setItem('site_lang', lang);
+  setLanguage(lang);
+  document.getElementById('lang-menu').style.display = 'none';
+}
+
+function getCurrentLang() {
+  const match = document.cookie.match(/googtrans=\/en\/([^;]+)/);
+  return match ? match[1] : 'en';
+}
+
+// ✅ Apply saved language ONLY if different
+window.addEventListener('load', () => {
+  const savedLang = localStorage.getItem('site_lang');
+  const currentLang = getCurrentLang();
+
+  if (savedLang && savedLang !== currentLang) {
+    setLanguage(savedLang);
+  }
+});
+  </script>
+
+  <script>
+
+  /* === FORCE REMOVE GOOGLE TOP BAR SHIFT === */
+(function() {
+    function fixGoogleTranslateLayout() {
+        // Force the body top to 0
+        document.body.style.top = "0px";
+        document.body.style.marginTop = "0px";
+        
+        // Force the html top to 0 (Google puts the margin here usually)
+        document.documentElement.style.marginTop = "0px";
+        document.documentElement.style.height = "100%";
+        
+        // Hide the banner frame
+        const banner = document.querySelector('.goog-te-banner-frame');
+        if (banner) {
+            banner.style.display = "none";
+        }
+    }
+
+    // Run immediately
+    fixGoogleTranslateLayout();
+
+    // Run whenever the DOM changes (because Google loads the banner asynchronously)
+    const observer = new MutationObserver(fixGoogleTranslateLayout);
+    observer.observe(document.documentElement, {
+        attributes: true,
+        childList: true,
+        subtree: true,
+        attributeFilter: ['style'] // Only trigger when styles change
+    });
+})();
+          </script>
+</body>
+</html>
