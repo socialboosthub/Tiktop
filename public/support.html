@@ -469,17 +469,17 @@
 
           <div class="support-form-content">
             <!-- Amount Select Controls -->
-            <label class="support-label">Select Support Amount (USD):</label>
+            <label class="support-label">Select Support Amount (Kes):</label>
             <div class="support-presets">
-              <button type="button" class="preset-btn" onclick="selectPresetAmount(5)">$5</button>
-              <button type="button" class="preset-btn active" onclick="selectPresetAmount(10)">$10</button>
-              <button type="button" class="preset-btn" onclick="selectPresetAmount(25)">$25</button>
+              <button type="button" class="preset-btn" onclick="selectPresetAmount(5)">Kes 650</button>
+              <button type="button" class="preset-btn active" onclick="selectPresetAmount(10)">Kes 1300</button>
+              <button type="button" class="preset-btn" onclick="selectPresetAmount(25)">Kes 3250</button>
             </div>
 
             <!-- Custom Amount Block Entry -->
             <div class="input-box">
-              <span style="color: #333; font-weight: bold; margin-right: 8px;">$</span>
-              <input type="number" id="custom-amount-input" value="10" min="1" step="1" oninput="handleCustomAmountChange()" placeholder="Enter custom amount">
+              <span style="color: #333; font-weight: bold; margin-right: 8px;">Kes</span>
+              <input type="number" id="custom-amount-input" value="1300" min="1" step="1" oninput="handleCustomAmountChange()" placeholder="Enter custom amount">
             </div>
 
             <!-- Verification Email Address Block Input -->
@@ -489,7 +489,7 @@
 
             <!-- Target Dynamic Status Information Block Display -->
             <p id="support-msg" style="font-size: 14px; text-align: center; margin: 15px 0; color: var(--cyan); font-weight: 600;">
-              You are choosing a one-time donation of $10. Thank you!
+              You are choosing a one-time donation of Kes 1300. Thank you!
             </p>
 
             <!-- Checkout Provider Dynamic Controls Execution Grid -->
@@ -557,7 +557,7 @@
   <script>
     // State Tracking Properties Context Engine Variables
     let chosenSupportType = 'one-time';
-    let supportAmount = 10;
+    let supportAmount = 1300;
     let userEmail = '';
 
     function toggleSupportType(type) {
@@ -573,7 +573,7 @@
       document.getElementById('custom-amount-input').value = amount;
       
       document.querySelectorAll('.preset-btn').forEach(btn => {
-        btn.classList.toggle('active', btn.textContent === `$${amount}`);
+        btn.classList.toggle('active', btn.textContent === `Kes ${amount}`);
       });
       updateSupportMessage();
       renderPayPalButtons();
@@ -593,10 +593,10 @@
     function updateSupportMessage() {
       const msgEl = document.getElementById('support-msg');
       if (chosenSupportType === 'one-time') {
-        msgEl.textContent = `You are choosing a one-time donation of $${supportAmount}. Thank you!`;
+        msgEl.textContent = `You are choosing a one-time donation of Kes ${supportAmount}. Thank you!`;
         msgEl.style.color = "var(--cyan)";
       } else {
-        msgEl.textContent = `You are joining as a member at $${supportAmount} billed every month. Incredible!`;
+        msgEl.textContent = `You are joining as a member at Kes ${supportAmount} billed every month. Incredible!`;
         msgEl.style.color = "var(--pink)";
       }
       validateSupportForm();
@@ -635,7 +635,7 @@
         .then(res => res.json())
         .then(data => {
           let handler = PaystackPop.setup({
-            key: 'YOUR_PAYSTACK_PUBLIC_KEY',
+            key: 'pk_test_85a44c65de1f197a97a4391910aab287c1dca911',
             email: userEmail,
             amount: supportAmount * 100, // conversion to kobo/cents units
             plan: data.plan_code, 
@@ -650,7 +650,7 @@
           key: 'pk_test_85a44c65de1f197a97a4391910aab287c1dca911',
           email: userEmail,
           amount: supportAmount * 100, 
-          currency: 'USD',
+          currency: 'Kes',
           callback: function(response){
             alert('Thank you for your support donation! Transaction Reference: ' + response.reference);
           }
