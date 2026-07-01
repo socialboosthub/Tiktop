@@ -627,7 +627,7 @@
 
       if (chosenSupportType === 'monthly') {
         // Backend lookup integration target needed to build custom-priced dynamic plan codes
-        fetch('/api/create-paystack-subscription-plan', {
+        fetch('https://api.tiktop.online/api/create-paystack-subscription-plan', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email: userEmail, amount: supportAmount })
@@ -680,7 +680,7 @@
         createSubscription: function(data, actions) {
           if (chosenSupportType === 'monthly') {
             // Backend lookup endpoint target needed to construct instant price specific subscription plans
-            return fetch('/api/create-paypal-subscription-plan', {
+            return fetch('https://api.tiktop.online/api/create-paypal-subscription-plan', { 
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ amount: supportAmount })
