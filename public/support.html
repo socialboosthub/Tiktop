@@ -324,28 +324,11 @@
       width: 100%;
     }
 
-    .process-btn {
-      height: 55px;
-      width: 100%;
-      background: #3ec689;
-      color: white;
-      border-radius: 10px;
-      border: none;
-      cursor: pointer;
-      font-size: 16px;
-      font-weight: bold;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      transition: 0.3s;
-    }
-
-    .process-btn:hover { filter: brightness(1.1); transform: translateY(-2px); }
-
     .payment-buttons-grid {
       display: flex;
       flex-direction: column;
       gap: 15px;
-      margin-top: 20px;
+      margin-top: 25px;
     }
 
     #paypal-button-container { width: 100%; z-index: 1; }
@@ -398,7 +381,6 @@
       h2 { font-size: 42px; }
     }
 
-    /* Remove Google Translate frame space elements */
     iframe.goog-te-banner-frame, body > .skiptranslate, .goog-tooltip, .goog-text-highlight { display: none !important; }
   </style>
 </head>
@@ -457,18 +439,16 @@
       <div class="section-wrap">
         <h2 style="text-align:center; color:var(--pink);">Support TikTop</h2>
         <p class="section-desc" style="text-align: center; margin: 0 auto 30px auto;">
-          Help keep our servers fast, free, and completely ad-light. Choose to pay once or become a member with your own custom monthly amount!
+          Help keep our servers fast, free, and completely ad-light. Securely donate once or become a member using your card or PayPal account.
         </p>
         
         <div class="support-card-container">
-          <!-- Selection Configuration Headers -->
           <div class="support-tabs-wrapper">
             <button id="tab-one-time" class="support-tab-btn active" onclick="toggleSupportType('one-time')">Pay Once</button>
             <button id="tab-monthly" class="support-tab-btn" onclick="toggleSupportType('monthly')">Become a Member</button>
           </div>
 
           <div class="support-form-content">
-            <!-- Amount Select Controls -->
             <label class="support-label">Select Support Amount (USD):</label>
             <div class="support-presets">
               <button type="button" class="preset-btn" onclick="selectPresetAmount(5)">$5</button>
@@ -476,31 +456,24 @@
               <button type="button" class="preset-btn" onclick="selectPresetAmount(25)">$25</button>
             </div>
 
-            <!-- Custom Amount Block Entry -->
+            <!-- Custom Amount Box -->
             <div class="input-box">
               <span style="color: #333; font-weight: bold; margin-right: 8px;">$</span>
               <input type="number" id="custom-amount-input" value="10" min="1" step="1" oninput="handleCustomAmountChange()" placeholder="Enter custom amount">
             </div>
 
-            <!-- Verification Email Address Block Input -->
+            <!-- Email Notification Input Box -->
             <div class="input-box">
               <input type="email" id="payer-email-input" placeholder="✉️ Enter your email address (Required)" oninput="validateSupportForm()">
             </div>
 
-            <!-- Target Dynamic Status Information Block Display -->
             <p id="support-msg" style="font-size: 14px; text-align: center; margin: 15px 0; color: var(--cyan); font-weight: 600;">
               You are choosing a one-time donation of $10. Thank you!
             </p>
 
-            <!-- Checkout Provider Dynamic Controls Execution Grid -->
             <div class="payment-buttons-grid">
-              <!-- PayPal SDK Element Hook Target Container -->
+              <!-- Render PayPal Dynamic buttons (Handles Credit/Debit Cards automatically) -->
               <div id="paypal-button-container"></div>
-              
-              <!-- Paystack Native SDK Frame Direct Access Trigger Button -->
-              <button id="paystack-submit-btn" class="process-btn" onclick="payWithPaystack()">
-                Pay with Paystack
-              </button>
             </div>
           </div>
         </div>
@@ -546,19 +519,19 @@
     </footer>
   </div>
 
-  <!-- SCROLL ACTION BUTTON TARGET -->
   <div id="scrollTop" onclick="scrollToTop()">🚀</div>
 
-  <!-- External Payment Provider SDK Core Target Integration Scripts -->
+  <!-- Load PayPal Smart Buttons SDK Engine with Vault active for recurring models -->
   <script src="https://www.paypal.com/sdk/js?client-id=YOUR_PAYPAL_CLIENT_PUBLIC_ID&vault=true&intent=subscription"></script>
-  <script src="https://js.paystack.co/v1/inline.js"></script>
 
-  <!-- INTERACTIVE SYSTEM SCRIPT DRIVERS -->
   <script>
-    // State Tracking Properties Context Engine Variables
     let chosenSupportType = 'one-time';
     let supportAmount = 10;
     let userEmail = '';
+    let paypalButtonsInstance = null;
+
+    // Set your live server backend API domain URL endpoint here
+    const BACKEND_API_URL = 'https://api.yourdomain.com';
 
     function toggleSupportType(type) {
       chosenSupportType = type;
@@ -599,69 +572,14 @@
         msgEl.textContent = `You are joining as a member at $${supportAmount} billed every month. Incredible!`;
         msgEl.style.color = "var(--pink)";
       }
-      validateSupportForm();
     }
 
     function validateSupportForm() {
       userEmail = document.getElementById('payer-email-input').value.trim();
-      const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(userEmail);
-      const paystackBtn = document.getElementById('paystack-submit-btn');
-      
-      if (isEmailValid && supportAmount > 0) {
-        paystackBtn.disabled = false;
-        paystackBtn.style.opacity = "1";
-        return true;
-      } else {
-        paystackBtn.disabled = true;
-        paystackBtn.style.opacity = "0.5";
-        return false;
-      }
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(userEmail) && supportAmount > 0;
     }
 
-    // === PAYSTACK IMPLEMENTATION LOGIC PIPELINE ===
-    function payWithPaystack() {
-      if (!validateSupportForm()) {
-        alert("Please enter a valid email address before proceeding.");
-        return;
-      }
-
-      if (chosenSupportType === 'monthly') {
-        // Backend lookup integration target needed to build custom-priced dynamic plan codes
-        fetch('/api/create-paystack-subscription-plan', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email: userEmail, amount: supportAmount })
-        })
-        .then(res => res.json())
-        .then(data => {
-          let handler = PaystackPop.setup({
-            key: 'YOUR_PAYSTACK_PUBLIC_KEY',
-            email: userEmail,
-            amount: supportAmount * 100, // conversion to kobo/cents units
-            plan: data.plan_code, 
-            callback: function(response){
-              alert('Membership subscription activated successfully! Reference: ' + response.reference);
-            }
-          });
-          handler.openIframe();
-        });
-      } else {
-        let handler = PaystackPop.setup({
-          key: 'YOUR_PAYSTACK_PUBLIC_KEY',
-          email: userEmail,
-          amount: supportAmount * 100, 
-          currency: 'USD',
-          callback: function(response){
-            alert('Thank you for your support donation! Transaction Reference: ' + response.reference);
-          }
-        });
-        handler.openIframe();
-      }
-    }
-
-    // === PAYPAL IMPLEMENTATION LOGIC PIPELINE ===
-    let paypalButtonsInstance = null;
-
+    // === PAYPAL HOOK ENGINE ===
     function renderPayPalButtons() {
       if (paypalButtonsInstance) {
         paypalButtonsInstance.close();
@@ -670,41 +588,63 @@
 
       paypalButtonsInstance = paypal.Buttons({
         style: { layout: 'vertical', color: 'blue', shape: 'rect', label: 'paypal' },
+        
+        // Intercept checkout clicks to validate email format before gateway load
+        onClick: function(data, actions) {
+          if (!validateSupportForm()) {
+            alert("Please enter a valid email address first so we can secure your billing updates.");
+            return actions.reject();
+          }
+          return actions.resolve();
+        },
+
         createOrder: function(data, actions) {
           if (chosenSupportType === 'one-time') {
             return actions.order.create({
-              purchase_units: [{ amount: { value: supportAmount.toString() } }]
+              purchase_units: [{
+                amount: { value: supportAmount.toString() },
+                custom_id: userEmail // Pass local email to identify order in webhook asynchronously
+              }]
             });
           }
         },
+
         createSubscription: function(data, actions) {
           if (chosenSupportType === 'monthly') {
-            // Backend lookup endpoint target needed to construct instant price specific subscription plans
-            return fetch('/api/create-paypal-subscription-plan', {
+            return fetch(`${BACKEND_API_URL}/api/create-paypal-subscription-plan`, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ amount: supportAmount })
             })
             .then(res => res.json())
             .then(serverPlan => {
-              return actions.subscription.create({ 'plan_id': serverPlan.id });
+              return actions.subscription.create({
+                'plan_id': serverPlan.id,
+                'custom_id': userEmail // Embed transactional lookup link to track active user email 
+              });
             });
           }
         },
+
         onApprove: function(data, actions) {
           if (chosenSupportType === 'one-time') {
             return actions.order.capture().then(function(details) {
-              alert('Donation transaction complete! Thank you ' + details.payer.name.given_name);
+              alert('Donation complete! Thank you ' + details.payer.name.given_name + ' for supporting TikTop.');
             });
           } else {
-            alert('Subscription registration complete! Plan Reference: ' + data.subscriptionID);
+            alert('Subscription running! Thank you for joining our support circle. Subscription ID: ' + data.subscriptionID);
           }
+        },
+
+        onError: function(err) {
+          console.error('PayPal Core Failure:', err);
+          alert('An error occurred during payment processing. Please try checking out with an alternative card.');
         }
       });
       paypalButtonsInstance.render('#paypal-button-container');
     }
 
-    // === INTERACTIVE STRUCTURE INTERFACE THEME & NAV CONTROLLERS ===
+    // UTILITIES
     function toggleTheme() {
       document.body.classList.toggle('light-mode');
       const isLight = document.body.classList.contains('light-mode');
@@ -712,10 +652,7 @@
       document.getElementById('theme-icon').textContent = isLight ? "☀️" : "🌙";
     }
 
-    function toggleMenu() {
-      document.getElementById('side-menu').classList.toggle('open');
-    }
-
+    function toggleMenu() { document.getElementById('side-menu').classList.toggle('open'); }
     function toggleLangMenu() {
       const menu = document.getElementById('lang-menu');
       menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
@@ -724,19 +661,12 @@
     function changeLang(lang) {
       localStorage.setItem('site_lang', lang);
       document.cookie = "googtrans=/en/" + lang + ";path=/";
-      document.cookie = "googtrans=/en/" + lang + ";domain=" + window.location.hostname + ";path=/";
       location.reload();
     }
 
-    function scrollToTop() {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
+    function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
+    window.onscroll = () => { document.getElementById('scrollTop').style.display = window.pageYOffset > 400 ? 'flex' : 'none'; }
 
-    window.onscroll = () => {
-      document.getElementById('scrollTop').style.display = window.pageYOffset > 400 ? 'flex' : 'none';
-    }
-
-    // Preloader and Layout Load Handlers
     window.addEventListener('load', function() {
       const preloader = document.getElementById('page-preloader');
       setTimeout(() => {
@@ -744,7 +674,6 @@
         setTimeout(() => { preloader.style.display = 'none'; }, 500);
       }, 500);
 
-      // Restore active user configuration options saved context settings
       if (localStorage.getItem('theme') === 'light') {
         document.body.classList.add('light-mode');
         document.getElementById('theme-icon').textContent = "☀️";
@@ -756,4 +685,3 @@
   </script>
 </body>
 </html>
-
