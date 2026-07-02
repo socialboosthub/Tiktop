@@ -331,7 +331,7 @@
       margin-top: 25px;
     }
 
-    #paypal-button-container { width: 100%; z-index: 1; }
+    #paypal-button-container { width: 100%; z-index: 1; min-height: 150px; }
 
     /* === DISCLAIMER & FOOTER MAPS === */
     .disclaimer {
@@ -386,7 +386,6 @@
 </head>
 <body>
 
-  <!-- PAGE PRELOADER -->
   <div id="page-preloader">
     <div class="neon-loader">
         <div class="neon-ring ring-1"></div>
@@ -397,7 +396,6 @@
   </div>
 
   <div id="page-content-wrapper">
-    <!-- NAVIGATION BAR -->
     <nav class="fcc-nav">
       <a href="./" class="fcc-logo">
         <img src="https://i.ibb.co/wZjXcKz9/file-00000000e22871fd9cb25a4586788b91.png" alt="TikTop Logo">
@@ -409,7 +407,6 @@
         <button class="menu-toggle" onclick="toggleMenu()">Menu ☰</button>
       </div>
 
-      <!-- LANGUAGE DROPDOWN MENU -->
       <div class="lang-menu" id="lang-menu">
         <div onclick="changeLang('en')">English</div>
         <div onclick="changeLang('fr')">Français</div>
@@ -425,7 +422,6 @@
       </div>
     </nav>
 
-    <!-- MOBILE SIDE BAR MENU -->
     <div class="side-menu" id="side-menu">
       <a href="./">Home</a>
       <a href="./#download">How to download</a>
@@ -434,7 +430,6 @@
       <a href="./contact.html">Contact Us</a>
     </div>
 
-    <!-- MAIN INTERACTIVE PAYMENT MODULE -->
     <section style="margin: auto 0;">
       <div class="section-wrap">
         <h2 style="text-align:center; color:var(--pink);">Support TikTop</h2>
@@ -456,13 +451,11 @@
               <button type="button" class="preset-btn" onclick="selectPresetAmount(25)">$25</button>
             </div>
 
-            <!-- Custom Amount Box -->
             <div class="input-box">
               <span style="color: #333; font-weight: bold; margin-right: 8px;">$</span>
               <input type="number" id="custom-amount-input" value="10" min="1" step="1" oninput="handleCustomAmountChange()" placeholder="Enter custom amount">
             </div>
 
-            <!-- Email Notification Input Box -->
             <div class="input-box">
               <input type="email" id="payer-email-input" placeholder="✉️ Enter your email address (Required)" oninput="validateSupportForm()">
             </div>
@@ -472,7 +465,6 @@
             </p>
 
             <div class="payment-buttons-grid">
-              <!-- Render PayPal Dynamic buttons (Handles Credit/Debit Cards automatically) -->
               <div id="paypal-button-container"></div>
             </div>
           </div>
@@ -480,7 +472,6 @@
       </div>
     </section>
 
-    <!-- LEGAL SITE DISCLAIMER SECTION BLOCK -->
     <section class="disclaimer">
       <p>
         TikTop.online is an independent utility tool and is not affiliated, associated, authorized, endorsed by, or in any way officially connected with TikTok, ByteDance, or any of their subsidiaries or affiliates.
@@ -490,7 +481,6 @@
       </p>
     </section>
 
-    <!-- BOTTOM VISUAL FOOTER STRUCTURE MODULE -->
     <footer class="footer">
       <div class="footer-grid">
         <div>
@@ -521,24 +511,55 @@
 
   <div id="scrollTop" onclick="scrollToTop()">🚀</div>
 
-  <!-- Load PayPal Smart Buttons SDK Engine with Vault active for recurring models -->
-  <script src="https://www.paypal.com/sdk/js?client-id=AQP059oCAgQi3RxCHICt95GjIU7R6U4jvqVdRofXPh7X5ZLuJ0tNPJ-ENBy7E2KImlojhHaj3dwIdfCP&vault=true&intent=subscription"></script>
-
   <script>
     let chosenSupportType = 'one-time';
     let supportAmount = 10;
     let userEmail = '';
     let paypalButtonsInstance = null;
 
-    // Set your live server backend API domain URL endpoint here
     const BACKEND_API_URL = 'https://tiktop-rust.vercel.app';
+    const PAYPAL_CLIENT_ID = 'AQP059oCAgQi3RxCHICt95GjIU7R6U4jvqVdRofXPh7X5ZLuJ0tNPJ-ENBy7E2KImlojhHaj3dwIdfCP';
+
+    // === DYNAMIC SCRIPT LOADER ===
+    // PayPal strict intent rule: We must reload the script if switching from standard payments to subscriptions
+    function loadPayPalScript(type) {
+      const oldScript = document.getElementById('paypal-sdk-script');
+      if (oldScript) {
+        oldScript.remove();
+      }
+      
+      // Close out the old buttons to prevent ghosting
+      if (paypalButtonsInstance && paypalButtonsInstance.close) {
+        try { paypalButtonsInstance.close(); } catch(e) {}
+      }
+      
+      document.getElementById('paypal-button-container').innerHTML = '';
+
+      const script = document.createElement('script');
+      script.id = 'paypal-sdk-script';
+      
+      if (type === 'monthly') {
+        script.src = `https://www.paypal.com/sdk/js?client-id=${PAYPAL_CLIENT_ID}&vault=true&intent=subscription`;
+      } else {
+        script.src = `https://www.paypal.com/sdk/js?client-id=${PAYPAL_CLIENT_ID}&currency=USD`;
+      }
+
+      script.onload = () => {
+        renderPayPalButtons();
+      };
+
+      document.body.appendChild(script);
+    }
 
     function toggleSupportType(type) {
+      if (chosenSupportType === type) return; // Ignore if clicking the same tab
+      
       chosenSupportType = type;
       document.getElementById('tab-one-time').classList.toggle('active', type === 'one-time');
       document.getElementById('tab-monthly').classList.toggle('active', type === 'monthly');
+      
       updateSupportMessage();
-      renderPayPalButtons();
+      loadPayPalScript(type); // Dynamically grab correct SDK intent
     }
 
     function selectPresetAmount(amount) {
@@ -581,15 +602,17 @@
 
     // === PAYPAL HOOK ENGINE ===
     function renderPayPalButtons() {
-      if (paypalButtonsInstance) {
-        paypalButtonsInstance.close();
+      if (!window.paypal) return; // Prevent crash if script isn't ready
+      
+      if (paypalButtonsInstance && paypalButtonsInstance.close) {
+        try { paypalButtonsInstance.close(); } catch(e) {}
       }
+      
       document.getElementById('paypal-button-container').innerHTML = '';
 
       paypalButtonsInstance = paypal.Buttons({
         style: { layout: 'vertical', color: 'blue', shape: 'rect', label: 'paypal' },
         
-        // Intercept checkout clicks to validate email format before gateway load
         onClick: function(data, actions) {
           if (!validateSupportForm()) {
             alert("Please enter a valid email address first so we can secure your billing updates.");
@@ -603,7 +626,7 @@
             return actions.order.create({
               purchase_units: [{
                 amount: { value: supportAmount.toString() },
-                custom_id: userEmail // Pass local email to identify order in webhook asynchronously
+                custom_id: userEmail
               }]
             });
           }
@@ -616,12 +639,19 @@
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ amount: supportAmount })
             })
-            .then(res => res.json())
+            .then(res => {
+              if (!res.ok) throw new Error("Could not connect to payment server.");
+              return res.json();
+            })
             .then(serverPlan => {
               return actions.subscription.create({
                 'plan_id': serverPlan.id,
-                'custom_id': userEmail // Embed transactional lookup link to track active user email 
+                'custom_id': userEmail
               });
+            })
+            .catch(err => {
+              console.error(err);
+              alert("There was an issue contacting the server to build your plan. Please try again later.");
             });
           }
         },
@@ -638,9 +668,10 @@
 
         onError: function(err) {
           console.error('PayPal Core Failure:', err);
-          alert('An error occurred during payment processing. Please try checking out with an alternative card.');
+          alert('An error occurred during payment processing. Please ensure your fields are filled and try checking out again.');
         }
       });
+      
       paypalButtonsInstance.render('#paypal-button-container');
     }
 
@@ -680,8 +711,11 @@
       }
       
       updateSupportMessage();
-      renderPayPalButtons();
+      
+      // Initialize the correct PayPal script on first load
+      loadPayPalScript(chosenSupportType);
     });
   </script>
 </body>
 </html>
+
