@@ -1,8 +1,12 @@
+require("dotenv").config();
+const mongoose = require("mongoose");
+const nodemailer = require("nodemailer");
+const axios = require("axios");
 const express = require("express");
 const fetch = require("node-fetch");
 
 const app = express();
-
+app.use(express.json());
 // API: Fetch TikTok data
 app.get("/api", async (req, res) => {
   try {
