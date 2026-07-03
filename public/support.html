@@ -3,401 +3,133 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Support TikTop - One-time Donation or Monthly Membership</title>
-  <meta name="description" content="Support TikTop.online. Help keep our TikTok downloader fast, free, and completely ad-light by becoming a member or giving a one-time donation.">
+  <title>Support TikTop - Keep It Free & Ad-Free</title>
+  
+  <meta name="description" content="Support TikTop's infrastructure. Make a one-time donation or subscribe monthly to help us keep our TikTok downloading tools fast, free, and secure.">
   <meta name="theme-color" content="#EE1D52">
   <link rel="icon" href="https://tiktop.online/assets/Logo.ico" type="image/x-icon">
-  
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
-    /* === BASE UTILITIES & THEME CONSTANTS === */
-    :root {
-      --bg: #000000;
-      --card: #111111;
-      --text: #ffffff;
-      --text-main: #ffffff;
-      --text-dim: #b0b0b0;
-      --muted: #aaaaaa;
-      --border: rgba(255, 255, 255, 0.08);
-      --box-bg: #111111;
-      --pink: #EE1D52;
-      --cyan: #25F4EE;
-      --nav-bg: #0a0a23;
-      --border-gradient: linear-gradient(to bottom right, #EE1D52, #25F4EE);
-    }
+    /* === REMOVE GOOGLE TRANSLATE BAR & FIX LAYOUT === */
+    iframe.goog-te-banner-frame { display: none !important; visibility: hidden !important; height: 0 !important; }
+    body > .skiptranslate { display: none !important; }
+    body { top: 0px !important; position: static !important; margin-top: 0px !important; }
+    html { margin-top: 0px !important; height: 100% !important; }
+    .goog-tooltip, .goog-tooltip:hover, .goog-text-highlight { display: none !important; box-shadow: none !important; background: none !important; }
+    .fcc-nav { top: 0 !important; }
 
-    body.light-mode {
-      --bg: #f5f5f7;
-      --card: #ffffff;
-      --text: #111111;
-      --text-main: #000000;
-      --text-dim: #222222;
-      --muted: #666666;
-      --border: rgba(0,0,0,0.08);
-      --box-bg: #ffffff;
-      --nav-bg: #0a0a23;
-    }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: Inter, 'Segoe UI', Arial, sans-serif;
-    }
-
-    body {
-      background: var(--bg);
-      color: var(--text-main);
-      transition: background 0.3s, color 0.3s;
-      overflow-x: hidden;
-      top: 0 !important;
-      position: static !important;
-      margin-top: 0 !important;
-    }
-
-    html {
-      margin-top: 0 !important;
-      height: 100% !important;
-    }
-
-    /* === PRELOADER UTILITIES === */
+    /* PRELOADER */
     #page-preloader {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: var(--bg);
-      z-index: 999999;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg);
+      z-index: 999999; display: flex; flex-direction: column; align-items: center; justify-content: center;
       transition: opacity 0.5s ease, visibility 0.5s ease;
     }
-
-    #page-preloader.hidden {
-      opacity: 0;
-      visibility: hidden;
-      pointer-events: none;
-    }
-      
+    #page-preloader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
     .neon-loader { position: relative; width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; }
     .neon-ring { position: absolute; border: 4px solid transparent; border-radius: 50%; animation: ring-pulse 2s cubic-bezier(0.455, 0.03, 0.515, 0.955) infinite; }
     .ring-1 { width: 100%; height: 100%; border-top-color: var(--cyan); border-bottom-color: var(--cyan); animation-delay: 0s; }
     .ring-2 { width: 70%; height: 70%; border-left-color: var(--pink); border-right-color: var(--pink); animation-delay: 0.5s; }
-    .ring-3 { width: 40%; height: 40%; border-top-color: var(--text-main); border-bottom-color: var(--text-main); animation-delay: 1s; }   
-      
-    @keyframes ring-pulse {
-      0% { transform: rotate(0deg) scale(1); opacity: 1; }
-      50% { transform: rotate(180deg) scale(1.2); opacity: 0.5; }
-      100% { transform: rotate(360deg) scale(1); opacity: 1; }
-    }
-      
+    .ring-3 { width: 40%; height: 40%; border-top-color: var(--text-main); border-bottom-color: var(--text-main); animation-delay: 1s; } 
+    @keyframes ring-pulse { 0% { transform: rotate(0deg) scale(1); opacity: 1; } 50% { transform: rotate(180deg) scale(1.2); opacity: 0.5; } 100% { transform: rotate(360deg) scale(1); opacity: 1; } }
     .loader-text-neon { margin-top: 25px; font-size: 11px; letter-spacing: 4px; color: var(--text-main); font-weight: bold; text-transform: uppercase; animation: fade-blink 1s infinite; }
     @keyframes fade-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 
-    /* === NAVBAR LAYOUT === */
-    .fcc-nav {
-      position: fixed;
-      top: 0 !important;
-      left: 0;
-      width: 100%;
-      height: 70px;
-      background: var(--nav-bg);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 20px;
-      z-index: 10000;
+    /* CORE VARIABLES */
+    :root {
+      --bg: #000000; --card: #111111; --text: #ffffff; --text-main: #ffffff; --text-dim: #b0b0b0;
+      --muted: #aaaaaa; --border: rgba(255, 255, 255, 0.08); --box-bg: #111111; --pink: #EE1D52;
+      --cyan: #25F4EE; --nav-bg: #0a0a23; --border-gradient: linear-gradient(to bottom right, #EE1D52, #25F4EE);
+    }
+    body.light-mode {
+      --bg: #f5f5f7; --card: #ffffff; --text: #111111; --text-main: #000000; --text-dim: #222222;
+      --muted: #666666; --border: rgba(0,0,0,0.08); --box-bg: linear-gradient(to bottom, #EE1D52, #25F4EE);
+      --nav-bg: #0a0a23;
     }
 
-    #page-content-wrapper {
-      padding-top: 70px;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: Inter, sans-serif; }
+    body { background: var(--bg); color: var(--text-main); transition: background 0.3s, color 0.3s; overflow-x: hidden; }
 
-    .fcc-logo {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      text-decoration: none;
-    }
-
-    .fcc-logo img {
-      height: 32px;
-      width: auto;
-      display: block;
-    }
-
-    .fcc-logo span {
-      background: linear-gradient(to bottom right, var(--pink), var(--cyan));
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-      font-weight: bold;
-      font-size: 20px;
-    }
-
-    .nav-right {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-    }
-
-    .theme-icon, .lang-icon {
-      cursor: pointer;
-      font-size: 20px;
-      transition: 0.3s;
-    }
-
-    .menu-toggle {
-      background: #3b3b4f;
-      border: 1px solid #fff;
-      color: #fff;
-      padding: 5px 10px;
-      cursor: pointer;
-      border-radius: 4px;
-    }
-
-    .side-menu {
-      position: fixed;
-      top: 70px;
-      right: -100%;
-      width: 250px;
-      height: calc(100vh - 70px);
-      background: var(--nav-bg);
-      transition: 0.4s;
-      z-index: 9999;
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      border-left: 1px solid #3b3b4f;
-    }
-
+    /* NAV */
+    .fcc-nav { position: fixed; width: 100%; height: 70px; background: var(--nav-bg); display: flex; align-items: center; justify-content: space-between; padding: 0 20px; z-index: 10000; }
+    .fcc-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; }
+    .fcc-logo img { height: 32px; width: auto; display: block; }
+    .fcc-logo span { background: linear-gradient(to bottom right, var(--pink), var(--cyan)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; font-weight: bold; font-size: 20px; }
+    .nav-right { display: flex; align-items: center; gap: 15px; }
+    .theme-icon, .lang-icon { cursor: pointer; font-size: 20px; transition: 0.3s; }
+    .menu-toggle { background: #3b3b4f; border: 1px solid #fff; color: #fff; padding: 5px 10px; cursor: pointer; border-radius: 4px; }
+    
+    .side-menu { position: fixed; top: 50px; right: -100%; width: 250px; height: calc(100vh - 50px); background: var(--nav-bg); transition: 0.4s; z-index: 9999; padding: 20px; display: flex; flex-direction: column; gap: 20px; border-left: 1px solid #3b3b4f; }
     .side-menu.open { right: 0; }
-    .side-menu a {
-      color: #fff;
-      text-decoration: none;
-      font-size: 18px;
-      border-bottom: 1px solid #3b3b4f;
-      padding-bottom: 10px;
-    }
+    .side-menu a { color: #fff; text-decoration: none; font-size: 18px; border-bottom: 1px solid #3b3b4f; padding-bottom: 10px; }
 
-    .lang-menu {
-      position: fixed;
-      top: 60px;
-      right: 80px;
-      background: #0a0a23;
-      border: 1px solid #3b3b4f;
-      border-radius: 10px;
-      display: none;
-      z-index: 10002;
-      overflow: hidden;
-    }
-
-    .lang-menu div {
-      padding: 10px 16px;
-      color: #fff;
-      cursor: pointer;
-      font-size: 14px;
-    }
+    .lang-menu { position: fixed; top: 55px; right: 80px; background: #0a0a23; border: 1px solid #3b3b4f; border-radius: 10px; display: none; z-index: 10002; overflow: hidden; }
+    .lang-menu div { padding: 10px 16px; color: #fff; cursor: pointer; font-size: 14px; }
     .lang-menu div:hover { background: #EE1D52; }
 
-    /* === PAYMENT CONTENT MODULES === */
-    .section-wrap {
-      max-width: 1100px;
-      margin: 40px auto;
-      padding: 0 20px;
+    /* CONTENT WRAPPER */
+    #index-content { padding-top: 70px; min-height: 100vh; display: flex; flex-direction: column; }
+
+    /* DONATION UI SPECIFICS */
+    .support-wrapper { max-width: 600px; margin: 40px auto; padding: 0 20px; width: 100%; }
+    
+    .gradient-box {
+      background: linear-gradient(180deg, #EE1D52 0%, #25F4EE 100%); padding: 35px 25px; border-radius: 12px;
+      text-align: center; border: 1px solid rgba(255, 255, 255, 0.2); position: relative; box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
     }
+    .gradient-box h1, .gradient-box p { color: #fff; text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3); }
 
-    h2 { font-size: 36px; margin-bottom: 12px; }
-    .section-desc { color: var(--muted); max-width: 600px; margin-bottom: 30px; }
-
-    .support-card-container {
-      background: var(--box-bg);
-      border: 1px solid #222;
-      border-radius: 20px;
-      max-width: 550px;
-      margin: 0 auto;
-      padding: 35px 25px;
-      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
-      transition: 0.3s ease;
+    .tab-container { display: flex; gap: 8px; margin: 20px 0; background: rgba(0,0,0,0.3); padding: 5px; border-radius: 10px; }
+    .filter-button {
+      flex: 1; padding: 12px 10px; border: none; border-radius: 8px; cursor: pointer; color: white;
+      font-size: 15px; font-weight: 600; background: transparent; transition: 0.4s ease; text-align: center;
     }
+    .filter-button.selected { background: #000; color: var(--cyan); box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
 
-    body.light-mode .support-card-container {
-      background: #fff;
-      border: 2px solid var(--cyan);
+    .amount-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
+    .amount-btn {
+      background: rgba(255, 255, 255, 0.95); color: #000; border: 2px solid transparent; border-radius: 10px;
+      padding: 15px; font-size: 18px; font-weight: bold; cursor: pointer; transition: 0.3s;
     }
-
-    .support-tabs-wrapper {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 25px;
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 15px;
-    }
-
-    .support-tab-btn {
-      flex: 1;
-      padding: 12px;
-      background: transparent;
-      border: 1px solid var(--border);
-      color: var(--text-dim);
-      font-weight: 600;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: 0.3s ease;
-    }
-
-    body.light-mode .support-tab-btn { color: #333; }
-
-    .support-tab-btn.active {
-      background: var(--pink);
-      color: #fff;
-      border-color: var(--pink);
-    }
-
-    .support-label {
-      display: block;
-      font-size: 14px;
-      color: var(--text-dim);
-      margin-bottom: 10px;
-      font-weight: 600;
-      text-align: left;
-    }
-
-    .support-presets {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin-bottom: 15px;
-    }
-
-    .preset-btn {
-      padding: 12px;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid var(--border);
-      color: var(--text-main);
-      border-radius: 8px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-
-    body.light-mode .preset-btn {
-      background: #f0f0f2;
-      color: #000;
-    }
-
-    .preset-btn:hover, .preset-btn.active {
-      border-color: var(--cyan);
-      background: rgba(37, 244, 238, 0.1);
-      color: var(--cyan);
-    }
+    .amount-btn:hover { transform: translateY(-2px); }
+    .amount-btn.active { border-color: #000; background: #25F4EE; box-shadow: 0 0 15px rgba(37, 244, 238, 0.6); }
 
     .input-box {
-      display: flex;
-      align-items: center;
-      background: rgba(255, 255, 255, 0.95);
-      border-radius: 10px;
-      padding: 8px 18px;
-      margin-bottom: 15px;
-      min-height: 55px;
-      border: 2px solid #fff;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+      background: rgba(255, 255, 255, 0.95); border-radius: 10px; padding: 15px 18px; margin-bottom: 20px;
+      border: 2px solid #fff; transition: 0.3s; width: 100%; font-size: 15px; color: #333; outline: none;
     }
+    .input-box:focus { border-color: var(--cyan); }
 
-    .input-box input {
-      flex: 1;
-      border: none;
-      outline: none;
-      font-size: 15px;
-      color: #333;
-      background: transparent;
-      width: 100%;
-    }
+    #paypal-button-container { margin-top: 25px; min-height: 150px; background: rgba(0,0,0,0.1); border-radius: 10px; padding: 15px; }
 
-    .payment-buttons-grid {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-      margin-top: 25px;
-    }
-
-    #paypal-button-container { width: 100%; z-index: 1; min-height: 150px; }
-
-    /* === DISCLAIMER & FOOTER MAPS === */
-    .disclaimer {
-      background: var(--card);
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-      text-align: center;
-      margin-top: auto;
-      padding: 30px 20px;
-    }
-
-    .disclaimer p { color: var(--muted); max-width: 900px; margin: 0 auto 12px auto; line-height: 1.6; font-size: 14px; }
-    body.light-mode .disclaimer { background: white; border: 2px solid var(--pink); border-radius: 12px; margin: 40px 20px 0 20px; }
-
-    .footer { padding: 60px 6% 40px; background: var(--pink); border-radius: 12px; margin: 40px 0 0 0; text-align: left; color: #000; }
-    .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 30px; }
+    /* FOOTER */
+    .footer { padding: 60px 6% 40px; background: #000; margin-top: auto; color: #fff; }
+    body.light-mode .footer { background: var(--pink); color: #000; }
+    body.light-mode .footer p, body.light-mode .footer a, body.light-mode .footer h3, body.light-mode .footer h4 { color: black; }
+    .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 30px; max-width: 1100px; margin: 0 auto; }
     .footer h3, .footer h4 { margin-bottom: 12px; }
-    .footer p, .footer a { color: black; font-size: 14px; text-decoration: none; display: block; margin-bottom: 8px; }
-    
-    .footer-bottom {
-      margin-top: 40px;
-      text-align: center;
-      font-size: 13px;
-      opacity: 0.7;
-      border-top: 1px solid rgba(0,0,0,0.1);
-      padding-top: 20px;
-    }
-
-    #scrollTop {
-      position: fixed;
-      bottom: 30px;
-      right: 30px;
-      width: 55px;
-      height: 55px;
-      background: var(--border-gradient);
-      border-radius: 50%;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      font-size: 25px;
-      cursor: pointer;
-      z-index: 5000;
-    }
-
-    @media screen and (min-width: 1024px) {
-      .footer-grid { grid-template-columns: repeat(3, 1fr); max-width: 1100px; margin: 0 auto; }
-      h2 { font-size: 42px; }
-    }
-
-    iframe.goog-te-banner-frame, body > .skiptranslate, .goog-tooltip, .goog-text-highlight { display: none !important; }
+    .footer p, .footer a { color: inherit; font-size: 14px; text-decoration: none; display: block; margin-bottom: 8px; }
+    .footer a:hover { opacity: 0.7; }
+    .footer-bottom { margin-top: 40px; text-align: center; font-size: 13px; opacity: 0.7; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; }
+    body.light-mode .footer-bottom { border-top: 1px solid rgba(0,0,0,0.1); }
   </style>
 </head>
 <body>
-
   <div id="page-preloader">
     <div class="neon-loader">
         <div class="neon-ring ring-1"></div>
         <div class="neon-ring ring-2"></div>
         <div class="neon-ring ring-3"></div>
     </div>
-    <p class="loader-text-neon">TikTop</p>
+    <p class="loader-text-neon">TikTop Support</p>
   </div>
 
-  <div id="page-content-wrapper">
+  <div id="index-content">
     <nav class="fcc-nav">
-      <a href="./" class="fcc-logo">
+      <a href="/" class="fcc-logo">
         <img src="https://i.ibb.co/wZjXcKz9/file-00000000e22871fd9cb25a4586788b91.png" alt="TikTop Logo">
         <span>TikTop</span>
       </a>
@@ -406,7 +138,6 @@
         <span class="theme-icon" onclick="toggleTheme()" id="theme-icon">🌙</span>
         <button class="menu-toggle" onclick="toggleMenu()">Menu ☰</button>
       </div>
-
       <div class="lang-menu" id="lang-menu">
         <div onclick="changeLang('en')">English</div>
         <div onclick="changeLang('fr')">Français</div>
@@ -423,63 +154,38 @@
     </nav>
 
     <div class="side-menu" id="side-menu">
-      <a href="./">Home</a>
-      <a href="./#download">How to download</a>
-      <a href="./#faq">FAQ</a>
+      <a href="/">Home</a>
+      <a href="/#download">How to download</a>
+      <a href="/#faq">FAQ</a>
       <a href="./history.html">History</a>
+      <a href="./support.html">Support Us</a>
       <a href="./contact.html">Contact Us</a>
     </div>
 
-    <section style="margin: auto 0;">
-      <div class="section-wrap">
-        <h2 style="text-align:center; color:var(--pink);">Support TikTop</h2>
-        <p class="section-desc" style="text-align: center; margin: 0 auto 30px auto;">
-          Help keep our servers fast, free, and completely ad-light. Securely donate once or become a member using your card or PayPal account.
-        </p>
+    <div class="support-wrapper">
+      <div class="gradient-box">
+        <h1 style="font-size: 26px; margin-bottom: 10px;">Support TikTop</h1>
+        <p style="font-size: 14px; margin-bottom: 20px;">Help us keep the servers running and tools completely free.</p>
         
-        <div class="support-card-container">
-          <div class="support-tabs-wrapper">
-            <button id="tab-one-time" class="support-tab-btn active" onclick="toggleSupportType('one-time')">Pay Once</button>
-            <button id="tab-monthly" class="support-tab-btn" onclick="toggleSupportType('monthly')">Become a Member</button>
-          </div>
-
-          <div class="support-form-content">
-            <label class="support-label">Select Support Amount (USD):</label>
-            <div class="support-presets">
-              <button type="button" class="preset-btn" onclick="selectPresetAmount(5)">$5</button>
-              <button type="button" class="preset-btn active" onclick="selectPresetAmount(10)">$10</button>
-              <button type="button" class="preset-btn" onclick="selectPresetAmount(25)">$25</button>
-            </div>
-
-            <div class="input-box">
-              <span style="color: #333; font-weight: bold; margin-right: 8px;">$</span>
-              <input type="number" id="custom-amount-input" value="10" min="1" step="1" oninput="handleCustomAmountChange()" placeholder="Enter custom amount">
-            </div>
-
-            <div class="input-box">
-              <input type="email" id="payer-email-input" placeholder="✉️ Enter your email address (Required)" oninput="validateSupportForm()">
-            </div>
-
-            <p id="support-msg" style="font-size: 14px; text-align: center; margin: 15px 0; color: var(--cyan); font-weight: 600;">
-              You are choosing a one-time donation of $10. Thank you!
-            </p>
-
-            <div class="payment-buttons-grid">
-              <div id="paypal-button-container"></div>
-            </div>
-          </div>
+        <div class="tab-container">
+          <button class="filter-button selected" id="tab-one-time" onclick="setDonationMode('one-time')">One-Time Support</button>
+          <button class="filter-button" id="tab-monthly" onclick="setDonationMode('monthly')">Monthly Member</button>
         </div>
-      </div>
-    </section>
 
-    <section class="disclaimer">
-      <p>
-        TikTop.online is an independent utility tool and is not affiliated, associated, authorized, endorsed by, or in any way officially connected with TikTok, ByteDance, or any of their subsidiaries or affiliates.
-      </p>
-      <p>
-        This website does not host any TikTok videos on its servers. All transactions go directly to maintaining operations. Users are responsible for their financial selections.
-      </p>
-    </section>
+        <input type="email" id="donor-email" class="input-box" placeholder="Your Email Address (For the receipt)" oninput="debouncedRender()">
+
+        <div class="amount-grid">
+          <button class="amount-btn" onclick="setAmount(5, this)">$5</button>
+          <button class="amount-btn active" onclick="setAmount(10, this)">$10</button>
+          <button class="amount-btn" onclick="setAmount(25, this)">$25</button>
+        </div>
+
+        <input type="number" id="custom-amount" class="input-box" placeholder="Enter custom amount ($)" style="display: none;" oninput="debouncedRender()">
+        <button class="amount-btn" id="custom-toggle-btn" onclick="toggleCustomInput()" style="width: 100%; margin-bottom: 15px; background: transparent; color: #fff; border: 1px solid rgba(255,255,255,0.4);">Enter Custom Amount</button>
+
+        <div id="paypal-button-container"></div>
+      </div>
+    </div>
 
     <footer class="footer">
       <div class="footer-grid">
@@ -504,208 +210,163 @@
         </div>
       </div>
       <div class="footer-bottom">
-        © 2026 TikTop. All rights reserved.
+        © 2025 TikTop. All rights reserved.
       </div>
     </footer>
   </div>
 
-  <div id="scrollTop" onclick="scrollToTop()">🚀</div>
+  <div id="google_translate_element" style="display:none;"></div>
+  <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+  <script src="https://www.paypal.com/sdk/js?client-id=YOUR_PAYPAL_CLIENT_ID&vault=true&intent=subscription" data-sdk-integration-source="button-factory"></script>
 
   <script>
-    let chosenSupportType = 'one-time';
-    let supportAmount = 10;
-    let userEmail = '';
-    let paypalButtonsInstance = null;
+    // === UI & STATE VARIABLES ===
+    let donationMode = 'one-time';
+    let currentAmount = 10;
+    let isCustom = false;
+    let renderTimer;
 
-    const BACKEND_API_URL = 'https://tiktop-rust.vercel.app';
-    const PAYPAL_CLIENT_ID = 'AQP059oCAgQi3RxCHICt95GjIU7R6U4jvqVdRofXPh7X5ZLuJ0tNPJ-ENBy7E2KImlojhHaj3dwIdfCP';
-
-    // === DYNAMIC SCRIPT LOADER ===
-    // PayPal strict intent rule: We must reload the script if switching from standard payments to subscriptions
-    function loadPayPalScript() {
-  if (window.paypal) {
-    renderPayPalButtons();
-    return;
-  }
-
-  const script = document.createElement("script");
-  script.id = "paypal-sdk-script";
-  script.src = `https://www.paypal.com/sdk/js?client-id=${PAYPAL_CLIENT_ID}&components=buttons&currency=USD&vault=true&intent=subscription`;
-
-  script.onload = () => {
-    renderPayPalButtons();
-  };
-
-  script.onerror = () => {
-    alert("Failed to load PayPal.");
-  };
-
-  document.body.appendChild(script);
-    }
-    function toggleSupportType(type) {
-      if (chosenSupportType === type) return; // Ignore if clicking the same tab
+    // Remove preloader
+    window.addEventListener('load', function() {
+      const preloader = document.getElementById('page-preloader');
+      setTimeout(() => {
+        preloader.classList.add('hidden');
+        setTimeout(() => preloader.style.display = 'none', 500);
+      }, 500);
       
-      chosenSupportType = type;
-      document.getElementById('tab-one-time').classList.toggle('active', type === 'one-time');
-      document.getElementById('tab-monthly').classList.toggle('active', type === 'monthly');
-      
-      updateSupportMessage();
-      renderPayPalButtons();
-    }
+      // Initial render of PayPal button
+      renderPayPal();
+    });
 
-    function selectPresetAmount(amount) {
-      supportAmount = amount;
-      document.getElementById('custom-amount-input').value = amount;
-      
-      document.querySelectorAll('.preset-btn').forEach(btn => {
-        btn.classList.toggle('active', btn.textContent === `$${amount}`);
-      });
-      updateSupportMessage();
-    }
+    // Toggle Mobile Menu
+    function toggleMenu() { document.getElementById('side-menu').classList.toggle('open'); }
 
-    function handleCustomAmountChange() {
-      const inputVal = parseFloat(document.getElementById('custom-amount-input').value);
-      supportAmount = isNaN(inputVal) || inputVal <= 0 ? 1 : inputVal;
-      
-      document.querySelectorAll('.preset-btn').forEach(btn => {
-        btn.classList.toggle('active', btn.textContent === `$${supportAmount}`);
-      });
-      updateSupportMessage();
-    }
-
-    function updateSupportMessage() {
-      const msgEl = document.getElementById('support-msg');
-      if (chosenSupportType === 'one-time') {
-        msgEl.textContent = `You are choosing a one-time donation of $${supportAmount}. Thank you!`;
-        msgEl.style.color = "var(--cyan)";
-      } else {
-        msgEl.textContent = `You are joining as a member at $${supportAmount} billed every month. Incredible!`;
-        msgEl.style.color = "var(--pink)";
-      }
-    }
-
-    function validateSupportForm() {
-      userEmail = document.getElementById('payer-email-input').value.trim();
-      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(userEmail) && supportAmount > 0;
-    }
-
-    // === PAYPAL HOOK ENGINE ===
-    function renderPayPalButtons() {
-      if (!window.paypal) return; // Prevent crash if script isn't ready
-      
-      if (paypalButtonsInstance && paypalButtonsInstance.close) {
-        try { paypalButtonsInstance.close(); } catch(e) {}
-      }
-      
-      document.getElementById('paypal-button-container').innerHTML = '';
-
-      paypalButtonsInstance = paypal.Buttons({
-        style: { layout: 'vertical', color: 'blue', shape: 'rect', label: 'paypal' },
-        
-        onClick: function(data, actions) {
-          if (!validateSupportForm()) {
-            alert("Please enter a valid email address first so we can secure your billing updates.");
-            return actions.reject();
-          }
-          return actions.resolve();
-        },
-
-        createOrder: function(data, actions) {
-          if (chosenSupportType === 'one-time') {
-            return actions.order.create({
-              purchase_units: [{
-                amount: { value: supportAmount.toString() },
-                custom_id: userEmail
-              }]
-            });
-          }
-        },
-
-        createSubscription: function(data, actions) {
-          if (chosenSupportType === 'monthly') {
-            return fetch(`${BACKEND_API_URL}/api/create-paypal-subscription-plan`, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ amount: supportAmount })
-            })
-            .then(res => {
-              if (!res.ok) throw new Error("Could not connect to payment server.");
-              return res.json();
-            })
-            .then(serverPlan => {
-              return actions.subscription.create({
-                'plan_id': serverPlan.id,
-                'custom_id': userEmail
-              });
-            })
-            .catch(err => {
-              console.error(err);
-              alert("There was an issue contacting the server to build your plan. Please try again later.");
-            });
-          }
-        },
-
-        onApprove: function(data, actions) {
-          if (chosenSupportType === 'one-time') {
-            return actions.order.capture().then(function(details) {
-              alert('Donation complete! Thank you ' + details.payer.name.given_name + ' for supporting TikTop.');
-            });
-          } else {
-            alert('Subscription running! Thank you for joining our support circle. Subscription ID: ' + data.subscriptionID);
-          }
-        },
-
-        onError: function(err) {
-          console.error('PayPal Core Failure:', err);
-          alert('An error occurred during payment processing. Please ensure your fields are filled and try checking out again.');
-        }
-      });
-      
-      paypalButtonsInstance.render('#paypal-button-container');
-    }
-
-    // UTILITIES
+    // Theme Toggle
     function toggleTheme() {
       document.body.classList.toggle('light-mode');
       const isLight = document.body.classList.contains('light-mode');
       localStorage.setItem('theme', isLight ? 'light' : 'dark');
       document.getElementById('theme-icon').textContent = isLight ? "☀️" : "🌙";
     }
+    (function() {
+      if (localStorage.getItem('theme') === 'light') {
+        document.body.classList.add('light-mode');
+        document.getElementById('theme-icon').textContent = "☀️";
+      }
+    })();
 
-    function toggleMenu() { document.getElementById('side-menu').classList.toggle('open'); }
+    // Language Toggle
     function toggleLangMenu() {
       const menu = document.getElementById('lang-menu');
       menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
     }
-
     function changeLang(lang) {
       localStorage.setItem('site_lang', lang);
       document.cookie = "googtrans=/en/" + lang + ";path=/";
+      document.cookie = "googtrans=/en/" + lang + ";domain=" + window.location.hostname + ";path=/";
       location.reload();
     }
+    function googleTranslateElementInit() { new google.translate.TranslateElement({ pageLanguage: 'en', autoDisplay: false }, 'google_translate_element'); }
 
-    function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
-    window.onscroll = () => { document.getElementById('scrollTop').style.display = window.pageYOffset > 400 ? 'flex' : 'none'; }
+    // === DONATION LOGIC ===
+    function setDonationMode(mode) {
+      donationMode = mode;
+      document.getElementById('tab-one-time').classList.toggle('selected', mode === 'one-time');
+      document.getElementById('tab-monthly').classList.toggle('selected', mode === 'monthly');
+      renderPayPal();
+    }
 
-    window.addEventListener('load', function () {
-  const preloader = document.getElementById('page-preloader');
+    function setAmount(val, btnElement) {
+      isCustom = false;
+      currentAmount = val;
+      document.getElementById('custom-amount').style.display = 'none';
+      document.querySelectorAll('.amount-btn').forEach(btn => btn.classList.remove('active'));
+      if(btnElement) btnElement.classList.add('active');
+      renderPayPal();
+    }
 
-  setTimeout(() => {
-    preloader.classList.add('hidden');
-    setTimeout(() => {
-      preloader.style.display = 'none';
-    }, 500);
-  }, 500);
+    function toggleCustomInput() {
+      isCustom = true;
+      document.querySelectorAll('.amount-btn').forEach(btn => btn.classList.remove('active'));
+      const customInput = document.getElementById('custom-amount');
+      customInput.style.display = 'block';
+      customInput.focus();
+      document.getElementById('custom-toggle-btn').classList.add('active');
+      renderPayPal();
+    }
 
-  if (localStorage.getItem('theme') === 'light') {
-    document.body.classList.add('light-mode');
-    document.getElementById('theme-icon').textContent = "☀️";
-  }
+    function debouncedRender() {
+      clearTimeout(renderTimer);
+      renderTimer = setTimeout(renderPayPal, 800); // Wait user to finish typing
+    }
 
-  updateSupportMessage();
-  loadPayPalScript();
-});
+    // === PAYPAL INTEGRATION ===
+    function renderPayPal() {
+      const container = document.getElementById('paypal-button-container');
+      container.innerHTML = ''; // Clear old buttons to re-render fresh state
+
+      let finalAmount = isCustom ? parseFloat(document.getElementById('custom-amount').value) : currentAmount;
+      if (!finalAmount || finalAmount <= 0) finalAmount = 5; // Fallback
+      
+      const userEmail = document.getElementById('donor-email').value || "anonymous@tiktop.online";
+
+      // Build Config based on Mode
+      let paypalConfig = {
+        style: { shape: 'rect', color: 'black', layout: 'vertical', label: donationMode === 'monthly' ? 'subscribe' : 'paypal' }
+      };
+
+      if (donationMode === 'one-time') {
+        paypalConfig.createOrder = function(data, actions) {
+          return actions.order.create({
+            purchase_units: [{
+              amount: { value: finalAmount.toString(), currency_code: "USD" },
+              custom_id: userEmail // Maps to Webhook
+            }]
+          });
+        };
+        paypalConfig.onApprove = function(data, actions) {
+          return actions.order.capture().then(function(details) {
+            alert('Thank you for your generous support!');
+            document.getElementById('donor-email').value = '';
+          });
+        };
+      } else {
+        paypalConfig.createSubscription = function(data, actions) {
+          // Calls your index.js backend endpoint
+          return fetch('/api/create-paypal-subscription-plan', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ amount: finalAmount })
+          })
+          .then(res => res.json())
+          .then(data => {
+            if (data.id) return data.id; // Returns the generated plan ID
+            throw new Error("Plan creation failed");
+          });
+        };
+        paypalConfig.onApprove = function(data, actions) {
+          alert('Thank you for becoming a monthly member! Your receipt has been sent.');
+        };
+      }
+
+      paypal.Buttons(paypalConfig).render('#paypal-button-container');
+    }
+
+    // Google Layout Fixer
+    (function() {
+      function fixGoogleTranslateLayout() {
+        document.body.style.top = "0px";
+        document.body.style.marginTop = "0px";
+        document.documentElement.style.marginTop = "0px";
+        document.documentElement.style.height = "100%";
+        const banner = document.querySelector('.goog-te-banner-frame');
+        if (banner) banner.style.display = "none";
+      }
+      fixGoogleTranslateLayout();
+      const observer = new MutationObserver(fixGoogleTranslateLayout);
+      observer.observe(document.documentElement, { attributes: true, childList: true, subtree: true, attributeFilter: ['style'] });
+    })();
   </script>
 </body>
 </html>
-
