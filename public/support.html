@@ -570,7 +570,6 @@
         btn.classList.toggle('active', btn.textContent === `$${amount}`);
       });
       updateSupportMessage();
-      renderPayPalButtons();
     }
 
     function handleCustomAmountChange() {
@@ -581,7 +580,6 @@
         btn.classList.toggle('active', btn.textContent === `$${supportAmount}`);
       });
       updateSupportMessage();
-      renderPayPalButtons();
     }
 
     function updateSupportMessage() {
