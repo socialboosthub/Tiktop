@@ -522,35 +522,26 @@
 
     // === DYNAMIC SCRIPT LOADER ===
     // PayPal strict intent rule: We must reload the script if switching from standard payments to subscriptions
-    function loadPayPalScript(type) {
-      const oldScript = document.getElementById('paypal-sdk-script');
-      if (oldScript) {
-        oldScript.remove();
-      }
-      
-      // Close out the old buttons to prevent ghosting
-      if (paypalButtonsInstance && paypalButtonsInstance.close) {
-        try { paypalButtonsInstance.close(); } catch(e) {}
-      }
-      
-      document.getElementById('paypal-button-container').innerHTML = '';
+    function loadPayPalScript() {
+  if (window.paypal) {
+    renderPayPalButtons();
+    return;
+  }
 
-      const script = document.createElement('script');
-      script.id = 'paypal-sdk-script';
-      
-      if (type === 'monthly') {
-        script.src = `https://www.paypal.com/sdk/js?client-id=${PAYPAL_CLIENT_ID}&vault=true&intent=subscription`;
-      } else {
-        script.src = `https://www.paypal.com/sdk/js?client-id=${PAYPAL_CLIENT_ID}&currency=USD`;
-      }
+  const script = document.createElement("script");
+  script.id = "paypal-sdk-script";
+  script.src = `https://www.paypal.com/sdk/js?client-id=${PAYPAL_CLIENT_ID}&components=buttons&currency=USD&vault=true&intent=subscription`;
 
-      script.onload = () => {
-        renderPayPalButtons();
-      };
+  script.onload = () => {
+    renderPayPalButtons();
+  };
 
-      document.body.appendChild(script);
+  script.onerror = () => {
+    alert("Failed to load PayPal.");
+  };
+
+  document.body.appendChild(script);
     }
-
     function toggleSupportType(type) {
       if (chosenSupportType === type) return; // Ignore if clicking the same tab
       
@@ -559,7 +550,7 @@
       document.getElementById('tab-monthly').classList.toggle('active', type === 'monthly');
       
       updateSupportMessage();
-      loadPayPalScript(type); // Dynamically grab correct SDK intent
+      renderPayPalButtons();
     }
 
     function selectPresetAmount(amount) {
@@ -702,6 +693,8 @@
         preloader.classList.add('hidden');
         setTimeout(() => { preloader.style.display = 'none'; }, 500);
       }, 500);
+      loadPayPalScript();
+});
 
       if (localStorage.getItem('theme') === 'light') {
         document.body.classList.add('light-mode');
