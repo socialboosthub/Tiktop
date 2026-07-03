@@ -687,25 +687,24 @@
     function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
     window.onscroll = () => { document.getElementById('scrollTop').style.display = window.pageYOffset > 400 ? 'flex' : 'none'; }
 
-    window.addEventListener('load', function() {
-      const preloader = document.getElementById('page-preloader');
-      setTimeout(() => {
-        preloader.classList.add('hidden');
-        setTimeout(() => { preloader.style.display = 'none'; }, 500);
-      }, 500);
-      loadPayPalScript();
-});
+    window.addEventListener('load', function () {
+  const preloader = document.getElementById('page-preloader');
 
-      if (localStorage.getItem('theme') === 'light') {
-        document.body.classList.add('light-mode');
-        document.getElementById('theme-icon').textContent = "☀️";
-      }
-      
-      updateSupportMessage();
-      
-      // Initialize the correct PayPal script on first load
-      loadPayPalScript(chosenSupportType);
-    });
+  setTimeout(() => {
+    preloader.classList.add('hidden');
+    setTimeout(() => {
+      preloader.style.display = 'none';
+    }, 500);
+  }, 500);
+
+  if (localStorage.getItem('theme') === 'light') {
+    document.body.classList.add('light-mode');
+    document.getElementById('theme-icon').textContent = "☀️";
+  }
+
+  updateSupportMessage();
+  loadPayPalScript();
+});
   </script>
 </body>
 </html>
