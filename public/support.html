@@ -224,7 +224,6 @@ let donationMode = 'one-time';
 let currentAmount = 10;
 let isCustom = false;
 let renderTimer;
-let paypalScript = null; // We will track the script here
 
 // Remove preloader
 window.addEventListener('load', function() {
@@ -343,29 +342,36 @@ function debouncedRender() {
   renderTimer = setTimeout(renderPayPal, 800); 
 }
 
-// === PAYPAL DYNAMIC LOADER (THE MAGIC FIX) ===
+// === PAYPAL DYNAMIC LOADER (FIXED PREVENTING CONFLICTS WITH NAMESPACES) ===
 function loadPayPalSDK(mode, callback) {
-  // 1. Remove the old script so intents don't clash
-  if (paypalScript) {
-    paypalScript.remove();
-    delete window.paypal; // Clear the old object from memory
-  }
-  
   const clientId = "BAAomD4fABG8-ky8RB0K03YNMmwOwBeFynVBwRxc6uNsHTMdyEAJS2aOS8Kp1E0gpO8xmXHewft11eUsTE";
-  let scriptSrc = `https://www.paypal.com/sdk/js?client-id=${clientId}`;
+  const namespace = mode === 'monthly' ? 'paypalMonthly' : 'paypalOneTime';
   
-  // 2. Append the correct intent variables
-  if (mode === 'monthly') {
-    scriptSrc += "&vault=true&intent=subscription";
-  } else {
-    scriptSrc += "&currency=USD"; // Default capture mode for one-time
+  // If this mode's instance is already in memory, use it immediately
+  if (window[namespace]) {
+    callback();
+    return;
   }
-
-  // 3. Inject the new script
-  paypalScript = document.createElement('script');
-  paypalScript.src = scriptSrc;
-  paypalScript.onload = callback; // Run renderPayPal() once loaded
-  document.head.appendChild(paypalScript);
+  
+  // Check if script tag is already attached but still loading
+  let script = document.getElementById(`paypal-script-${mode}`);
+  if (!script) {
+    script = document.createElement('script');
+    script.id = `paypal-script-${mode}`;
+    
+    let scriptSrc = `https://www.paypal.com/sdk/js?client-id=${clientId}&namespace=${namespace}`;
+    if (mode === 'monthly') {
+      scriptSrc += "&vault=true&intent=subscription";
+    } else {
+      scriptSrc += "&currency=USD";
+    }
+    
+    script.src = scriptSrc;
+    document.head.appendChild(script);
+  }
+  
+  // Bind callback to execute when ready
+  script.onload = callback;
 }
 
 // === PAYPAL INTEGRATION ===
@@ -425,9 +431,12 @@ function renderPayPal() {
     };
   }
 
-  // Double check PayPal is loaded before rendering
-  if (window.paypal) {
-    paypal.Buttons(paypalConfig).render('#paypal-button-container');
+  // Fetch the correct isolated namespace instance
+  const namespace = donationMode === 'monthly' ? 'paypalMonthly' : 'paypalOneTime';
+  const paypalInstance = window[namespace];
+  
+  if (paypalInstance) {
+    paypalInstance.Buttons(paypalConfig).render('#paypal-button-container');
   }
 }
 
