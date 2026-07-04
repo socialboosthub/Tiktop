@@ -275,50 +275,68 @@ function setDonationMode(mode) {
   document.getElementById('tab-one-time').classList.toggle('selected', mode === 'one-time');
   document.getElementById('tab-monthly').classList.toggle('selected', mode === 'monthly');
   
-  // === NEW FIX: Hide Custom Amount for Subscriptions ===
   const customInput = document.getElementById('custom-amount');
   const customToggleBtn = document.getElementById('custom-toggle-btn');
   
   if (mode === 'monthly') {
-    // Hide the custom amount input and button completely
+    // Hide BOTH custom elements completely for subscriptions
     customInput.style.display = 'none';
     customToggleBtn.style.display = 'none';
     
     // Force the system back to the default $10 button so it doesn't crash
     isCustom = false;
     currentAmount = 10;
+    customInput.value = ''; // clear out any typed amount
     document.querySelectorAll('.amount-btn').forEach(btn => btn.classList.remove('active'));
     document.querySelectorAll('.amount-btn')[1].classList.add('active'); // Highlights the $10 button
   } else {
-    // Show the custom amount button again if they switch back to One-Time
+    // Switching back to One-Time: Show the custom button, hide the input
     customToggleBtn.style.display = 'block';
+    customInput.style.display = 'none';
   }
-  // =======================================================
 
   // Show a tiny loading state while swapping scripts
   document.getElementById('paypal-button-container').innerHTML = '<p style="color: var(--cyan); text-align: center; margin-top: 20px;">Loading Secure Checkout...</p>';
   loadPayPalSDK(mode, renderPayPal);
 }
 
-
 function setAmount(val, btnElement) {
   isCustom = false;
   currentAmount = val;
-  document.getElementById('custom-amount').style.display = 'none';
+  
+  const customInput = document.getElementById('custom-amount');
+  const customToggleBtn = document.getElementById('custom-toggle-btn');
+  
+  // Hide input and clear it, bring back the toggle button
+  customInput.style.display = 'none';
+  customInput.value = ''; 
+  
+  // Only show the custom button again if we are in one-time mode
+  if (donationMode === 'one-time') {
+    customToggleBtn.style.display = 'block';
+  }
+  
   document.querySelectorAll('.amount-btn').forEach(btn => btn.classList.remove('active'));
   if(btnElement) btnElement.classList.add('active');
+  
   renderPayPal();
 }
 
 function toggleCustomInput() {
   isCustom = true;
   document.querySelectorAll('.amount-btn').forEach(btn => btn.classList.remove('active'));
+  
   const customInput = document.getElementById('custom-amount');
+  const customToggleBtn = document.getElementById('custom-toggle-btn');
+  
+  // Show input box, HIDE the button
   customInput.style.display = 'block';
+  customToggleBtn.style.display = 'none';
+  
   customInput.focus();
-  document.getElementById('custom-toggle-btn').classList.add('active');
   renderPayPal();
 }
+
 
 function debouncedRender() {
   clearTimeout(renderTimer);
