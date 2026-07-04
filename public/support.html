@@ -294,8 +294,6 @@ function setDonationMode(mode) {
     customInput.style.display = 'none';
   }
 
-  // Show a tiny loading state while swapping scripts
-  document.getElementById('paypal-button-container').innerHTML = '<p style="color: var(--cyan); text-align: center; margin-top: 20px;">Loading Secure Checkout...</p>';
   loadPayPalSDK(mode, renderPayPal);
 }
 
@@ -342,41 +340,55 @@ function debouncedRender() {
   renderTimer = setTimeout(renderPayPal, 800); 
 }
 
-// === PAYPAL DYNAMIC LOADER (FIXED PREVENTING CONFLICTS WITH NAMESPACES) ===
+// === PAYPAL CLEAN ENGINE RELOADER ===
 function loadPayPalSDK(mode, callback) {
-  const clientId = "BAAomD4fABG8-ky8RB0K03YNMmwOwBeFynVBwRxc6uNsHTMdyEAJS2aOS8Kp1E0gpO8xmXHewft11eUsTE";
-  const namespace = mode === 'monthly' ? 'paypalMonthly' : 'paypalOneTime';
+  // 1. Wipe out any older script objects from DOM completely
+  const existingScripts = document.querySelectorAll('script[src*="paypal.com/sdk/js"]');
+  existingScripts.forEach(s => s.remove());
   
-  // If this mode's instance is already in memory, use it immediately
-  if (window[namespace]) {
-    callback();
-    return;
+  // 2. Kill the global object configuration variables
+  if (window.paypal) {
+    delete window.paypal;
   }
   
-  // Check if script tag is already attached but still loading
-  let script = document.getElementById(`paypal-script-${mode}`);
-  if (!script) {
-    script = document.createElement('script');
-    script.id = `paypal-script-${mode}`;
+  // 3. Re-create the actual UI container target block fresh to flush lingering internal iFrame window hooks
+  const oldContainer = document.getElementById('paypal-button-container');
+  if (oldContainer) {
+    const parentNode = oldContainer.parentNode;
+    const newContainer = document.createElement('div');
+    newContainer.id = 'paypal-button-container';
+    newContainer.innerHTML = '<p style="color: var(--cyan); text-align: center; margin-top: 20px;">Loading Secure Checkout...</p>';
+    parentNode.replaceChild(newContainer, oldContainer);
+  }
+
+  // 4. Give the browser engine a microtask delay frame to flush context before attaching new listener dependencies
+  setTimeout(() => {
+    const clientId = "BAAomD4fABG8-ky8RB0K03YNMmwOwBeFynVBwRxc6uNsHTMdyEAJS2aOS8Kp1E0gpO8xmXHewft11eUsTE";
+    let scriptSrc = `https://www.paypal.com/sdk/js?client-id=${clientId}`;
     
-    let scriptSrc = `https://www.paypal.com/sdk/js?client-id=${clientId}&namespace=${namespace}`;
     if (mode === 'monthly') {
       scriptSrc += "&vault=true&intent=subscription";
     } else {
       scriptSrc += "&currency=USD";
     }
-    
+
+    const script = document.createElement('script');
     script.src = scriptSrc;
+    script.onload = () => {
+      if (window.paypal) {
+        callback();
+      } else {
+        setTimeout(callback, 100); // Fail-safe retry if network delayed window bindings
+      }
+    };
     document.head.appendChild(script);
-  }
-  
-  // Bind callback to execute when ready
-  script.onload = callback;
+  }, 50);
 }
 
 // === PAYPAL INTEGRATION ===
 function renderPayPal() {
   const container = document.getElementById('paypal-button-container');
+  if (!container) return;
   container.innerHTML = ''; 
 
   let finalAmount = isCustom ? parseFloat(document.getElementById('custom-amount').value) : currentAmount;
@@ -409,20 +421,17 @@ function renderPayPal() {
     paypalConfig.createSubscription = function(data, actions) {
       let planId = '';
       
-      // Match the clicked amount to your specific PayPal Plan IDs from your screenshot
       if (finalAmount === 5) {
-        planId = 'P-1E5594289E451083PNJDDJIQ'; // Tiktop Support
+        planId = 'P-1E5594289E451083PNJDDJIQ'; 
       } else if (finalAmount === 10) {
-        planId = 'P-2FX85876F6040730ANJDC3YY'; // Tiktop Boost
+        planId = 'P-2FX85876F6040730ANJDC3YY'; 
       } else if (finalAmount === 25) {
-        planId = 'P-09975017VX501805FNJDHH2A'; // Tiktop Sponsor
+        planId = 'P-09975017VX501805FNJDHH2A'; 
       } else {
-        // Subscriptions require exact Plan IDs. If they typed a custom amount like $12, it won't work.
         alert("Custom amounts are not supported for monthly subscriptions. Please select $5, $10, or $25.");
         throw new Error("Invalid subscription amount"); 
       }
 
-      // Tell PayPal to open the window with this specific plan
       return actions.subscription.create({ 'plan_id': planId });
     };
     
@@ -431,12 +440,11 @@ function renderPayPal() {
     };
   }
 
-  // Fetch the correct isolated namespace instance
-  const namespace = donationMode === 'monthly' ? 'paypalMonthly' : 'paypalOneTime';
-  const paypalInstance = window[namespace];
-  
-  if (paypalInstance) {
-    paypalInstance.Buttons(paypalConfig).render('#paypal-button-container');
+  if (window.paypal && window.paypal.Buttons) {
+    paypal.Buttons(paypalConfig).render('#paypal-button-container');
+  } else {
+    // Back up check if initialization race condition triggers
+    setTimeout(renderPayPal, 100);
   }
 }
 
