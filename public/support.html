@@ -275,10 +275,31 @@ function setDonationMode(mode) {
   document.getElementById('tab-one-time').classList.toggle('selected', mode === 'one-time');
   document.getElementById('tab-monthly').classList.toggle('selected', mode === 'monthly');
   
+  // === NEW FIX: Hide Custom Amount for Subscriptions ===
+  const customInput = document.getElementById('custom-amount');
+  const customToggleBtn = document.getElementById('custom-toggle-btn');
+  
+  if (mode === 'monthly') {
+    // Hide the custom amount input and button completely
+    customInput.style.display = 'none';
+    customToggleBtn.style.display = 'none';
+    
+    // Force the system back to the default $10 button so it doesn't crash
+    isCustom = false;
+    currentAmount = 10;
+    document.querySelectorAll('.amount-btn').forEach(btn => btn.classList.remove('active'));
+    document.querySelectorAll('.amount-btn')[1].classList.add('active'); // Highlights the $10 button
+  } else {
+    // Show the custom amount button again if they switch back to One-Time
+    customToggleBtn.style.display = 'block';
+  }
+  // =======================================================
+
   // Show a tiny loading state while swapping scripts
   document.getElementById('paypal-button-container').innerHTML = '<p style="color: var(--cyan); text-align: center; margin-top: 20px;">Loading Secure Checkout...</p>';
   loadPayPalSDK(mode, renderPayPal);
 }
+
 
 function setAmount(val, btnElement) {
   isCustom = false;
