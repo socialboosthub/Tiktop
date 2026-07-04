@@ -225,6 +225,24 @@ let currentAmount = 10;
 let isCustom = false;
 let renderTimer;
 
+// Listen for secure payment messages from our internal sandbox frame
+window.addEventListener('message', function(event) {
+  if (event.data && event.data.type === 'PAYPAL_SUCCESS') {
+    if (event.data.mode === 'one-time') {
+      alert('Thank you for your generous support!');
+      document.getElementById('donor-email').value = '';
+    } else {
+      alert('Thank you for becoming a monthly member! Your receipt has been sent.');
+    }
+  }
+  if (event.data && event.data.type === 'PAYPAL_RESIZE') {
+    const frame = document.getElementById('paypal-sandbox-frame');
+    if (frame) {
+      frame.style.height = event.data.height + 'px';
+    }
+  }
+});
+
 // Remove preloader
 window.addEventListener('load', function() {
   const preloader = document.getElementById('page-preloader');
@@ -233,8 +251,7 @@ window.addEventListener('load', function() {
     setTimeout(() => preloader.style.display = 'none', 500);
   }, 500);
   
-  // Initial render: Dynamically load the correct PayPal SDK first
-  loadPayPalSDK(donationMode, renderPayPal);
+  renderPayPal();
 });
 
 // Toggle Mobile Menu
@@ -269,7 +286,7 @@ function googleTranslateElementInit() { new google.translate.TranslateElement({ 
 
 // === DONATION LOGIC ===
 function setDonationMode(mode) {
-  if (donationMode === mode) return; // Don't reload if clicking the same tab
+  if (donationMode === mode) return; 
   donationMode = mode;
   document.getElementById('tab-one-time').classList.toggle('selected', mode === 'one-time');
   document.getElementById('tab-monthly').classList.toggle('selected', mode === 'monthly');
@@ -278,23 +295,19 @@ function setDonationMode(mode) {
   const customToggleBtn = document.getElementById('custom-toggle-btn');
   
   if (mode === 'monthly') {
-    // Hide BOTH custom elements completely for subscriptions
     customInput.style.display = 'none';
     customToggleBtn.style.display = 'none';
-    
-    // Force the system back to the default $10 button so it doesn't crash
     isCustom = false;
     currentAmount = 10;
-    customInput.value = ''; // clear out any typed amount
+    customInput.value = ''; 
     document.querySelectorAll('.amount-btn').forEach(btn => btn.classList.remove('active'));
-    document.querySelectorAll('.amount-btn')[1].classList.add('active'); // Highlights the $10 button
+    document.querySelectorAll('.amount-btn')[1].classList.add('active'); 
   } else {
-    // Switching back to One-Time: Show the custom button, hide the input
     customToggleBtn.style.display = 'block';
     customInput.style.display = 'none';
   }
 
-  loadPayPalSDK(mode, renderPayPal);
+  renderPayPal();
 }
 
 function setAmount(val, btnElement) {
@@ -304,11 +317,9 @@ function setAmount(val, btnElement) {
   const customInput = document.getElementById('custom-amount');
   const customToggleBtn = document.getElementById('custom-toggle-btn');
   
-  // Hide input and clear it, bring back the toggle button
   customInput.style.display = 'none';
   customInput.value = ''; 
   
-  // Only show the custom button again if we are in one-time mode
   if (donationMode === 'one-time') {
     customToggleBtn.style.display = 'block';
   }
@@ -326,7 +337,6 @@ function toggleCustomInput() {
   const customInput = document.getElementById('custom-amount');
   const customToggleBtn = document.getElementById('custom-toggle-btn');
   
-  // Show input box, HIDE the button
   customInput.style.display = 'block';
   customToggleBtn.style.display = 'none';
   
@@ -334,120 +344,120 @@ function toggleCustomInput() {
   renderPayPal();
 }
 
-
 function debouncedRender() {
   clearTimeout(renderTimer);
-  renderTimer = setTimeout(renderPayPal, 800); 
+  renderTimer = setTimeout(renderPayPal, 400); 
 }
 
-// === PAYPAL CLEAN ENGINE RELOADER ===
-function loadPayPalSDK(mode, callback) {
-  // 1. Wipe out any older script objects from DOM completely
-  const existingScripts = document.querySelectorAll('script[src*="paypal.com/sdk/js"]');
-  existingScripts.forEach(s => s.remove());
-  
-  // 2. Kill the global object configuration variables
-  if (window.paypal) {
-    delete window.paypal;
-  }
-  
-  // 3. Re-create the actual UI container target block fresh to flush lingering internal iFrame window hooks
-  const oldContainer = document.getElementById('paypal-button-container');
-  if (oldContainer) {
-    const parentNode = oldContainer.parentNode;
-    const newContainer = document.createElement('div');
-    newContainer.id = 'paypal-button-container';
-    newContainer.innerHTML = '<p style="color: var(--cyan); text-align: center; margin-top: 20px;">Loading Secure Checkout...</p>';
-    parentNode.replaceChild(newContainer, oldContainer);
-  }
-
-  // 4. Give the browser engine a microtask delay frame to flush context before attaching new listener dependencies
-  setTimeout(() => {
-    const clientId = "BAAomD4fABG8-ky8RB0K03YNMmwOwBeFynVBwRxc6uNsHTMdyEAJS2aOS8Kp1E0gpO8xmXHewft11eUsTE";
-    let scriptSrc = `https://www.paypal.com/sdk/js?client-id=${clientId}`;
-    
-    if (mode === 'monthly') {
-      scriptSrc += "&vault=true&intent=subscription";
-    } else {
-      scriptSrc += "&currency=USD";
-    }
-
-    const script = document.createElement('script');
-    script.src = scriptSrc;
-    script.onload = () => {
-      if (window.paypal) {
-        callback();
-      } else {
-        setTimeout(callback, 100); // Fail-safe retry if network delayed window bindings
-      }
-    };
-    document.head.appendChild(script);
-  }, 50);
-}
-
-// === PAYPAL INTEGRATION ===
+// === SANDBOXED PAYPAL ENGINE (PREVENTS COLLISION VANISHING ACT) ===
 function renderPayPal() {
   const container = document.getElementById('paypal-button-container');
   if (!container) return;
-  container.innerHTML = ''; 
+  
+  container.innerHTML = '<p style="color: var(--cyan); text-align: center; margin-top: 20px;">Loading Secure Checkout...</p>';
 
   let finalAmount = isCustom ? parseFloat(document.getElementById('custom-amount').value) : currentAmount;
   if (!finalAmount || finalAmount <= 0) finalAmount = 5; 
   
   const userEmail = document.getElementById('donor-email').value || "anonymous@tiktop.online";
-
-  let paypalConfig = {
-    style: { shape: 'rect', color: 'black', layout: 'vertical', label: donationMode === 'monthly' ? 'subscribe' : 'paypal' }
-  };
-
-  if (donationMode === 'one-time') {
-    // --- ONE-TIME DONATION LOGIC ---
-    paypalConfig.createOrder = function(data, actions) {
-      return actions.order.create({
-        purchase_units: [{
-          amount: { value: finalAmount.toString(), currency_code: "USD" },
-          custom_id: userEmail 
-        }]
-      });
-    };
-    paypalConfig.onApprove = function(data, actions) {
-      return actions.order.capture().then(function(details) {
-        alert('Thank you for your generous support!');
-        document.getElementById('donor-email').value = '';
-      });
-    };
+  const clientId = "BAAomD4fABG8-ky8RB0K03YNMmwOwBeFynVBwRxc6uNsHTMdyEAJS2aOS8Kp1E0gpO8xmXHewft11eUsTE";
+  
+  let scriptSrc = `https://www.paypal.com/sdk/js?client-id=${clientId}`;
+  if (donationMode === 'monthly') {
+    scriptSrc += "&vault=true&intent=subscription";
   } else {
-    // --- MONTHLY SUBSCRIPTION LOGIC ---
-    paypalConfig.createSubscription = function(data, actions) {
-      let planId = '';
-      
-      if (finalAmount === 5) {
-        planId = 'P-1E5594289E451083PNJDDJIQ'; 
-      } else if (finalAmount === 10) {
-        planId = 'P-2FX85876F6040730ANJDC3YY'; 
-      } else if (finalAmount === 25) {
-        planId = 'P-09975017VX501805FNJDHH2A'; 
-      } else {
-        alert("Custom amounts are not supported for monthly subscriptions. Please select $5, $10, or $25.");
-        throw new Error("Invalid subscription amount"); 
-      }
-
-      return actions.subscription.create({ 'plan_id': planId });
-    };
-    
-    paypalConfig.onApprove = function(data, actions) {
-      alert('Thank you for becoming a monthly member! Your receipt has been sent.');
-    };
+    scriptSrc += "&currency=USD";
   }
 
-  if (window.paypal && window.paypal.Buttons) {
-    paypal.Buttons(paypalConfig).render('#paypal-button-container');
-  } else {
-    // Back up check if initialization race condition triggers
-    setTimeout(renderPayPal, 100);
-  }
+  // Create clean isolated document window structure
+  const iframe = document.createElement('iframe');
+  iframe.id = 'paypal-sandbox-frame';
+  iframe.style.width = '100%';
+  iframe.style.border = 'none';
+  iframe.style.height = '200px'; 
+  iframe.style.background = 'transparent';
+  iframe.style.overflow = 'hidden';
+  iframe.setAttribute('allowtransparency', 'true');
+
+  container.innerHTML = '';
+  container.appendChild(iframe);
+
+  const iframeContent = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="UTF-8">
+      <style>
+        body { margin: 0; padding: 0; background: transparent; overflow: hidden; }
+        #render-target { width: 100%; min-height: 150px; }
+      </style>
+    </head>
+    <body>
+      <div id="render-target"></div>
+      <script src="${scriptSrc}"><\/script>
+      <script>
+        function emitResize() {
+          window.parent.postMessage({ type: 'PAYPAL_RESIZE', height: document.body.scrollHeight || 250 }, '*');
+        }
+        
+        window.onload = function() {
+          if (!window.paypal || !window.paypal.Buttons) {
+            window.parent.postMessage({ type: 'PAYPAL_RESIZE', height: 150 }, '*');
+            return;
+          }
+          
+          let config = {
+            style: { shape: 'rect', color: 'black', layout: 'vertical', label: '${donationMode === 'monthly' ? 'subscribe' : 'paypal'}' }
+          };
+          
+          if ('${donationMode}' === 'one-time') {
+            config.createOrder = function(data, actions) {
+              return actions.order.create({
+                purchase_units: [{
+                  amount: { value: "${finalAmount}", currency_code: "USD" },
+                  custom_id: "${userEmail}"
+                }]
+              });
+            };
+            config.onApprove = function(data, actions) {
+              return actions.order.capture().then(function(details) {
+                window.parent.postMessage({ type: 'PAYPAL_SUCCESS', mode: 'one-time' }, '*');
+              });
+            };
+          } else {
+            config.createSubscription = function(data, actions) {
+              let planId = '';
+              if (${finalAmount} === 5) planId = 'P-1E5594289E451083PNJDDJIQ';
+              else if (${finalAmount} === 10) planId = 'P-2FX85876F6040730ANJDC3YY';
+              else if (${finalAmount} === 25) planId = 'P-09975017VX501805FNJDHH2A';
+              else {
+                alert("Custom amounts are not supported for subscriptions. Please select $5, $10, or $25.");
+                throw new Error("Invalid plan amount");
+              }
+              return actions.subscription.create({ 'plan_id': planId });
+            };
+            config.onApprove = function(data, actions) {
+              window.parent.postMessage({ type: 'PAYPAL_SUCCESS', mode: 'monthly' }, '*');
+            };
+          }
+          
+          paypal.Buttons(config).render('#render-target').then(function() {
+            setTimeout(emitResize, 400);
+          });
+          
+          // Continuously track layout size updates (e.g. expansion of card forms)
+          setInterval(emitResize, 800);
+        };
+      <\/script>
+    </body>
+    </html>
+  `;
+
+  const doc = iframe.contentWindow.document;
+  doc.open();
+  doc.write(iframeContent);
+  doc.close();
 }
-
 
 // Google Layout Fixer
 (function() {
@@ -463,7 +473,7 @@ function renderPayPal() {
   const observer = new MutationObserver(fixGoogleTranslateLayout);
   observer.observe(document.documentElement, { attributes: true, childList: true, subtree: true, attributeFilter: ['style'] });
 })();
-
   </script>
 </body>
 </html>
+
