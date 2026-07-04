@@ -224,11 +224,9 @@ let donationMode = 'one-time';
 let currentAmount = 10;
 let isCustom = false;
 let renderTimer;
-let paypalScriptElement = null; // Track the injected script
+let paypalScript = null; // We will track the script here
 
-const PAYPAL_CLIENT_ID = "AQP059oCAgQi3RxCHICt95GjIU7R6U4jvqVdRofXPh7X5ZLuJ0tNPJ-ENBy7E2KImlojhHaj3dwIdfCP";
-
-// Remove preloader & Init
+// Remove preloader
 window.addEventListener('load', function() {
   const preloader = document.getElementById('page-preloader');
   setTimeout(() => {
@@ -236,8 +234,8 @@ window.addEventListener('load', function() {
     setTimeout(() => preloader.style.display = 'none', 500);
   }, 500);
   
-  // Initial load of the PayPal SDK for default mode
-  loadPayPalSDK(donationMode);
+  // Initial render: Dynamically load the correct PayPal SDK first
+  loadPayPalSDK(donationMode, renderPayPal);
 });
 
 // Toggle Mobile Menu
@@ -270,39 +268,16 @@ function changeLang(lang) {
 }
 function googleTranslateElementInit() { new google.translate.TranslateElement({ pageLanguage: 'en', autoDisplay: false }, 'google_translate_element'); }
 
-// === DYNAMIC PAYPAL SDK LOADER ===
-function loadPayPalSDK(mode) {
-  const container = document.getElementById('paypal-button-container');
-  container.innerHTML = '<p style="color: #25F4EE; text-align: center; padding: 20px;">Loading PayPal...</p>';
-
-  // Clean up old PayPal script and global object to prevent conflicts
-  if (paypalScriptElement) {
-    paypalScriptElement.remove();
-    delete window.paypal;
-  }
-
-  // Create new script tag based on the required intent
-  paypalScriptElement = document.createElement('script');
-  paypalScriptElement.setAttribute('data-sdk-integration-source', 'button-factory');
-  
-  if (mode === 'monthly') {
-    paypalScriptElement.src = `https://www.paypal.com/sdk/js?client-id=${PAYPAL_CLIENT_ID}&vault=true&intent=subscription`;
-  } else {
-    paypalScriptElement.src = `https://www.paypal.com/sdk/js?client-id=${PAYPAL_CLIENT_ID}&currency=USD`;
-  }
-
-  // Once script loads, render the buttons
-  paypalScriptElement.onload = renderPayPal;
-  document.head.appendChild(paypalScriptElement);
-}
-
 // === DONATION LOGIC ===
 function setDonationMode(mode) {
-  if (donationMode === mode) return; // Do nothing if clicking the same tab
+  if (donationMode === mode) return; // Don't reload if clicking the same tab
   donationMode = mode;
   document.getElementById('tab-one-time').classList.toggle('selected', mode === 'one-time');
   document.getElementById('tab-monthly').classList.toggle('selected', mode === 'monthly');
-  loadPayPalSDK(mode); // Reload SDK with correct intent
+  
+  // Show a tiny loading state while swapping scripts
+  document.getElementById('paypal-button-container').innerHTML = '<p style="color: var(--cyan); text-align: center; margin-top: 20px;">Loading Secure Checkout...</p>';
+  loadPayPalSDK(mode, renderPayPal);
 }
 
 function setAmount(val, btnElement) {
@@ -311,7 +286,7 @@ function setAmount(val, btnElement) {
   document.getElementById('custom-amount').style.display = 'none';
   document.querySelectorAll('.amount-btn').forEach(btn => btn.classList.remove('active'));
   if(btnElement) btnElement.classList.add('active');
-  if (window.paypal) renderPayPal();
+  renderPayPal();
 }
 
 function toggleCustomInput() {
@@ -321,23 +296,46 @@ function toggleCustomInput() {
   customInput.style.display = 'block';
   customInput.focus();
   document.getElementById('custom-toggle-btn').classList.add('active');
-  if (window.paypal) renderPayPal();
+  renderPayPal();
 }
 
 function debouncedRender() {
   clearTimeout(renderTimer);
-  renderTimer = setTimeout(() => {
-    if (window.paypal) renderPayPal();
-  }, 800); // Wait user to finish typing
+  renderTimer = setTimeout(renderPayPal, 800); 
+}
+
+// === PAYPAL DYNAMIC LOADER (THE MAGIC FIX) ===
+function loadPayPalSDK(mode, callback) {
+  // 1. Remove the old script so intents don't clash
+  if (paypalScript) {
+    paypalScript.remove();
+    delete window.paypal; // Clear the old object from memory
+  }
+  
+  const clientId = "AQP059oCAgQi3RxCHICt95GjIU7R6U4jvqVdRofXPh7X5ZLuJ0tNPJ-ENBy7E2KImlojhHaj3dwIdfCP";
+  let scriptSrc = `https://www.paypal.com/sdk/js?client-id=${clientId}`;
+  
+  // 2. Append the correct intent variables
+  if (mode === 'monthly') {
+    scriptSrc += "&vault=true&intent=subscription";
+  } else {
+    scriptSrc += "&currency=USD"; // Default capture mode for one-time
+  }
+
+  // 3. Inject the new script
+  paypalScript = document.createElement('script');
+  paypalScript.src = scriptSrc;
+  paypalScript.onload = callback; // Run renderPayPal() once loaded
+  document.head.appendChild(paypalScript);
 }
 
 // === PAYPAL INTEGRATION ===
 function renderPayPal() {
   const container = document.getElementById('paypal-button-container');
-  container.innerHTML = ''; // Clear old buttons
+  container.innerHTML = ''; 
 
   let finalAmount = isCustom ? parseFloat(document.getElementById('custom-amount').value) : currentAmount;
-  if (!finalAmount || finalAmount <= 0) finalAmount = 5; // Fallback
+  if (!finalAmount || finalAmount <= 0) finalAmount = 5; 
   
   const userEmail = document.getElementById('donor-email').value || "anonymous@tiktop.online";
 
@@ -346,11 +344,12 @@ function renderPayPal() {
   };
 
   if (donationMode === 'one-time') {
+    // --- ONE-TIME DONATION LOGIC ---
     paypalConfig.createOrder = function(data, actions) {
       return actions.order.create({
         purchase_units: [{
           amount: { value: finalAmount.toString(), currency_code: "USD" },
-          custom_id: userEmail // Maps to Webhook
+          custom_id: userEmail 
         }]
       });
     };
@@ -361,33 +360,38 @@ function renderPayPal() {
       });
     };
   } else {
+    // --- MONTHLY SUBSCRIPTION LOGIC ---
     paypalConfig.createSubscription = function(data, actions) {
-      // Calls your index.js backend endpoint
-      return fetch('/api/create-paypal-subscription-plan', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ amount: finalAmount })
-      })
-      .then(res => {
-        if (!res.ok) throw new Error("Network response was not ok");
-        return res.json();
-      })
-      .then(data => {
-        if (data.id) return data.id; // Returns the generated plan ID
-        throw new Error("Plan creation failed - No ID returned");
-      })
-      .catch(err => {
-        console.error("Subscription Error:", err);
-        alert("Server error creating subscription. Check backend logs.");
-      });
+      let planId = '';
+      
+      // Match the clicked amount to your specific PayPal Plan IDs from your screenshot
+      if (finalAmount === 5) {
+        planId = 'P-1E5594289E451083FNDDIIQ'; // Tiktop Support
+      } else if (finalAmount === 10) {
+        planId = 'P-2FX85876F6840730ANJDC3YY'; // Tiktop Boost
+      } else if (finalAmount === 25) {
+        planId = 'P-09Q75017VX501805FMJDHH2A'; // Tiktop Sponsor
+      } else {
+        // Subscriptions require exact Plan IDs. If they typed a custom amount like $12, it won't work.
+        alert("Custom amounts are not supported for monthly subscriptions. Please select $5, $10, or $25.");
+        throw new Error("Invalid subscription amount"); 
+      }
+
+      // Tell PayPal to open the window with this specific plan
+      return actions.subscription.create({ 'plan_id': planId });
     };
+    
     paypalConfig.onApprove = function(data, actions) {
       alert('Thank you for becoming a monthly member! Your receipt has been sent.');
     };
   }
 
-  paypal.Buttons(paypalConfig).render('#paypal-button-container');
+  // Double check PayPal is loaded before rendering
+  if (window.paypal) {
+    paypal.Buttons(paypalConfig).render('#paypal-button-container');
+  }
 }
+
 
 // Google Layout Fixer
 (function() {
