@@ -218,155 +218,192 @@
   <div id="google_translate_element" style="display:none;"></div>
   <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
-  <script src="https://www.paypal.com/sdk/js?client-id=AQP059oCAgQi3RxCHICt95GjIU7R6U4jvqVdRofXPh7X5ZLuJ0tNPJ-ENBy7E2KImlojhHaj3dwIdfCP&vault=true&intent=subscription" data-sdk-integration-source="button-factory"></script>
-
   <script>
-    // === UI & STATE VARIABLES ===
-    let donationMode = 'one-time';
-    let currentAmount = 10;
-    let isCustom = false;
-    let renderTimer;
+// === UI & STATE VARIABLES ===
+let donationMode = 'one-time';
+let currentAmount = 10;
+let isCustom = false;
+let renderTimer;
+let paypalScriptElement = null; // Track the injected script
 
-    // Remove preloader
-    window.addEventListener('load', function() {
-      const preloader = document.getElementById('page-preloader');
-      setTimeout(() => {
-        preloader.classList.add('hidden');
-        setTimeout(() => preloader.style.display = 'none', 500);
-      }, 500);
-      
-      // Initial render of PayPal button
-      renderPayPal();
-    });
+const PAYPAL_CLIENT_ID = "AQP059oCAgQi3RxCHICt95GjIU7R6U4jvqVdRofXPh7X5ZLuJ0tNPJ-ENBy7E2KImlojhHaj3dwIdfCP";
 
-    // Toggle Mobile Menu
-    function toggleMenu() { document.getElementById('side-menu').classList.toggle('open'); }
+// Remove preloader & Init
+window.addEventListener('load', function() {
+  const preloader = document.getElementById('page-preloader');
+  setTimeout(() => {
+    preloader.classList.add('hidden');
+    setTimeout(() => preloader.style.display = 'none', 500);
+  }, 500);
+  
+  // Initial load of the PayPal SDK for default mode
+  loadPayPalSDK(donationMode);
+});
 
-    // Theme Toggle
-    function toggleTheme() {
-      document.body.classList.toggle('light-mode');
-      const isLight = document.body.classList.contains('light-mode');
-      localStorage.setItem('theme', isLight ? 'light' : 'dark');
-      document.getElementById('theme-icon').textContent = isLight ? "☀️" : "🌙";
-    }
-    (function() {
-      if (localStorage.getItem('theme') === 'light') {
-        document.body.classList.add('light-mode');
-        document.getElementById('theme-icon').textContent = "☀️";
-      }
-    })();
+// Toggle Mobile Menu
+function toggleMenu() { document.getElementById('side-menu').classList.toggle('open'); }
 
-    // Language Toggle
-    function toggleLangMenu() {
-      const menu = document.getElementById('lang-menu');
-      menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
-    }
-    function changeLang(lang) {
-      localStorage.setItem('site_lang', lang);
-      document.cookie = "googtrans=/en/" + lang + ";path=/";
-      document.cookie = "googtrans=/en/" + lang + ";domain=" + window.location.hostname + ";path=/";
-      location.reload();
-    }
-    function googleTranslateElementInit() { new google.translate.TranslateElement({ pageLanguage: 'en', autoDisplay: false }, 'google_translate_element'); }
+// Theme Toggle
+function toggleTheme() {
+  document.body.classList.toggle('light-mode');
+  const isLight = document.body.classList.contains('light-mode');
+  localStorage.setItem('theme', isLight ? 'light' : 'dark');
+  document.getElementById('theme-icon').textContent = isLight ? "☀️" : "🌙";
+}
+(function() {
+  if (localStorage.getItem('theme') === 'light') {
+    document.body.classList.add('light-mode');
+    document.getElementById('theme-icon').textContent = "☀️";
+  }
+})();
 
-    // === DONATION LOGIC ===
-    function setDonationMode(mode) {
-      donationMode = mode;
-      document.getElementById('tab-one-time').classList.toggle('selected', mode === 'one-time');
-      document.getElementById('tab-monthly').classList.toggle('selected', mode === 'monthly');
-      renderPayPal();
-    }
+// Language Toggle
+function toggleLangMenu() {
+  const menu = document.getElementById('lang-menu');
+  menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+}
+function changeLang(lang) {
+  localStorage.setItem('site_lang', lang);
+  document.cookie = "googtrans=/en/" + lang + ";path=/";
+  document.cookie = "googtrans=/en/" + lang + ";domain=" + window.location.hostname + ";path=/";
+  location.reload();
+}
+function googleTranslateElementInit() { new google.translate.TranslateElement({ pageLanguage: 'en', autoDisplay: false }, 'google_translate_element'); }
 
-    function setAmount(val, btnElement) {
-      isCustom = false;
-      currentAmount = val;
-      document.getElementById('custom-amount').style.display = 'none';
-      document.querySelectorAll('.amount-btn').forEach(btn => btn.classList.remove('active'));
-      if(btnElement) btnElement.classList.add('active');
-      renderPayPal();
-    }
+// === DYNAMIC PAYPAL SDK LOADER ===
+function loadPayPalSDK(mode) {
+  const container = document.getElementById('paypal-button-container');
+  container.innerHTML = '<p style="color: #25F4EE; text-align: center; padding: 20px;">Loading PayPal...</p>';
 
-    function toggleCustomInput() {
-      isCustom = true;
-      document.querySelectorAll('.amount-btn').forEach(btn => btn.classList.remove('active'));
-      const customInput = document.getElementById('custom-amount');
-      customInput.style.display = 'block';
-      customInput.focus();
-      document.getElementById('custom-toggle-btn').classList.add('active');
-      renderPayPal();
-    }
+  // Clean up old PayPal script and global object to prevent conflicts
+  if (paypalScriptElement) {
+    paypalScriptElement.remove();
+    delete window.paypal;
+  }
 
-    function debouncedRender() {
-      clearTimeout(renderTimer);
-      renderTimer = setTimeout(renderPayPal, 800); // Wait user to finish typing
-    }
+  // Create new script tag based on the required intent
+  paypalScriptElement = document.createElement('script');
+  paypalScriptElement.setAttribute('data-sdk-integration-source', 'button-factory');
+  
+  if (mode === 'monthly') {
+    paypalScriptElement.src = `https://www.paypal.com/sdk/js?client-id=${PAYPAL_CLIENT_ID}&vault=true&intent=subscription`;
+  } else {
+    paypalScriptElement.src = `https://www.paypal.com/sdk/js?client-id=${PAYPAL_CLIENT_ID}&currency=USD`;
+  }
 
-    // === PAYPAL INTEGRATION ===
-    function renderPayPal() {
-      const container = document.getElementById('paypal-button-container');
-      container.innerHTML = ''; // Clear old buttons to re-render fresh state
+  // Once script loads, render the buttons
+  paypalScriptElement.onload = renderPayPal;
+  document.head.appendChild(paypalScriptElement);
+}
 
-      let finalAmount = isCustom ? parseFloat(document.getElementById('custom-amount').value) : currentAmount;
-      if (!finalAmount || finalAmount <= 0) finalAmount = 5; // Fallback
-      
-      const userEmail = document.getElementById('donor-email').value || "anonymous@tiktop.online";
+// === DONATION LOGIC ===
+function setDonationMode(mode) {
+  if (donationMode === mode) return; // Do nothing if clicking the same tab
+  donationMode = mode;
+  document.getElementById('tab-one-time').classList.toggle('selected', mode === 'one-time');
+  document.getElementById('tab-monthly').classList.toggle('selected', mode === 'monthly');
+  loadPayPalSDK(mode); // Reload SDK with correct intent
+}
 
-      // Build Config based on Mode
-      let paypalConfig = {
-        style: { shape: 'rect', color: 'black', layout: 'vertical', label: donationMode === 'monthly' ? 'subscribe' : 'paypal' }
-      };
+function setAmount(val, btnElement) {
+  isCustom = false;
+  currentAmount = val;
+  document.getElementById('custom-amount').style.display = 'none';
+  document.querySelectorAll('.amount-btn').forEach(btn => btn.classList.remove('active'));
+  if(btnElement) btnElement.classList.add('active');
+  if (window.paypal) renderPayPal();
+}
 
-      if (donationMode === 'one-time') {
-        paypalConfig.createOrder = function(data, actions) {
-          return actions.order.create({
-            purchase_units: [{
-              amount: { value: finalAmount.toString(), currency_code: "USD" },
-              custom_id: userEmail // Maps to Webhook
-            }]
-          });
-        };
-        paypalConfig.onApprove = function(data, actions) {
-          return actions.order.capture().then(function(details) {
-            alert('Thank you for your generous support!');
-            document.getElementById('donor-email').value = '';
-          });
-        };
-      } else {
-        paypalConfig.createSubscription = function(data, actions) {
-          // Calls your index.js backend endpoint
-          return fetch('/api/create-paypal-subscription-plan', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ amount: finalAmount })
-          })
-          .then(res => res.json())
-          .then(data => {
-            if (data.id) return data.id; // Returns the generated plan ID
-            throw new Error("Plan creation failed");
-          });
-        };
-        paypalConfig.onApprove = function(data, actions) {
-          alert('Thank you for becoming a monthly member! Your receipt has been sent.');
-        };
-      }
+function toggleCustomInput() {
+  isCustom = true;
+  document.querySelectorAll('.amount-btn').forEach(btn => btn.classList.remove('active'));
+  const customInput = document.getElementById('custom-amount');
+  customInput.style.display = 'block';
+  customInput.focus();
+  document.getElementById('custom-toggle-btn').classList.add('active');
+  if (window.paypal) renderPayPal();
+}
 
-      paypal.Buttons(paypalConfig).render('#paypal-button-container');
-    }
+function debouncedRender() {
+  clearTimeout(renderTimer);
+  renderTimer = setTimeout(() => {
+    if (window.paypal) renderPayPal();
+  }, 800); // Wait user to finish typing
+}
 
-    // Google Layout Fixer
-    (function() {
-      function fixGoogleTranslateLayout() {
-        document.body.style.top = "0px";
-        document.body.style.marginTop = "0px";
-        document.documentElement.style.marginTop = "0px";
-        document.documentElement.style.height = "100%";
-        const banner = document.querySelector('.goog-te-banner-frame');
-        if (banner) banner.style.display = "none";
-      }
-      fixGoogleTranslateLayout();
-      const observer = new MutationObserver(fixGoogleTranslateLayout);
-      observer.observe(document.documentElement, { attributes: true, childList: true, subtree: true, attributeFilter: ['style'] });
-    })();
+// === PAYPAL INTEGRATION ===
+function renderPayPal() {
+  const container = document.getElementById('paypal-button-container');
+  container.innerHTML = ''; // Clear old buttons
+
+  let finalAmount = isCustom ? parseFloat(document.getElementById('custom-amount').value) : currentAmount;
+  if (!finalAmount || finalAmount <= 0) finalAmount = 5; // Fallback
+  
+  const userEmail = document.getElementById('donor-email').value || "anonymous@tiktop.online";
+
+  let paypalConfig = {
+    style: { shape: 'rect', color: 'black', layout: 'vertical', label: donationMode === 'monthly' ? 'subscribe' : 'paypal' }
+  };
+
+  if (donationMode === 'one-time') {
+    paypalConfig.createOrder = function(data, actions) {
+      return actions.order.create({
+        purchase_units: [{
+          amount: { value: finalAmount.toString(), currency_code: "USD" },
+          custom_id: userEmail // Maps to Webhook
+        }]
+      });
+    };
+    paypalConfig.onApprove = function(data, actions) {
+      return actions.order.capture().then(function(details) {
+        alert('Thank you for your generous support!');
+        document.getElementById('donor-email').value = '';
+      });
+    };
+  } else {
+    paypalConfig.createSubscription = function(data, actions) {
+      // Calls your index.js backend endpoint
+      return fetch('/api/create-paypal-subscription-plan', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ amount: finalAmount })
+      })
+      .then(res => {
+        if (!res.ok) throw new Error("Network response was not ok");
+        return res.json();
+      })
+      .then(data => {
+        if (data.id) return data.id; // Returns the generated plan ID
+        throw new Error("Plan creation failed - No ID returned");
+      })
+      .catch(err => {
+        console.error("Subscription Error:", err);
+        alert("Server error creating subscription. Check backend logs.");
+      });
+    };
+    paypalConfig.onApprove = function(data, actions) {
+      alert('Thank you for becoming a monthly member! Your receipt has been sent.');
+    };
+  }
+
+  paypal.Buttons(paypalConfig).render('#paypal-button-container');
+}
+
+// Google Layout Fixer
+(function() {
+  function fixGoogleTranslateLayout() {
+    document.body.style.top = "0px";
+    document.body.style.marginTop = "0px";
+    document.documentElement.style.marginTop = "0px";
+    document.documentElement.style.height = "100%";
+    const banner = document.querySelector('.goog-te-banner-frame');
+    if (banner) banner.style.display = "none";
+  }
+  fixGoogleTranslateLayout();
+  const observer = new MutationObserver(fixGoogleTranslateLayout);
+  observer.observe(document.documentElement, { attributes: true, childList: true, subtree: true, attributeFilter: ['style'] });
+})();
+
   </script>
 </body>
 </html>
