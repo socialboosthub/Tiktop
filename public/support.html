@@ -103,7 +103,7 @@
     }
     .input-box:focus { border-color: var(--cyan); }
 
-    #paypal-button-container { margin-top: 25px; min-height: 150px; background: rgba(0,0,0,0.1); border-radius: 10px; padding: 15px; }
+    #paypal-button-container { margin-top: 25px; min-height: 160px; background: rgba(0,0,0,0.1); border-radius: 10px; padding: 15px; }
 
     /* FOOTER */
     .footer { padding: 60px 6% 40px; background: #000; margin-top: auto; color: #fff; }
@@ -373,7 +373,7 @@ function renderPayPal() {
   iframe.id = 'paypal-sandbox-frame';
   iframe.style.width = '100%';
   iframe.style.border = 'none';
-  iframe.style.height = '200px'; 
+  iframe.style.height = '220px'; 
   iframe.style.background = 'transparent';
   iframe.style.overflow = 'hidden';
   iframe.setAttribute('allowtransparency', 'true');
@@ -388,7 +388,7 @@ function renderPayPal() {
       <meta charset="UTF-8">
       <style>
         body { margin: 0; padding: 0; background: transparent; overflow: hidden; }
-        #render-target { width: 100%; min-height: 150px; }
+        #render-target { width: 100%; min-height: 160px; }
       </style>
     </head>
     <body>
@@ -401,7 +401,7 @@ function renderPayPal() {
         
         window.onload = function() {
           if (!window.paypal || !window.paypal.Buttons) {
-            window.parent.postMessage({ type: 'PAYPAL_RESIZE', height: 150 }, '*');
+            window.parent.postMessage({ type: 'PAYPAL_RESIZE', height: 160 }, '*');
             return;
           }
           
@@ -410,7 +410,8 @@ function renderPayPal() {
               shape: 'rect', 
               color: 'blue', 
               layout: 'vertical', 
-              label: '${donationMode === 'monthly' ? 'subscribe' : 'pay'}' 
+              label: '${donationMode === 'monthly' ? 'subscribe' : 'pay'}',
+              height: 50
             }
           };
           
