@@ -349,7 +349,7 @@ function debouncedRender() {
   renderTimer = setTimeout(renderPayPal, 400); 
 }
 
-// === SANDBOXED PAYPAL ENGINE (PREVENTS COLLISION VANISHING ACT) ===
+// === SANDBOXED PAYPAL ENGINE ===
 function renderPayPal() {
   const container = document.getElementById('paypal-button-container');
   if (!container) return;
@@ -369,7 +369,6 @@ function renderPayPal() {
     scriptSrc += "&currency=USD";
   }
 
-  // Create clean isolated document window structure
   const iframe = document.createElement('iframe');
   iframe.id = 'paypal-sandbox-frame';
   iframe.style.width = '100%';
@@ -407,7 +406,12 @@ function renderPayPal() {
           }
           
           let config = {
-            style: { shape: 'rect', color: 'black', layout: 'vertical', label: '${donationMode === 'monthly' ? 'subscribe' : 'paypal'}' }
+            style: { 
+              shape: 'rect', 
+              color: 'blue', 
+              layout: 'vertical', 
+              label: '${donationMode === 'monthly' ? 'subscribe' : 'pay'}' 
+            }
           };
           
           if ('${donationMode}' === 'one-time') {
@@ -445,7 +449,6 @@ function renderPayPal() {
             setTimeout(emitResize, 400);
           });
           
-          // Continuously track layout size updates (e.g. expansion of card forms)
           setInterval(emitResize, 800);
         };
       <\/script>
@@ -476,4 +479,3 @@ function renderPayPal() {
   </script>
 </body>
 </html>
-
