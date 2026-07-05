@@ -115,140 +115,30 @@
     .footer a:hover { opacity: 0.7; }
     .footer-bottom { margin-top: 40px; text-align: center; font-size: 13px; opacity: 0.7; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; }
     body.light-mode .footer-bottom { border-top: 1px solid rgba(0,0,0,0.1); }
+
     /* === FAQ ACCORDION STYLES === */
-.faq-container {
-  max-width: 600px;
-  margin: 50px auto;
-  padding: 0 20px;
-  color: var(--text-main);
-}
-.faq-title {
-  font-size: 24px;
-  text-align: center;
-  margin-bottom: 30px;
-}
-.faq-item {
-  margin-bottom: 12px;
-  background: rgba(255, 255, 255, 0.03);
-  border-radius: 8px;
-  border: 1px solid var(--border);
-  overflow: hidden;
-  transition: border-color 0.3s;
-}
-.faq-item:hover {
-  border-color: rgba(37, 244, 238, 0.4); /* subtle cyan glow on hover */
-}
-.faq-trigger {
-  width: 100%;
-  background: transparent;
-  border: none;
-  outline: none;
-  padding: 18px;
-  text-align: left;
-  color: var(--text-main);
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 15px;
-}
-.faq-arrow {
-  font-size: 12px;
-  transition: transform 0.3s ease;
-  color: var(--pink);
-}
-.faq-panel {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.3s ease-out, padding 0.3s ease;
-  padding: 0 18px;
-}
-.faq-panel p {
-  font-size: 14px;
-  color: var(--text-dim);
-  line-height: 1.6;
-  padding-bottom: 18px;
-}
-/* Active state classes handled via JavaScript */
-.faq-item.active {
-  border-color: var(--cyan);
-  background: rgba(255, 255, 255, 0.05);
-}
-.faq-item.active .faq-arrow {
-  transform: rotate(90deg);
-  color: var(--cyan);
-}
-/* === SUPPORT CLAIMS CARD STYLES === */
-.claims-container {
-  max-width: 600px;
-  margin: 40px auto;
-  padding: 0 20px;
-}
-.claims-heading {
-  font-size: 22px;
-  margin-bottom: 25px;
-  border-bottom: 2px solid var(--pink);
-  padding-bottom: 8px;
-  display: inline-block;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-}
-.claims-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-.claim-card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 20px;
-  display: flex;
-  gap: 18px;
-  align-items: flex-start;
-  transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), border-color 0.3s ease, box-shadow 0.3s ease;
-}
-/* Smooth interactive hover depth shifts */
-.claim-card:hover {
-  transform: translateY(-3px);
-  border-color: rgba(238, 29, 82, 0.5); /* Pink accent border glow */
-  box-shadow: 0 12px 30px rgba(238, 29, 82, 0.15);
-}
-/* Alternate color theme matching for alternating cards */
-.claim-card:nth-child(even):hover {
-  border-color: rgba(37, 244, 238, 0.5); /* Cyan accent border glow */
-  box-shadow: 0 12px 30px rgba(37, 244, 238, 0.15);
-}
-.claim-icon {
-  font-size: 24px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid var(--border);
-  padding: 10px;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 48px;
-  height: 48px;
-}
-body.light-mode .claim-icon {
-  background: rgba(0, 0, 0, 0.03);
-}
-.claim-content h3 {
-  font-size: 16px;
-  color: var(--text-main);
-  margin-bottom: 6px;
-  font-weight: 600;
-}
-.claim-content p {
-  font-size: 14px;
-  color: var(--text-dim);
-  line-height: 1.5;
-}
+    .faq-container { max-width: 600px; margin: 50px auto; padding: 0 20px; color: var(--text-main); }
+    .faq-title { font-size: 24px; text-align: center; margin-bottom: 30px; }
+    .faq-item { margin-bottom: 12px; background: rgba(255, 255, 255, 0.03); border-radius: 8px; border: 1px solid var(--border); overflow: hidden; transition: border-color 0.3s; }
+    .faq-item:hover { border-color: rgba(37, 244, 238, 0.4); }
+    .faq-trigger { width: 100%; background: transparent; border: none; outline: none; padding: 18px; text-align: left; color: var(--text-main); font-size: 16px; font-weight: 600; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 15px; }
+    .faq-arrow { font-size: 12px; transition: transform 0.3s ease; color: var(--pink); }
+    .faq-panel { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out, padding 0.3s ease; padding: 0 18px; }
+    .faq-panel p { font-size: 14px; color: var(--text-dim); line-height: 1.6; padding-bottom: 18px; }
+    .faq-item.active { border-color: var(--cyan); background: rgba(255, 255, 255, 0.05); }
+    .faq-item.active .faq-arrow { transform: rotate(90deg); color: var(--cyan); }
 
-
+    /* === SUPPORT CLAIMS CARD STYLES === */
+    .claims-container { max-width: 600px; margin: 40px auto; padding: 0 20px; }
+    .claims-heading { font-size: 22px; margin-bottom: 25px; border-bottom: 2px solid var(--pink); padding-bottom: 8px; display: inline-block; font-weight: 700; letter-spacing: 0.5px; }
+    .claims-grid { display: flex; flex-direction: column; gap: 16px; }
+    .claim-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; display: flex; gap: 18px; align-items: flex-start; transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), border-color 0.3s ease, box-shadow 0.3s ease; }
+    .claim-card:hover { transform: translateY(-3px); border-color: rgba(238, 29, 82, 0.5); box-shadow: 0 12px 30px rgba(238, 29, 82, 0.15); }
+    .claim-card:nth-child(even):hover { border-color: rgba(37, 244, 238, 0.5); box-shadow: 0 12px 30px rgba(37, 244, 238, 0.15); }
+    .claim-icon { font-size: 24px; background: rgba(255, 255, 255, 0.04); border: 1px solid var(--border); padding: 10px; border-radius: 12px; display: flex; align-items: center; justify-content: center; min-width: 48px; height: 48px; }
+    body.light-mode .claim-icon { background: rgba(0, 0, 0, 0.03); }
+    .claim-content h3 { font-size: 16px; color: var(--text-main); margin-bottom: 6px; font-weight: 600; }
+    .claim-content p { font-size: 14px; color: var(--text-dim); line-height: 1.5; }
   </style>
 </head>
 <body>
@@ -320,88 +210,80 @@ body.light-mode .claim-icon {
         <div id="paypal-button-container"></div>
       </div>
     </div>
+
     <div class="claims-container">
-  <h2 class="claims-heading">Why We Need Your Support</h2>
-  <div class="claims-grid">
-
-    <div class="claim-card">
-      <div class="claim-icon">🚀</div>
-      <div class="claim-content">
-        <h3>High Bandwidth & Server Costs</h3>
-        <p>Processing and delivering high-definition video files to thousands of users simultaneously takes heavy server performance. As traffic scales, backend infrastructure costs scale up directly.</p>
+      <h2 class="claims-heading">Why We Need Your Support</h2>
+      <div class="claims-grid">
+        <div class="claim-card">
+          <div class="claim-icon">🚀</div>
+          <div class="claim-content">
+            <h3>High Bandwidth & Server Costs</h3>
+            <p>Processing and delivering high-definition video files to thousands of users simultaneously takes heavy server performance. As traffic scales, backend infrastructure costs scale up directly.</p>
+          </div>
+        </div>
+        <div class="claim-card">
+          <div class="claim-icon">🛡️</div>
+          <div class="claim-content">
+            <h3>Bypassing Algorithm Disruptions</h3>
+            <p>Social networks change their data structure tags frequently to break scrapers. Donations secure premium proxy assets and pay for the fast code adjustments required to keep download pipelines online 24/7.</p>
+          </div>
+        </div>
+        <div class="claim-card">
+          <div class="claim-icon">🚫</div>
+          <div class="claim-content">
+            <h3>100% Clean & Safe Space</h3>
+            <p>Most online converters rely on malicious redirect networks, trackers, or intrusive pop-up ads to pay the bills. User contributions are the exclusive reason we can keep the platform entirely safe and ad-free.</p>
+          </div>
+        </div>
+        <div class="claim-card">
+          <div class="claim-icon">🛠️</div>
+          <div class="claim-content">
+            <h3>Priority Feature Routing</h3>
+            <p>While the utility options stay completely accessible to everyone, supporters gain an open channel for immediate input. Bug alerts or platform request messages from our active donors always go directly to the front of our system queue.</p>
+          </div>
+        </div>
       </div>
     </div>
-
-    <div class="claim-card">
-      <div class="claim-icon">🛡️</div>
-      <div class="claim-content">
-        <h3>Bypassing Algorithm Disruptions</h3>
-        <p>Social networks change their data structure tags frequently to break scrapers. Donations secure premium proxy assets and pay for the fast code adjustments required to keep download pipelines online 24/7.</p>
-      </div>
-    </div>
-
-    <div class="claim-card">
-      <div class="claim-icon">🚫</div>
-      <div class="claim-content">
-        <h3>100% Clean & Safe Space</h3>
-        <p>Most online converters rely on malicious redirect networks, trackers, or intrusive pop-up ads to pay the bills. User contributions are the exclusive reason we can keep the platform entirely safe and ad-free.</p>
-      </div>
-    </div>
-
-    <div class="claim-card">
-      <div class="claim-icon">🛠️</div>
-      <div class="claim-content">
-        <h3>Priority Feature Routing</h3>
-        <p>While the utility options stay completely accessible to everyone, supporters gain an open channel for immediate input. Bug alerts or platform request messages from our active donors always go directly to the front of our system queue.</p>
-      </div>
-    </div>
-
-  </div>
-</div>
 
     <div class="faq-container">
-  <h2 class="faq-title">Frequently Asked Questions</h2>
-
-  <div class="faq-item">
-    <button class="faq-trigger">
-      <span>How do I cancel my monthly subscription?</span>
-      <span class="faq-arrow">▶</span>
-    </button>
-    <div class="faq-panel">
-      <p>You can pause or cancel your monthly support at any time directly inside your personal PayPal account dashboard under "Automatic Payments," or by dropping an email to our support team.</p>
+      <h2 class="faq-title">Frequently Asked Questions</h2>
+      <div class="faq-item">
+        <button class="faq-trigger">
+          <span>How do I cancel my monthly subscription?</span>
+          <span class="faq-arrow">▶</span>
+        </button>
+        <div class="faq-panel">
+          <p>You can pause or cancel your monthly support at any time directly inside your personal PayPal account dashboard under "Automatic Payments," or by dropping an email to our support team.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-trigger">
+          <span>Is my payment configuration secure?</span>
+          <span class="faq-arrow">▶</span>
+        </button>
+        <div class="faq-panel">
+          <p>Absolutely. We use PayPal’s official secure payment architecture to process all transactions. TikTop operates completely serverless regarding transactional files; we never see, collect, or store your payment details.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-trigger">
+          <span>Are donations refundable?</span>
+          <span class="faq-arrow">▶</span>
+        </button>
+        <div class="faq-panel">
+          <p>Because contributions go directly toward covering live server resource costs and running active proxy assets, requests are generally non-refundable. However, if there was an explicit billing system issue, get in touch via our contact form.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-trigger">
+          <span>Is my contribution tax-deductible?</span>
+          <span class="faq-arrow">▶</span>
+        </button>
+        <div class="faq-panel">
+          <p>No. TikTop is an independent web utility project and is not a registered 501(c)(3) charity. Your support helps directly as a standard commercial operation cost contribution.</p>
+        </div>
+      </div>
     </div>
-  </div>
-
-  <div class="faq-item">
-    <button class="faq-trigger">
-      <span>Is my payment configuration secure?</span>
-      <span class="faq-arrow">▶</span>
-    </button>
-    <div class="faq-panel">
-      <p>Absolutely. We use PayPal’s official secure payment architecture to process all transactions. TikTop operates completely serverless regarding transactional files; we never see, collect, or store your payment details.</p>
-    </div>
-  </div>
-
-  <div class="faq-item">
-    <button class="faq-trigger">
-      <span>Are donations refundable?</span>
-      <span class="faq-arrow">▶</span>
-    </button>
-    <div class="faq-panel">
-      <p>Because contributions go directly toward covering live server resource costs and running active proxy assets, requests are generally non-refundable. However, if there was an explicit billing system issue, get in touch via our contact form.</p>
-    </div>
-  </div>
-
-  <div class="faq-item">
-    <button class="faq-trigger">
-      <span>Is my contribution tax-deductible?</span>
-      <span class="faq-arrow">▶</span>
-    </button>
-    <div class="faq-panel">
-      <p>No. TikTop is an independent web utility project and is not a registered 501(c)(3) charity. Your support helps directly as a standard commercial operation cost contribution.</p>
-    </div>
-  </div>
-</div>
 
     <footer class="footer">
       <div class="footer-grid">
@@ -441,7 +323,7 @@ let currentAmount = 10;
 let isCustom = false;
 let renderTimer;
 
-// Listen for secure payment messages from our internal sandbox frame
+// Listen for secure payment and error messages from our internal sandbox frame
 window.addEventListener('message', function(event) {
   if (event.data && event.data.type === 'PAYPAL_SUCCESS') {
     if (event.data.mode === 'one-time') {
@@ -456,6 +338,14 @@ window.addEventListener('message', function(event) {
     if (frame) {
       frame.style.height = event.data.height + 'px';
     }
+  }
+  // Catch internal SDK/API checkout failure configurations
+  if (event.data && event.data.type === 'PAYPAL_ERROR') {
+    alert('Checkout Initialization Failed: The donation amount entered is invalid or too large for standard PayPal processing. Please enter a valid, smaller amount.');
+    // Instantly reset the system value securely
+    const customInput = document.getElementById('custom-amount');
+    if(customInput) customInput.value = '';
+    setAmount(10, document.querySelectorAll('.amount-btn')[1]);
   }
 });
 
@@ -570,9 +460,18 @@ function renderPayPal() {
   const container = document.getElementById('paypal-button-container');
   if (!container) return;
   
+  let finalAmount = isCustom ? parseFloat(document.getElementById('custom-amount').value) : currentAmount;
+  
+  // Guard 1: Proactive client-side balance ceiling boundary validation
+  if (isCustom && finalAmount > 50000) {
+    alert("Donation limit reached: The maximum allowable online donation transaction setup is $50,000. Please enter a lower amount.");
+    document.getElementById('custom-amount').value = '';
+    setAmount(10, document.querySelectorAll('.amount-btn')[1]);
+    return;
+  }
+
   container.innerHTML = '<p style="color: var(--cyan); text-align: center; margin-top: 20px;">Loading Secure Checkout...</p>';
 
-  let finalAmount = isCustom ? parseFloat(document.getElementById('custom-amount').value) : currentAmount;
   if (!finalAmount || finalAmount <= 0) finalAmount = 5; 
   
   const userEmail = document.getElementById('donor-email').value || "anonymous@tiktop.online";
@@ -628,6 +527,10 @@ function renderPayPal() {
               layout: 'vertical', 
               label: '${donationMode === 'monthly' ? 'subscribe' : 'pay'}',
               height: 50
+            },
+            // Guard 2: Capture critical payment runtime initialization crashes/errors
+            onError: function(err) {
+              window.parent.postMessage({ type: 'PAYPAL_ERROR' }, '*');
             }
           };
           
@@ -702,7 +605,7 @@ function renderPayPal() {
       const panel = currentItem.querySelector('.faq-panel');
       const isActive = currentItem.classList.contains('active');
 
-      // Close all other items first (optional, mimics smooth accordion behavior)
+      // Close all other items first
       document.querySelectorAll('.faq-item').forEach(item => {
         item.classList.remove('active');
         item.querySelector('.faq-panel').style.maxHeight = null;
@@ -719,6 +622,6 @@ function renderPayPal() {
     });
   });
 </script>
-
 </body>
 </html>
+
