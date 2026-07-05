@@ -115,6 +115,72 @@
     .footer a:hover { opacity: 0.7; }
     .footer-bottom { margin-top: 40px; text-align: center; font-size: 13px; opacity: 0.7; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; }
     body.light-mode .footer-bottom { border-top: 1px solid rgba(0,0,0,0.1); }
+    /* === FAQ ACCORDION STYLES === */
+.faq-container {
+  max-width: 600px;
+  margin: 50px auto;
+  padding: 0 20px;
+  color: var(--text-main);
+}
+.faq-title {
+  font-size: 24px;
+  text-align: center;
+  margin-bottom: 30px;
+}
+.faq-item {
+  margin-bottom: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  overflow: hidden;
+  transition: border-color 0.3s;
+}
+.faq-item:hover {
+  border-color: rgba(37, 244, 238, 0.4); /* subtle cyan glow on hover */
+}
+.faq-trigger {
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  padding: 18px;
+  text-align: left;
+  color: var(--text-main);
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+}
+.faq-arrow {
+  font-size: 12px;
+  transition: transform 0.3s ease;
+  color: var(--pink);
+}
+.faq-panel {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-out, padding 0.3s ease;
+  padding: 0 18px;
+}
+.faq-panel p {
+  font-size: 14px;
+  color: var(--text-dim);
+  line-height: 1.6;
+  padding-bottom: 18px;
+}
+/* Active state classes handled via JavaScript */
+.faq-item.active {
+  border-color: var(--cyan);
+  background: rgba(255, 255, 255, 0.05);
+}
+.faq-item.active .faq-arrow {
+  transform: rotate(90deg);
+  color: var(--cyan);
+}
+
   </style>
 </head>
 <body>
@@ -186,6 +252,49 @@
         <div id="paypal-button-container"></div>
       </div>
     </div>
+    <div class="faq-container">
+  <h2 class="faq-title">Frequently Asked Questions</h2>
+
+  <div class="faq-item">
+    <button class="faq-trigger">
+      <span>How do I cancel my monthly subscription?</span>
+      <span class="faq-arrow">▶</span>
+    </button>
+    <div class="faq-panel">
+      <p>You can pause or cancel your monthly support at any time directly inside your personal PayPal account dashboard under "Automatic Payments," or by dropping an email to our support team.</p>
+    </div>
+  </div>
+
+  <div class="faq-item">
+    <button class="faq-trigger">
+      <span>Is my payment configuration secure?</span>
+      <span class="faq-arrow">▶</span>
+    </button>
+    <div class="faq-panel">
+      <p>Absolutely. We use PayPal’s official secure payment architecture to process all transactions. TikTop operates completely serverless regarding transactional files; we never see, collect, or store your payment details.</p>
+    </div>
+  </div>
+
+  <div class="faq-item">
+    <button class="faq-trigger">
+      <span>Are donations refundable?</span>
+      <span class="faq-arrow">▶</span>
+    </button>
+    <div class="faq-panel">
+      <p>Because contributions go directly toward covering live server resource costs and running active proxy assets, requests are generally non-refundable. However, if there was an explicit billing system issue, get in touch via our contact form.</p>
+    </div>
+  </div>
+
+  <div class="faq-item">
+    <button class="faq-trigger">
+      <span>Is my contribution tax-deductible?</span>
+      <span class="faq-arrow">▶</span>
+    </button>
+    <div class="faq-panel">
+      <p>No. TikTop is an independent web utility project and is not a registered 501(c)(3) charity. Your support helps directly as a standard commercial operation cost contribution.</p>
+    </div>
+  </div>
+</div>
 
     <footer class="footer">
       <div class="footer-grid">
@@ -478,5 +587,31 @@ function renderPayPal() {
   observer.observe(document.documentElement, { attributes: true, childList: true, subtree: true, attributeFilter: ['style'] });
 })();
   </script>
+  <script>
+  // Accordion Logic
+  document.querySelectorAll('.faq-trigger').forEach(trigger => {
+    trigger.addEventListener('click', () => {
+      const currentItem = trigger.parentElement;
+      const panel = currentItem.querySelector('.faq-panel');
+      const isActive = currentItem.classList.contains('active');
+
+      // Close all other items first (optional, mimics smooth accordion behavior)
+      document.querySelectorAll('.faq-item').forEach(item => {
+        item.classList.remove('active');
+        item.querySelector('.faq-panel').style.maxHeight = null;
+      });
+
+      // Toggle current item
+      if (!isActive) {
+        currentItem.classList.add('active');
+        panel.style.maxHeight = panel.scrollHeight + "px";
+      } else {
+        currentItem.classList.remove('active');
+        panel.style.maxHeight = null;
+      }
+    });
+  });
+</script>
+
 </body>
 </html>
