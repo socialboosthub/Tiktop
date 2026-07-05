@@ -180,6 +180,74 @@
   transform: rotate(90deg);
   color: var(--cyan);
 }
+/* === SUPPORT CLAIMS CARD STYLES === */
+.claims-container {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+.claims-heading {
+  font-size: 22px;
+  margin-bottom: 25px;
+  border-bottom: 2px solid var(--pink);
+  padding-bottom: 8px;
+  display: inline-block;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+.claims-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.claim-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px;
+  display: flex;
+  gap: 18px;
+  align-items: flex-start;
+  transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), border-color 0.3s ease, box-shadow 0.3s ease;
+}
+/* Smooth interactive hover depth shifts */
+.claim-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(238, 29, 82, 0.5); /* Pink accent border glow */
+  box-shadow: 0 12px 30px rgba(238, 29, 82, 0.15);
+}
+/* Alternate color theme matching for alternating cards */
+.claim-card:nth-child(even):hover {
+  border-color: rgba(37, 244, 238, 0.5); /* Cyan accent border glow */
+  box-shadow: 0 12px 30px rgba(37, 244, 238, 0.15);
+}
+.claim-icon {
+  font-size: 24px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border);
+  padding: 10px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 48px;
+  height: 48px;
+}
+body.light-mode .claim-icon {
+  background: rgba(0, 0, 0, 0.03);
+}
+.claim-content h3 {
+  font-size: 16px;
+  color: var(--text-main);
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.claim-content p {
+  font-size: 14px;
+  color: var(--text-dim);
+  line-height: 1.5;
+}
+
 
   </style>
 </head>
@@ -252,37 +320,42 @@
         <div id="paypal-button-container"></div>
       </div>
     </div>
-    <div class="info-section" style="max-width: 600px; margin: 40px auto; color: var(--text-main);">
-  <h2 style="font-size: 22px; margin-bottom: 15px; border-bottom: 2px solid var(--pink); padding-bottom: 10px; display: inline-block;">What your support actually pays for:</h2>
-  <ul style="list-style-type: none; padding: 0; font-size: 15px; line-height: 1.6;">
-    <li style="margin-bottom: 10px;">🚀 <strong>Massive Bandwidth Costs:</strong> Video files are heavy. Serving millions of downloads requires expensive, high-speed servers to keep your downloads fast.</li>
-    <li style="margin-bottom: 10px;">🛡️ <strong>Proxies & API Maintenance:</strong> Social platforms constantly update their code to block downloaders. We spend resources on private proxies and daily code updates to ensure the tool never goes down.</li>
-    <li style="margin-bottom: 10px;">💻 <strong>Keeping It Free:</strong> Your donations allow us to keep the core tool 100% free for users who can't afford to pay.</li>
-  </ul>
-</div>
-<div class="info-section" style="max-width: 600px; margin: 40px auto; padding: 0 20px; color: var(--text-main);">
-  <h2 style="font-size: 22px; margin-bottom: 20px; border-bottom: 2px solid var(--pink); padding-bottom: 10px; display: inline-block;">Why We Need Your Support (The Honest Truth)</h2>
-  
-  <div style="display: flex; flex-direction: column; gap: 20px; font-size: 15px; line-height: 1.6;">
-    <div>
-      🚀 <strong>High Bandwidth & Server Costs</strong>
-      <p style="color: var(--text-dim); font-size: 14px; margin-top: 4px;">Processing and delivering high-definition video downloads to thousands of users simultaneously requires premium, high-speed servers. As traffic grows, our hosting bills scale up directly.</p>
+    <div class="claims-container">
+  <h2 class="claims-heading">Why We Need Your Support</h2>
+  <div class="claims-grid">
+
+    <div class="claim-card">
+      <div class="claim-icon">🚀</div>
+      <div class="claim-content">
+        <h3>High Bandwidth & Server Costs</h3>
+        <p>Processing and delivering high-definition video files to thousands of users simultaneously takes heavy server performance. As traffic scales, backend infrastructure costs scale up directly.</p>
+      </div>
     </div>
 
-    <div>
-      🛡️ <strong>Bypassing Constant Algorithm Changes</strong>
-      <p style="color: var(--text-dim); font-size: 14px; margin-top: 4px;">Social platforms update their code weekly to block scraping tools. Donations fund the high-quality proxy networks and continuous backend updates needed to ensure TikTop works 24/7 without breaking.</p>
+    <div class="claim-card">
+      <div class="claim-icon">🛡️</div>
+      <div class="claim-content">
+        <h3>Bypassing Algorithm Disruptions</h3>
+        <p>Social networks change their data structure tags frequently to break scrapers. Donations secure premium proxy assets and pay for the fast code adjustments required to keep download pipelines online 24/7.</p>
+      </div>
     </div>
 
-    <div>
-      🚫 <strong>Keeping the Site Clean and Safe</strong>
-      <p style="color: var(--text-dim); font-size: 14px; margin-top: 4px;">Most free downloading tools rely on intrusive, sketchy pop-up ads or malware networks to survive. Your contributions allow us to keep this platform completely clean, safe, and family-friendly.</p>
+    <div class="claim-card">
+      <div class="claim-icon">🚫</div>
+      <div class="claim-content">
+        <h3>100% Clean & Safe Space</h3>
+        <p>Most online converters rely on malicious redirect networks, trackers, or intrusive pop-up ads to pay the bills. User contributions are the exclusive reason we can keep the platform entirely safe and ad-free.</p>
+      </div>
     </div>
 
-    <div>
-      🛠️ <strong>What Monthly Supporters Get:</strong>
-      <p style="color: var(--text-dim); font-size: 14px; margin-top: 4px;">While the tool remains free for everyone, supporters get premium access to a dedicated feedback pipeline. If a download path breaks or you want a new platform added (like YouTube or Instagram updates), supporter requests are moved to the top of our development queue.</p>
+    <div class="claim-card">
+      <div class="claim-icon">🛠️</div>
+      <div class="claim-content">
+        <h3>Priority Feature Routing</h3>
+        <p>While the utility options stay completely accessible to everyone, supporters gain an open channel for immediate input. Bug alerts or platform request messages from our active donors always go directly to the front of our system queue.</p>
+      </div>
     </div>
+
   </div>
 </div>
 
