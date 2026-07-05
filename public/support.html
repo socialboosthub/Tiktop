@@ -105,6 +105,30 @@
 
     #paypal-button-container { margin-top: 25px; min-height: 160px; background: rgba(0,0,0,0.1); border-radius: 10px; padding: 15px; }
 
+    /* CUSTOM ALERTS STYLING */
+    .custom-modal-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.85); display: flex; align-items: center; justify-content: center;
+      z-index: 20000; opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
+    }
+    .custom-modal-overlay.open { opacity: 1; pointer-events: auto; }
+    .custom-modal-box {
+      background: var(--card); border: 2px solid var(--border); border-radius: 16px;
+      padding: 30px; max-width: 420px; width: 90%; text-align: center;
+      transform: translateY(-20px); transition: transform 0.3s ease;
+      color: var(--text-main);
+    }
+    .custom-modal-overlay.open .custom-modal-box { transform: translateY(0); }
+    .modal-icon { font-size: 45px; margin-bottom: 15px; display: inline-block; }
+    .modal-title { font-size: 20px; font-weight: 700; margin-bottom: 12px; }
+    .modal-desc { font-size: 14px; color: var(--text-dim); line-height: 1.6; margin-bottom: 24px; }
+    .modal-close-btn {
+      background: linear-gradient(to right, var(--pink), var(--cyan)); color: #fff;
+      border: none; padding: 12px 30px; font-size: 15px; font-weight: bold; border-radius: 8px;
+      cursor: pointer; width: 100%; transition: transform 0.2s, opacity 0.2s;
+    }
+    .modal-close-btn:hover { transform: scale(1.02); opacity: 0.9; }
+
     /* FOOTER */
     .footer { padding: 60px 6% 40px; background: #000; margin-top: auto; color: #fff; }
     body.light-mode .footer { background: var(--pink); color: #000; }
@@ -149,6 +173,15 @@
         <div class="neon-ring ring-3"></div>
     </div>
     <p class="loader-text-neon">TikTop Support</p>
+  </div>
+
+  <div id="custom-alert-modal" class="custom-modal-overlay">
+    <div class="custom-modal-box" id="modal-box">
+      <span class="modal-icon" id="modal-icon">❌</span>
+      <h3 class="modal-title" id="modal-title">System Error</h3>
+      <p class="modal-desc" id="modal-desc">Something went wrong during execution pipeline processing layout tags.</p>
+      <button class="modal-close-btn" onclick="closeCustomAlert()">Got It</button>
+    </div>
   </div>
 
   <div id="index-content">
@@ -323,14 +356,42 @@ let currentAmount = 10;
 let isCustom = false;
 let renderTimer;
 
+// Dynamic Styled Modals Custom Engine Handler
+function triggerStyledModal(type, title, text) {
+  const modal = document.getElementById('custom-alert-modal');
+  const box = document.getElementById('modal-box');
+  const icon = document.getElementById('modal-icon');
+  const titleEl = document.getElementById('modal-title');
+  const descEl = document.getElementById('modal-desc');
+
+  // Change style color depending on transaction status code
+  if (type === 'success') {
+    icon.textContent = '🎉';
+    box.style.borderColor = 'var(--cyan)';
+    box.style.boxShadow = '0 15px 40px rgba(37, 244, 238, 0.25)';
+  } else {
+    icon.textContent = '❌';
+    box.style.borderColor = 'var(--pink)';
+    box.style.boxShadow = '0 15px 40px rgba(238, 29, 82, 0.25)';
+  }
+
+  titleEl.textContent = title;
+  descEl.textContent = text;
+  modal.classList.add('open');
+}
+
+function closeCustomAlert() {
+  document.getElementById('custom-alert-modal').classList.remove('open');
+}
+
 // Listen for secure payment and error messages from our internal sandbox frame
 window.addEventListener('message', function(event) {
   if (event.data && event.data.type === 'PAYPAL_SUCCESS') {
     if (event.data.mode === 'one-time') {
-      alert('Thank you for your generous support!');
+      triggerStyledModal('success', 'Generous Contribution Received!', 'Thank you for your incredible support to help keep TikTop fast and ad-free!');
       document.getElementById('donor-email').value = '';
     } else {
-      alert('Thank you for becoming a monthly member! Your receipt has been sent.');
+      triggerStyledModal('success', 'Welcome to the Club!', 'Thank you for becoming a monthly member! Your automatic subscription billing details receipt has been successfully logged.');
     }
   }
   if (event.data && event.data.type === 'PAYPAL_RESIZE') {
@@ -339,10 +400,11 @@ window.addEventListener('message', function(event) {
       frame.style.height = event.data.height + 'px';
     }
   }
-  // Catch internal SDK/API checkout failure configurations
+  // Catch exact system runtime execution initialization errors or size restrictions thrown directly from PayPal's platform
   if (event.data && event.data.type === 'PAYPAL_ERROR') {
-    alert('Checkout Initialization Failed: The donation amount entered is invalid or too large for standard PayPal processing. Please enter a valid, smaller amount.');
-    // Instantly reset the system value securely
+    triggerStyledModal('error', 'PayPal Gateway Refused', 'The secure checkout engine closed because PayPal rejected this specific transaction payload amount or processing request. Please reduce the numeric scale and try again.');
+    
+    // Smooth reset pipeline
     const customInput = document.getElementById('custom-amount');
     if(customInput) customInput.value = '';
     setAmount(10, document.querySelectorAll('.amount-btn')[1]);
@@ -460,18 +522,9 @@ function renderPayPal() {
   const container = document.getElementById('paypal-button-container');
   if (!container) return;
   
-  let finalAmount = isCustom ? parseFloat(document.getElementById('custom-amount').value) : currentAmount;
-  
-  // Guard 1: Proactive client-side balance ceiling boundary validation
-  if (isCustom && finalAmount > 50000) {
-    alert("Donation limit reached: The maximum allowable online donation transaction setup is $50,000. Please enter a lower amount.");
-    document.getElementById('custom-amount').value = '';
-    setAmount(10, document.querySelectorAll('.amount-btn')[1]);
-    return;
-  }
-
   container.innerHTML = '<p style="color: var(--cyan); text-align: center; margin-top: 20px;">Loading Secure Checkout...</p>';
 
+  let finalAmount = isCustom ? parseFloat(document.getElementById('custom-amount').value) : currentAmount;
   if (!finalAmount || finalAmount <= 0) finalAmount = 5; 
   
   const userEmail = document.getElementById('donor-email').value || "anonymous@tiktop.online";
@@ -528,7 +581,7 @@ function renderPayPal() {
               label: '${donationMode === 'monthly' ? 'subscribe' : 'pay'}',
               height: 50
             },
-            // Guard 2: Capture critical payment runtime initialization crashes/errors
+            // PayPal's SDK error boundary catcher handles exact payment runtime failures natively
             onError: function(err) {
               window.parent.postMessage({ type: 'PAYPAL_ERROR' }, '*');
             }
@@ -624,4 +677,3 @@ function renderPayPal() {
 </script>
 </body>
 </html>
-
