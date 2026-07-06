@@ -97,18 +97,57 @@
     .blog-title { font-size: 20px; color: var(--text-main); margin-bottom: 10px; line-height: 1.4; }
     .blog-excerpt { font-size: 15px; color: var(--text-dim); line-height: 1.6; margin-bottom: 20px; flex: 1; }
     .read-more { color: var(--cyan); font-weight: 600; font-size: 14px; margin-top: auto; display: inline-block; }
-
     /* FOOTER */
-    .footer { padding: 60px 6% 40px; background: #000; margin-top: auto; }
-    .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); max-width: 1100px; margin: 0 auto; }
-    .footer h3, .footer h4 { margin-bottom: 12px; color: var(--text-main); }
-    .footer p, .footer a { color: var(--text-dim); font-size: 14px; text-decoration: none; display: block; margin-bottom: 8px; transition: 0.2s; }
-    .footer a:hover { color: var(--cyan); }
-    .footer-bottom { margin-top: 40px; text-align: center; font-size: 13px; color: var(--text-dim); border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; padding-bottom: 40px; }
-    body.light-mode .footer { background: var(--pink); }
-    body.light-mode .footer h3, body.light-mode .footer h4, body.light-mode .footer p, body.light-mode .footer a { color: #000; }
-    body.light-mode .footer a:hover { color: #fff; }
-    body.light-mode .footer-bottom { border-top: 1px solid rgba(0,0,0,0.2); }
+    .footer {
+      padding: 60px 6% 40px;
+      background: #000;
+      margin-top: auto; 
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+
+    .footer h3,
+    .footer h4 {
+      margin-bottom: 12px;
+    }
+
+    .footer p,
+    .footer a {
+      color: black;
+      font-size: 14px;
+      text-decoration: none;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .footer a:hover {
+      color: var(--text);
+    }
+/* Update this block in your mp3-download.html <style> section */
+.footer-bottom { 
+    margin-top: 40px; 
+    text-align: center; 
+    font-size: 13px; 
+    opacity: 0.7; 
+    border-top: 1px solid rgba(0,0,0,0.1); 
+    padding-top: 20px;
+    padding-bottom: 40px; /* <--- ADD THIS EXTRA PADDING */
+}
+    
+
+/* Also ensure the footer itself doesn't cut off */
+.footer { 
+    padding: 60px 6% 40px; /* Increase last value from 30px to 40px */
+    background: var(--pink); 
+    border-radius: 12px; 
+    margin-top: 50px; 
+    text-align: left; 
+    color: #000; 
+}
+
   </style>
 </head>
 
