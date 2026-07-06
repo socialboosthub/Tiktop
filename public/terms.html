@@ -211,6 +211,38 @@ html {
 .fcc-nav {
     top: 0 !important;
 }
+    /* =========================
+   SCROLL TO TOP CSS
+========================= */
+
+#scrollTop {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 55px;
+  height: 55px;
+
+  background: linear-gradient(45deg, #EE1D52, #25F4EE);
+
+  border-radius: 50%;
+  display: none;
+
+  align-items: center;
+  justify-content: center;
+
+  font-size: 25px;
+  cursor: pointer;
+  z-index: 5000;
+
+  color: white;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+
+  transition: 0.3s ease;
+}
+
+#scrollTop:hover {
+  transform: translateY(-5px) scale(1.05);
+}
   </style>
 </head>
 <body>
@@ -243,14 +275,13 @@ html {
 </div>
     </nav>
 
-  <div class="side-menu" id="side-menu">
+    <div class="side-menu" id="side-menu">
     <a href="./index.html">Home</a>
-    <a href="./index.html#download">How to download</a>
-    <a href="./index.html#faq">FAQ</a>
+    <a href="./blogs.html">Blog</a>
     <a href="./history.html">History</a>
     <a href="./support.html">Support Us</a>
     <a href="./contact.html">Contact Us</a>
-  </div>
+    </div>
 
   <div class="container">
     <h1>Terms of Service</h1>
@@ -328,6 +359,8 @@ html {
       </div>
       <div>
         <h4>Tools</h4>
+                <a href="./index.html">Tiktok Downloader</a>
+        
         <a href="./instagram.html">Instagram Downloader</a>
         <a href="./youtube.html">Youtube Downloader</a>
         <a href="./facebook.html">Facebook Downloader</a>
@@ -445,5 +478,30 @@ window.addEventListener('load', () => {
     });
 })();
   </script>
+  <div id="scrollTop" onclick="scrollToTop()">🚀</div>
+<script>
+/* =========================
+   SCROLL TO TOP JS
+========================= */
+
+// Show button after scrolling down
+window.addEventListener("scroll", () => {
+  const btn = document.getElementById("scrollTop");
+
+  if (window.pageYOffset > 400) {
+    btn.style.display = "flex";
+  } else {
+    btn.style.display = "none";
+  }
+});
+
+// Smooth scroll to top
+function scrollToTop() {
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+}
+</script>
 </body>
 </html>
