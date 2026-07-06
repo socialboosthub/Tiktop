@@ -1678,6 +1678,29 @@ window.addEventListener('load', () => {
         attributeFilter: ['style'] // Only trigger when styles change
     });
 })();
+
+    function runDiagnostic(btn) {
+  const originalText = btn.innerHTML;
+  btn.disabled = true;
+  btn.innerHTML = "Pinging Node...";
+  btn.style.opacity = "0.6";
+  
+  setTimeout(() => {
+    const randomPing = Math.floor(Math.random() * (95 - 35 + 1)) + 35;
+    btn.innerHTML = `Connected! Latency: ${randomPing}ms`;
+    btn.style.background = "var(--cyan)";
+    btn.style.color = "#000";
+    btn.style.opacity = "1";
+    
+    setTimeout(() => {
+      btn.innerHTML = originalText;
+      btn.style.background = "var(--pink)";
+      btn.style.color = "#fff";
+      btn.disabled = false;
+    }, 4000);
+  }, 1200);
+}
+
   </script>
 </body>
 </html>
