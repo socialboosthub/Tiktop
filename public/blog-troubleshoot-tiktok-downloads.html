@@ -101,6 +101,38 @@
     .footer-bottom { margin-top: 40px; text-align: center; font-size: 13px; opacity: 0.7; border-top: 1px solid rgba(0,0,0,0.1); padding-top: 20px; padding-bottom: 40px; }
 
     @media (max-width: 768px) { .article-title { font-size: 32px; } .article-body { font-size: 16px; } }
+    /* =========================
+   SCROLL TO TOP CSS
+========================= */
+
+#scrollTop {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 55px;
+  height: 55px;
+
+  background: linear-gradient(45deg, #EE1D52, #25F4EE);
+
+  border-radius: 50%;
+  display: none;
+
+  align-items: center;
+  justify-content: center;
+
+  font-size: 25px;
+  cursor: pointer;
+  z-index: 5000;
+
+  color: white;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+
+  transition: 0.3s ease;
+}
+
+#scrollTop:hover {
+  transform: translateY(-5px) scale(1.05);
+}
   </style>
 </head>
 
@@ -226,6 +258,31 @@
     window.addEventListener('load', () => { const savedLang = localStorage.getItem('site_lang'); const currentLang = getCurrentLang(); if (savedLang && savedLang !== currentLang) { setLanguage(savedLang); } });
     (function() { function fixGoogleTranslateLayout() { document.body.style.top = "0px"; document.body.style.marginTop = "0px"; document.documentElement.style.marginTop = "0px"; document.documentElement.style.height = "100%"; const banner = document.querySelector('.goog-te-banner-frame'); if (banner) banner.style.display = "none"; } fixGoogleTranslateLayout(); const observer = new MutationObserver(fixGoogleTranslateLayout); observer.observe(document.documentElement, { attributes: true, childList: true, subtree: true, attributeFilter: ['style'] }); })();
   </script>
+  <div id="scrollTop" onclick="scrollToTop()">🚀</div>
+<script>
+/* =========================
+   SCROLL TO TOP JS
+========================= */
+
+// Show button after scrolling down
+window.addEventListener("scroll", () => {
+  const btn = document.getElementById("scrollTop");
+
+  if (window.pageYOffset > 400) {
+    btn.style.display = "flex";
+  } else {
+    btn.style.display = "none";
+  }
+});
+
+// Smooth scroll to top
+function scrollToTop() {
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+}
+</script>
 </body>
 </html>
 
