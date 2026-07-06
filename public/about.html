@@ -264,6 +264,40 @@ html {
 .fcc-nav {
     top: 0 !important;
 }
+    <style>
+/* =========================
+   SCROLL TO TOP CSS
+========================= */
+
+#scrollTop {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 55px;
+  height: 55px;
+
+  background: linear-gradient(45deg, #EE1D52, #25F4EE);
+
+  border-radius: 50%;
+  display: none;
+
+  align-items: center;
+  justify-content: center;
+
+  font-size: 25px;
+  cursor: pointer;
+  z-index: 5000;
+
+  color: white;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+
+  transition: 0.3s ease;
+}
+
+#scrollTop:hover {
+  transform: translateY(-5px) scale(1.05);
+}
+</style>
   </style>
 </head>
 <body>
@@ -533,5 +567,30 @@ window.addEventListener('load', () => {
     });
 })();
   </script>
+  <div id="scrollTop" onclick="scrollToTop()">🚀</div>
+<script>
+/* =========================
+   SCROLL TO TOP JS
+========================= */
+
+// Show button after scrolling down
+window.addEventListener("scroll", () => {
+  const btn = document.getElementById("scrollTop");
+
+  if (window.pageYOffset > 400) {
+    btn.style.display = "flex";
+  } else {
+    btn.style.display = "none";
+  }
+});
+
+// Smooth scroll to top
+function scrollToTop() {
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+}
+</script>
 </body>
   </html>
