@@ -124,6 +124,58 @@
 #scrollTop:hover {  
   transform: translateY(-5px) scale(1.05);  
 }  
+    /* FAQ */
+
+.faq{
+    margin-top:30px;
+}
+
+.faq details{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:12px;
+    margin-bottom:15px;
+    overflow:hidden;
+    transition:.3s;
+}
+
+.faq details[open]{
+    border-color:var(--cyan);
+    box-shadow:0 0 15px rgba(37,244,238,.15);
+}
+
+.faq summary{
+    list-style:none;
+    cursor:pointer;
+    padding:18px 20px;
+    font-size:18px;
+    font-weight:600;
+    color:var(--text-main);
+    position:relative;
+}
+
+.faq summary::-webkit-details-marker{
+    display:none;
+}
+
+.faq summary::after{
+    content:"+";
+    position:absolute;
+    right:20px;
+    font-size:24px;
+    color:var(--cyan);
+    transition:.3s;
+}
+
+.faq details[open] summary::after{
+    content:"−";
+}
+
+.faq p{
+    padding:0 20px 20px;
+    color:var(--text-dim);
+    line-height:1.8;
+}
   </style>  </head>  <body>  
   <div id="page-preloader">  
     <div class="neon-loader"><div class="neon-ring ring-1"></div><div class="neon-ring ring-2"></div><div class="neon-ring ring-3"></div></div>  
@@ -271,24 +323,44 @@
 
 <h2 id="faq">Frequently Asked Questions</h2>
 
-<h3>Is TikTop free?</h3>
-<p>Yes. TikTop is free to use.</p>
+<div class="faq">
 
-<h3>Can TikTop download private TikTok videos?</h3>
-<p>No. TikTop is intended for publicly available content and does not provide access to private videos.</p>
+<details>
+<summary>Is TikTop legal?</summary>
+<p>Yes. TikTop is a web-based tool that helps users download publicly available TikTok videos. Users are responsible for complying with applicable copyright laws and platform terms when using downloaded content.</p>
+</details>
 
-<h3>Do I need a TikTok account?</h3>
-<p>No. You only need the public video link.</p>
+<details>
+<summary>Is TikTop free?</summary>
+<p>Yes. TikTop is free to use and works directly in your browser without requiring installation.</p>
+</details>
 
-<h3>Can creators see that I downloaded their video?</h3>
+<details>
+<summary>Can TikTop download private TikTok videos?</summary>
+<p>No. TikTop only works with publicly accessible TikTok videos and does not provide access to private content.</p>
+</details>
+
+<details>
+<summary>Do I need a TikTok account?</summary>
+<p>No. Simply copy the public TikTok video link and paste it into TikTop.</p>
+</details>
+
+<details>
+<summary>Can creators see that I downloaded their video?</summary>
 <p>No. Downloading a publicly available video through TikTop does not notify the creator.</p>
+</details>
 
-<h3>Can I use downloaded videos commercially?</h3>
-<p>If you want to use someone else's content commercially, you should obtain permission from the copyright owner unless another legal basis applies.</p>
+<details>
+<summary>Can I repost downloaded videos?</summary>
+<p>Before reposting someone else's content, make sure you have permission or another valid legal basis, and respect copyright and platform rules.</p>
+</details>
 
-<h3>Does TikTop store my downloads?</h3>
-<p>TikTop is designed to process your download request and does not require creating an account to use the service.</p>
+<details>
+<summary>Is TikTop safe?</summary>
+<p>Yes. TikTop does not require your TikTok password or account login to process public video links.</p>
+</details>
 
+</div>
 <h2 id="final-thoughts">Final Thoughts</h2>
 
 <p>TikTop is a convenient tool that helps users download publicly available TikTok videos for offline access. The platform itself is legal to use, but users remain responsible for respecting copyright, creators' rights, and applicable laws when using downloaded content.</p>
