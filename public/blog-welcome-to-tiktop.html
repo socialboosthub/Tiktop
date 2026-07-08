@@ -134,6 +134,73 @@
 #scrollTop:hover {
   transform: translateY(-5px) scale(1.05);
 }
+    .toc{
+margin:35px 0;
+border:1px solid var(--border);
+border-radius:12px;
+overflow:hidden;
+background:var(--card);
+}
+
+.toc-toggle{
+width:100%;
+padding:18px;
+background:none;
+border:none;
+color:var(--text-main);
+font-size:18px;
+font-weight:700;
+display:flex;
+justify-content:space-between;
+cursor:pointer;
+}
+
+.toc-content{
+display:none;
+padding:0 18px 18px;
+}
+
+.toc-content.show{
+display:block;
+}
+
+.toc-content a{
+display:block;
+padding:8px 0;
+color:var(--cyan);
+text-decoration:none;
+}
+
+.faq-item{
+margin:18px 0;
+border:1px solid var(--border);
+border-radius:10px;
+overflow:hidden;
+}
+
+.faq-question{
+width:100%;
+padding:18px;
+background:var(--card);
+border:none;
+display:flex;
+justify-content:space-between;
+align-items:center;
+cursor:pointer;
+font-size:17px;
+font-weight:700;
+color:var(--text-main);
+}
+
+.faq-answer{
+display:none;
+padding:18px;
+background:rgba(255,255,255,.03);
+}
+
+.faq-answer.show{
+display:block;
+}
   </style>
 </head>
 
@@ -189,29 +256,209 @@
       <!-- Hero image using your logo with padding and styling to fit beautifully -->
       <img src="https://i.ibb.co/wZjXcKz9/file-00000000e22871fd9cb25a4586788b91.png" alt="TikTop Logo" class="hero-img">
 
-      <div class="article-body">
-        <p>If you've ever tried to download a video from social media, you already know the struggle. You search for a tool, click a link, and immediately get bombarded with fake download buttons, pop-up ads, and slow speeds. We got tired of it, too. That's exactly why we built <strong>TikTop</strong>.</p>
-        
-        <h2>The Vision Behind TikTop</h2>
-        <p>Our goal was simple: build a premium, hyper-fast digital tool that respects the user. We wanted a clean, beautiful interface where you could paste a link and instantly get a high-quality video or MP3 without jumping through hoops.</p>
+<div class="article-body">
 
-        <h2>What Makes Us Different?</h2>
-        <ul>
-            <li><strong>100% Ad-Free Experience:</strong> You will never see a confusing banner ad or a malicious pop-up on our site. We prioritize clean design and user safety.</li>
-            <li><strong>Batch Processing Power:</strong> Why download one video at a time? TikTop's infrastructure is built to let you process multiple links simultaneously, saving you massive amounts of time.</li>
-            <li><strong>Multi-Platform Ready:</strong> While we started with a flawless TikTok no-watermark experience, the TikTop family is built to handle content across the board—from Instagram and YouTube to Facebook and Twitter.</li>
-            <li><strong>Sleek Dark Mode:</strong> We built the platform with a premium neon-cyber aesthetic and a built-in light/dark toggle so it always looks great on your screen.</li>
-        </ul>
+<!-- TOC -->
+<div class="toc">
+<button class="toc-toggle">
+📑 Table of Contents <span>+</span>
+</button>
 
-        <h2>Join the Future of Downloading</h2>
-        <p>We are constantly upgrading our servers and refining our code to ensure that TikTop remains the absolute fastest and most reliable tool on the web. Whether you are a content creator, a video editor, or just someone saving funny clips to share with friends, TikTop is built for you.</p>
+<div class="toc-content">
+<a href="#story">Our Story</a>
+<a href="#mission">Our Mission</a>
+<a href="#features">Why Users Choose TikTop</a>
+<a href="#future">Building for the Future</a>
+<a href="#security">Privacy & Security</a>
+<a href="#community">Our Community</a>
+<a href="#faq">Frequently Asked Questions</a>
+</div>
+</div>
 
-        <div class="cta-box">
-            <h3>Try the Best Downloader Today</h3>
-            <p>Experience the ad-free, high-speed difference right now.</p>
-            <a href="./index.html" class="cta-button">Go to Homepage</a>
-        </div>
-      </div>
+<p>
+TikTop was created with one clear objective: make downloading public social media
+content simple, fast, and frustration-free. Many existing download websites are
+filled with misleading advertisements, fake buttons, unnecessary redirects, and
+slow processing times. We believed users deserved something better.
+</p>
+
+<p>
+Instead of overwhelming visitors with distractions, TikTop focuses on speed,
+simplicity, and reliability. Whether you're downloading a single clip or saving
+content for later viewing, our platform is designed to complete the job with only
+a few clicks.
+</p>
+
+<h2 id="story">Our Story</h2>
+
+<p>
+The idea behind TikTop started from a common experience shared by millions of
+internet users. Finding a trustworthy downloader often meant trying multiple
+websites before finding one that actually worked.
+</p>
+
+<p>
+Rather than accepting that poor experience as normal, we built a platform that
+prioritizes clean design, dependable performance, and an interface anyone can use,
+regardless of technical experience.
+</p>
+
+<h2 id="mission">Our Mission</h2>
+
+<p>
+Our mission is straightforward: provide a dependable collection of online tools
+that remain easy to use while delivering excellent performance across every device.
+</p>
+
+<ul>
+<li>Fast processing.</li>
+<li>Simple interface.</li>
+<li>No complicated setup.</li>
+<li>Works on desktop and mobile.</li>
+<li>Regular improvements.</li>
+</ul>
+
+<h2 id="features">Why Users Choose TikTop</h2>
+
+<p>
+People return to TikTop because they know what to expect. Pages load quickly,
+downloads begin within seconds, and the interface remains uncluttered from start
+to finish.
+</p>
+
+<p>
+Every improvement is focused on making the experience smoother instead of adding
+features that complicate the website.
+</p>
+
+<ul>
+<li>Responsive design for all screen sizes.</li>
+<li>Quick download processing.</li>
+<li>Support for multiple content types.</li>
+<li>Modern dark and light themes.</li>
+<li>Regular performance updates.</li>
+<li>Simple navigation for beginners.</li>
+</ul>
+
+<h2 id="future">Building for the Future</h2>
+
+<p>
+TikTop continues to evolve. New tools, faster servers, and improved compatibility
+are added as the platform grows.
+</p>
+
+<p>
+Future updates are focused on making downloads even quicker while expanding support
+for additional media formats and improving accessibility for users around the world.
+</p>
+
+<div class="cta-box">
+<h3>Experience TikTop Today</h3>
+
+<p>
+See why thousands of visitors choose TikTop for quick and reliable downloads.
+</p>
+
+<a href="./index.html" class="cta-button">
+Open TikTop
+</a>
+
+</div>
+
+<h2 id="security">Privacy & Security</h2>
+
+<p>
+Privacy matters. TikTop is designed to minimize unnecessary data collection while
+providing a smooth experience. We continuously improve security practices to help
+protect visitors while using our tools.
+</p>
+
+<p>
+Our goal is to make every visit straightforward without asking users to complete
+unnecessary registration before accessing the downloader.
+</p>
+
+<h2 id="community">Growing Together</h2>
+
+<p>
+Every suggestion from users helps shape TikTop's future. Feedback about new tools,
+performance improvements, and design changes allows us to keep improving the
+platform over time.
+</p>
+
+<p>
+As our community grows, so does our commitment to providing reliable online tools
+that remain easy for everyone to use.
+</p>
+
+<h2 id="faq">Frequently Asked Questions</h2>
+
+<div class="faq-item">
+<button class="faq-question">
+What is TikTop?
+<span>+</span>
+</button>
+
+<div class="faq-answer">
+<p>
+TikTop is an online platform that provides tools for downloading publicly available social media content quickly and easily.
+</p>
+</div>
+</div>
+
+<div class="faq-item">
+<button class="faq-question">
+Do I need an account?
+<span>+</span>
+</button>
+
+<div class="faq-answer">
+<p>
+No. Most TikTop tools can be used without creating an account.
+</p>
+</div>
+</div>
+
+<div class="faq-item">
+<button class="faq-question">
+Does TikTop work on phones?
+<span>+</span>
+</button>
+
+<div class="faq-answer">
+<p>
+Yes. TikTop works on Android phones, iPhones, tablets, laptops, and desktop computers.
+</p>
+</div>
+</div>
+
+<div class="faq-item">
+<button class="faq-question">
+Will more tools be added?
+<span>+</span>
+</button>
+
+<div class="faq-answer">
+<p>
+Yes. We continue expanding TikTop with additional download tools and performance improvements.
+</p>
+</div>
+</div>
+
+<div class="faq-item">
+<button class="faq-question">
+Is TikTop free to use?
+<span>+</span>
+</button>
+
+<div class="faq-answer">
+<p>
+Yes. TikTop is free and designed to provide a fast, simple downloading experience.
+</p>
+</div>
+</div>
+
+</div>
 
     </article>
   </div>
@@ -284,6 +531,29 @@ function scrollToTop() {
   });
 }
 </script>
+  <script>
+document.querySelector(".toc-toggle").onclick=function(){
+const content=document.querySelector(".toc-content");
+const icon=this.querySelector("span");
+
+content.classList.toggle("show");
+
+icon.textContent=content.classList.contains("show")?"−":"+";
+};
+
+document.querySelectorAll(".faq-question").forEach(btn=>{
+btn.onclick=function(){
+
+const answer=this.nextElementSibling;
+const icon=this.querySelector("span");
+
+answer.classList.toggle("show");
+
+icon.textContent=answer.classList.contains("show")?"−":"+";
+
+};
+});
+  </script>
 </body>
 </html>
 
