@@ -176,6 +176,71 @@
     color:var(--text-dim);
     line-height:1.8;
 }
+    /* =========================
+   TABLE OF CONTENTS
+========================= */
+
+.toc{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:14px;
+    margin:35px 0;
+    overflow:hidden;
+}
+
+.toc-header{
+    padding:18px 20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    cursor:pointer;
+    user-select:none;
+}
+
+.toc-header h2{
+    margin:0 !important;
+    padding:0 !important;
+    border:none !important;
+    font-size:24px !important;
+    color:var(--text-main);
+}
+
+.toc-icon{
+    font-size:28px;
+    color:var(--cyan);
+    font-weight:bold;
+    transition:.3s;
+}
+
+.toc-content{
+    max-height:1000px;
+    overflow:hidden;
+    transition:max-height .35s ease;
+}
+
+.toc.collapsed .toc-content{
+    max-height:0;
+}
+
+.toc ul{
+    list-style:none;
+    margin:0;
+    padding:0 20px 20px;
+}
+
+.toc li{
+    margin:12px 0;
+}
+
+.toc a{
+    color:var(--text-dim);
+    text-decoration:none;
+    transition:.25s;
+}
+
+.toc a:hover{
+    color:var(--cyan);
+}
   </style>  </head>  <body>  
   <div id="page-preloader">  
     <div class="neon-loader"><div class="neon-ring ring-1"></div><div class="neon-ring ring-2"></div><div class="neon-ring ring-3"></div></div>  
@@ -224,6 +289,45 @@ Is TikTop Legal? Everything You Need to Know
 
 <p>If you've searched for <strong>"Is TikTop legal?"</strong>, you're not alone. Many users want to know whether using TikTop to download public TikTok videos is allowed and whether it is safe. The simple answer is that <strong>TikTop is a legal online tool</strong>. Like many download utilities available on the internet, TikTop simply helps users access publicly available content for offline viewing. However, the way you use downloaded content is what matters most.</p>
 
+<div class="toc" id="toc">
+
+<div class="toc-header" onclick="toggleTOC()">
+<h2>Contents</h2>
+<span class="toc-icon" id="tocIcon">−</span>
+</div>
+
+<div class="toc-content">
+
+<ul>
+
+<li><a href="#what-is-tiktop">What Is TikTop?</a></li>
+
+<li><a href="#is-legal">Is TikTop Legal?</a></li>
+
+<li><a href="#how-it-works">How Does TikTop Work?</a></li>
+
+<li><a href="#copyright">Understanding Copyright</a></li>
+
+<li><a href="#fair-use">What Is Fair Use?</a></li>
+
+<li><a href="#responsible-use">Using TikTop Responsibly</a></li>
+
+<li><a href="#when-not-allowed">When Downloading Can Become a Problem</a></li>
+
+<li><a href="#is-safe">Is TikTop Safe?</a></li>
+
+<li><a href="#why-download">Why People Use TikTop</a></li>
+
+<li><a href="#faq">Frequently Asked Questions</a></li>
+
+<li><a href="#final-thoughts">Final Thoughts</a></li>
+
+</ul>
+
+</div>
+
+</div>
+    
 <h2 id="what-is-tiktop">What Is TikTop?</h2>
 
 <p>TikTop is a free online downloader that allows users to save publicly available TikTok videos without installing any software. The platform is designed to be fast, simple, and accessible from mobile phones, tablets, and desktop computers.</p>
@@ -443,6 +547,19 @@ behavior: "smooth"
 });
 }
 </script>
+<script>
+function toggleTOC(){
 
+const toc=document.getElementById("toc");
+const icon=document.getElementById("tocIcon");
+
+toc.classList.toggle("collapsed");
+
+icon.textContent=toc.classList.contains("collapsed")
+? "+"
+: "−";
+
+}
+</script>
 </body>  
 </html>
