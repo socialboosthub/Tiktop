@@ -133,6 +133,73 @@
 #scrollTop:hover {
   transform: translateY(-5px) scale(1.05);
 }
+    .toc{
+margin:35px 0;
+border:1px solid var(--border);
+border-radius:12px;
+overflow:hidden;
+background:var(--card);
+}
+
+.toc-toggle{
+width:100%;
+padding:18px;
+background:none;
+border:none;
+color:var(--text-main);
+font-size:18px;
+font-weight:700;
+display:flex;
+justify-content:space-between;
+cursor:pointer;
+}
+
+.toc-content{
+display:none;
+padding:0 18px 18px;
+}
+
+.toc-content.show{
+display:block;
+}
+
+.toc-content a{
+display:block;
+padding:8px 0;
+color:var(--cyan);
+text-decoration:none;
+}
+
+.faq-item{
+margin:18px 0;
+border:1px solid var(--border);
+border-radius:10px;
+overflow:hidden;
+}
+
+.faq-question{
+width:100%;
+padding:18px;
+background:var(--card);
+border:none;
+display:flex;
+justify-content:space-between;
+align-items:center;
+cursor:pointer;
+font-size:17px;
+font-weight:700;
+color:var(--text-main);
+}
+
+.faq-answer{
+display:none;
+padding:18px;
+background:rgba(255,255,255,.03);
+}
+
+.faq-answer.show{
+display:block;
+}
   </style>
 </head>
 
@@ -188,28 +255,203 @@
       <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?q=80&w=1000&auto=format&fit=crop" alt="Matrix error screens" class="hero-img">
 
       <div class="article-body">
-        <p>TikTop is designed to be the fastest and most reliable TikTok downloader on the internet. However, sometimes you might run into an error when trying to save a video. Don't worry—99% of the time, the issue is incredibly easy to fix.</p>
-        
-        <h2>1. "Video Not Found" or Invalid Link</h2>
-        <p>This is the most common error. If you get a message saying the link is invalid, check the following:</p>
-        <ul>
-            <li><strong>Is the account private?</strong> TikTop cannot download videos from private TikTok accounts due to privacy restrictions. The video must be public.</li>
-            <li><strong>Did the creator delete the video?</strong> If the video was taken down by the creator or TikTok, the link will no longer work.</li>
-            <li><strong>Is the link formatted correctly?</strong> Make sure you copied the full link (usually looking like <code>https://vm.tiktok.com/...</code> or <code>https://www.tiktok.com/@user/video/...</code>).</li>
-        </ul>
 
-        <h2>2. Downloads Sticking at 99%</h2>
-        <p>If your download starts but gets stuck, it is almost always related to your browser cache or internet connection.</p>
-        <p>Try refreshing the page, clearing your browser's cache, or simply using a different browser. If you are on mobile, switching from Wi-Fi to cellular data (or vice versa) can instantly fix the stall.</p>
+<!-- TOC -->
+<div class="toc">
+<button class="toc-toggle">
+📑 Table of Contents <span>+</span>
+</button>
 
-        <h2>3. Audio Missing from the Download</h2>
-        <p>Occasionally, TikTok mutes videos due to copyright issues in certain regions. If the original video on TikTok has been muted by the platform, the downloaded video will also not contain audio.</p>
+<div class="toc-content">
+<a href="#invalid">1. Invalid or Broken Links</a>
+<a href="#private">2. Private & Deleted Videos</a>
+<a href="#internet">3. Internet Problems</a>
+<a href="#browser">4. Browser Issues</a>
+<a href="#device">5. Device Storage Problems</a>
+<a href="#server">6. Server Maintenance</a>
+<a href="#tips">7. Best Practices</a>
+<a href="#faq">Frequently Asked Questions</a>
+</div>
+</div>
 
-        <div class="cta-box">
-            <h3>Still Having Trouble?</h3>
-            <p>Our servers are always up, but if you've tried everything above and it's still not working, reach out to our team.</p>
-            <a href="./contact.html" class="cta-button">Contact Support</a>
-        </div>
+<p>
+Downloading TikTok videos is usually instant, but occasionally something goes wrong.
+Most problems are caused by invalid links, browser cache, internet interruptions,
+or restrictions placed on the original TikTok video.
+Fortunately, nearly every issue can be solved in less than five minutes.
+</p>
+
+<p>
+This guide covers the most common download problems and explains exactly how to fix
+them without needing any technical knowledge.
+</p>
+
+<h2 id="invalid">Invalid or Broken Links</h2>
+
+<p>
+If TikTop reports that a video cannot be found, first verify that the copied URL is
+complete. Sometimes messaging apps shorten links or remove part of the address,
+making it impossible to locate the video.
+</p>
+
+<ul>
+<li>Copy the link directly from TikTok.</li>
+<li>Avoid manually editing the URL.</li>
+<li>Paste the full address into TikTop.</li>
+<li>Refresh the page and try again.</li>
+</ul>
+
+<h2 id="private">Private or Deleted Videos</h2>
+
+<p>
+Videos from private accounts cannot be downloaded because they are protected by
+TikTok's privacy settings.
+Likewise, videos that have been deleted or removed for policy reasons no longer
+exist on TikTok's servers.
+</p>
+
+<p>
+If the video opens normally inside TikTok but fails elsewhere, ask the creator
+whether they changed the video's visibility settings.
+</p>
+
+<h2 id="internet">Internet Connection Problems</h2>
+
+<p>
+An unstable internet connection is another common reason downloads stop midway.
+Large HD videos require a stable connection throughout the download.
+</p>
+
+<ul>
+<li>Switch between Wi-Fi and mobile data.</li>
+<li>Restart your router if necessary.</li>
+<li>Disable VPNs temporarily.</li>
+<li>Retry after your connection stabilizes.</li>
+</ul>
+
+<h2 id="browser">Browser Cache Issues</h2>
+
+<p>
+Your browser stores cached files to speed up websites. Occasionally these cached
+files become outdated and interfere with downloads.
+</p>
+
+<p>
+Clearing your cache, refreshing the page with Ctrl+F5 (desktop), or opening TikTop
+in an Incognito/Private window usually fixes the problem immediately.
+</p>
+
+<h2 id="device">Low Storage Space</h2>
+
+<p>
+Many users overlook available storage.
+If your phone or computer has almost no free space, downloads may fail without
+displaying a clear error.
+</p>
+
+<ul>
+<li>Delete unnecessary files.</li>
+<li>Move photos to cloud storage.</li>
+<li>Free at least 500 MB before downloading large videos.</li>
+</ul>
+
+<h2 id="server">Temporary Server Maintenance</h2>
+
+<p>
+Although TikTop maintains excellent uptime, scheduled maintenance occasionally
+takes place to improve speed and reliability.
+During these brief periods, processing requests may take slightly longer than usual.
+</p>
+
+<p>
+Simply wait a few minutes and try again.
+</p>
+
+<div class="cta-box">
+<h3>Need Help?</h3>
+<p>
+If you've tried every solution above and your download still isn't working,
+our support team is ready to help.
+</p>
+
+<a href="./contact.html" class="cta-button">
+Contact Support
+</a>
+</div>
+
+<h2 id="tips">Tips to Avoid Download Problems</h2>
+
+<ul>
+<li>Always copy links directly from TikTok.</li>
+<li>Keep your browser updated.</li>
+<li>Avoid downloading over unstable networks.</li>
+<li>Ensure your device has enough storage.</li>
+<li>Refresh the page before retrying failed downloads.</li>
+<li>Use the latest version of TikTop.</li>
+</ul>
+
+<h2 id="faq">Frequently Asked Questions</h2>
+
+<div class="faq-item">
+<button class="faq-question">
+Why won't my TikTok video download?
+<span>+</span>
+</button>
+<div class="faq-answer">
+<p>
+Most failures happen because the video is private, deleted, or the copied link is incomplete.
+</p>
+</div>
+</div>
+
+<div class="faq-item">
+<button class="faq-question">
+Does TikTop work on mobile?
+<span>+</span>
+</button>
+<div class="faq-answer">
+<p>
+Yes. TikTop supports Android, iPhone, tablets, Windows, Mac, and Linux browsers.
+</p>
+</div>
+</div>
+
+<div class="faq-item">
+<button class="faq-question">
+Why is my download slow?
+<span>+</span>
+</button>
+<div class="faq-answer">
+<p>
+Slow internet, VPN connections, or temporary network congestion usually reduce download speed.
+</p>
+</div>
+</div>
+
+<div class="faq-item">
+<button class="faq-question">
+Can I download videos from private accounts?
+<span>+</span>
+</button>
+<div class="faq-answer">
+<p>
+No. Private videos are protected by TikTok's privacy settings and cannot be accessed.
+</p>
+</div>
+</div>
+
+<div class="faq-item">
+<button class="faq-question">
+Is TikTop free?
+<span>+</span>
+</button>
+<div class="faq-answer">
+<p>
+Yes. TikTop is completely free to use without creating an account.
+</p>
+</div>
+</div>
+
       </div>
 
     </article>
@@ -283,6 +525,29 @@ function scrollToTop() {
   });
 }
 </script>
+  <script>
+document.querySelector(".toc-toggle").onclick=function(){
+const content=document.querySelector(".toc-content");
+const icon=this.querySelector("span");
+
+content.classList.toggle("show");
+
+icon.textContent=content.classList.contains("show")?"−":"+";
+};
+
+document.querySelectorAll(".faq-question").forEach(btn=>{
+btn.onclick=function(){
+
+const answer=this.nextElementSibling;
+const icon=this.querySelector("span");
+
+answer.classList.toggle("show");
+
+icon.textContent=answer.classList.contains("show")?"−":"+";
+
+};
+});
+  </script>
 </body>
 </html>
 
