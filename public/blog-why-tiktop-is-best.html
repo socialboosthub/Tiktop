@@ -133,35 +133,67 @@
 #scrollTop:hover {
   transform: translateY(-5px) scale(1.05);
 }
+
     /* TABLE OF CONTENTS */
 
 .toc{
-background:var(--card);
-border:1px solid var(--border);
-border-radius:14px;
-padding:22px;
 margin:35px 0;
+border:1px solid var(--border);
+background:var(--card);
+border-radius:12px;
+overflow:hidden;
 }
 
-.toc h3{
-margin:0 0 15px;
-color:var(--cyan);
+.toc-header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:18px 20px;
+cursor:pointer;
+}
+
+.toc-header h3{
+margin:0;
 font-size:22px;
+color:var(--cyan);
+}
+
+.toc-toggle{
+font-size:30px;
+font-weight:bold;
+color:var(--cyan);
+transition:.3s;
+}
+
+.toc-content{
+max-height:0;
+overflow:hidden;
+transition:max-height .35s ease;
+}
+
+.toc.active .toc-content{
+max-height:500px;
+padding:0 20px 20px;
+}
+
+.toc.active .toc-toggle{
+color:var(--pink);
+transform:rotate(45deg);
 }
 
 .toc ul{
 list-style:none;
-padding:0;
 margin:0;
+padding:0;
 }
 
 .toc li{
-margin:12px 0;
+margin:14px 0;
 }
 
 .toc a{
-color:var(--text-main);
 text-decoration:none;
+color:var(--text-main);
 transition:.3s;
 }
 
@@ -169,7 +201,7 @@ transition:.3s;
 color:var(--pink);
 padding-left:6px;
 }
-
+    
 /* FAQ */
 
 .faq{
@@ -283,21 +315,28 @@ color:var(--pink);
 <p>Whether you are collecting educational videos, preserving creative inspiration, building a content library, or simply saving entertaining clips for offline viewing, TikTop is designed to make the process efficient from beginning to end. Every feature has been developed with speed, simplicity, and reliability in mind.</p>
 
         <div class="toc">
+
+<div class="toc-header">
 <h3>📑 Table of Contents</h3>
+<span class="toc-toggle">+</span>
+</div>
+
+<div class="toc-content">
 
 <ul>
-<li><a href="#why">Why TikTop is Different</a></li>
-
-<li><a href="#speed">Lightning-Fast Downloads</a></li>
-
-<li><a href="#quality">HD Quality Without Watermark</a></li>
-
-<li><a href="#privacy">Privacy Comes First</a></li>
-
-<li><a href="#future">What's Next for TikTop?</a></li>
+<li><a href="#ads">1. A Truly Clean Experience</a></li>
+<li><a href="#speed">2. Faster Processing Technology</a></li>
+<li><a href="#batch">3. Batch Downloading Saves Valuable Time</a></li>
+<li><a href="#quality">4. High-Quality Downloads</a></li>
+<li><a href="#privacy">5. Built with Privacy in Mind</a></li>
+<li><a href="#devices">6. Compatible with Almost Every Device</a></li>
+<li><a href="#future">7. Constant Improvements</a></li>
 </ul>
 
+</div>
+
         </div>
+        
 <h2 id="ads">1. A Truly Clean Experience</h2>
 
 <p>One of the first things visitors notice is the uncluttered interface. Rather than filling every corner of the page with flashing banners or confusing download buttons, TikTop keeps the design focused on what matters. Users simply paste a supported link, choose their preferred download option, and receive their file without unnecessary distractions.</p>
@@ -528,8 +567,22 @@ item.classList.contains("active")?"−":"+";
 });
 
 });
+/* TOC COLLAPSIBLE */
 
+const toc = document.querySelector(".toc");
+const tocHeader = document.querySelector(".toc-header");
+const tocToggle = document.querySelector(".toc-toggle");
+
+tocHeader.addEventListener("click", () => {
+
+toc.classList.toggle("active");
+
+tocToggle.textContent =
+toc.classList.contains("active") ? "−" : "+";
+
+});
   </script>
+  
 </body>
 </html>
 
