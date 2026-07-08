@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How to Save a TikTok Draft to Your Gallery Without Posting It</title>
+  
+  <meta name="description" content="Discover the best workarounds to safely download and save your unpublished TikTok drafts straight to your camera roll without showing them to the public.">
+  <meta name="keywords" content="save tiktok draft, download tiktok draft, tiktok draft to gallery, keep tiktok draft without posting, export tiktok draft">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <meta name="theme-color" content="#EE1D52">
+  <link rel="canonical" href="https://tiktop.online/blog-save-tiktok-drafts.html">
+
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="How to Save a TikTok Draft Without Posting It">
+  <meta property="og:description" content="Master the art of extracting your unpublished TikTok masterpieces directly to your phone's camera roll securely.">
+  <meta property="og:url" content="https://tiktop.online/blog-save-tiktok-drafts.html">
+  <meta property="og:site_name" content="TikTop">
+  <meta property="og:image" content="https://images.unsplash.com/photo-1616469829581-73993eb86b02?q=80&w=1000&auto=format&fit=crop">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="How to Save a TikTok Draft Without Posting It">
+  <meta name="twitter:description" content="Master the art of extracting your unpublished TikTok masterpieces directly to your phone's camera roll securely.">
+  <meta name="twitter:image" content="https://images.unsplash.com/photo-1616469829581-73993eb86b02?q=80&w=1000&auto=format&fit=crop">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="https://tiktop.online/assets/Logo.ico" type="image/x-icon">
+
+  <style>
+    /* BASE CSS */
+    iframe.goog-te-banner-frame { display: none !important; visibility: hidden !important; height: 0 !important; }
+    body > .skiptranslate { display: none !important; }
+    body { top: 0px !important; position: static !important; margin-top: 0px !important; }
+    html { margin-top: 0px !important; height: 100% !important; }
+    .goog-tooltip, .goog-tooltip:hover, .goog-text-highlight { display: none !important; box-shadow: none !important; background: none !important; }
+    .fcc-nav { top: 0 !important; }
+
+    :root {
+      --bg: #000000; --card: #111111; --text: #ffffff; --text-main: #ffffff;
+      --text-dim: #b0b0b0; --muted: #aaaaaa; --border: rgba(255, 255, 255, 0.08);
+      --box-bg: #111111; --pink: #EE1D52; --cyan: #25F4EE; --nav-bg: #0a0a23;
+    }
+    body.light-mode {
+      --bg: #f5f5f7; --card: #ffffff; --text: #111111; --text-main: #000000;
+      --text-dim: #222222; --muted: #666666; --border: rgba(0,0,0,0.08);
+      --box-bg: #ffffff; --nav-bg: #0a0a23;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: Inter, sans-serif; }
+    body { background: var(--bg); color: var(--text-main); transition: background 0.3s, color 0.3s; overflow-x: hidden; }
+    
+    /* PRELOADER */
+    #page-preloader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); z-index: 999999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.5s ease, visibility 0.5s ease; }
+    #page-preloader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+    .neon-loader { position: relative; width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; }
+    .neon-ring { position: absolute; border: 4px solid transparent; border-radius: 50%; animation: ring-pulse 2s cubic-bezier(0.455, 0.03, 0.515, 0.955) infinite; }
+    .ring-1 { width: 100%; height: 100%; border-top-color: var(--cyan); border-bottom-color: var(--cyan); animation-delay: 0s; }
+    .ring-2 { width: 70%; height: 70%; border-left-color: var(--pink); border-right-color: var(--pink); animation-delay: 0.5s; }
+    .ring-3 { width: 40%; height: 40%; border-top-color: var(--text-main); border-bottom-color: var(--text-main); animation-delay: 1s; } 
+    @keyframes ring-pulse { 0% { transform: rotate(0deg) scale(1); opacity: 1; } 50% { transform: rotate(180deg) scale(1.2); opacity: 0.5; } 100% { transform: rotate(360deg) scale(1); opacity: 1; } }
+    .loader-text-neon { margin-top: 25px; font-size: 11px; letter-spacing: 4px; color: var(--text-main); font-weight: bold; text-transform: uppercase; animation: fade-blink 1s infinite; }
+    @keyframes fade-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+    /* NAV & SIDE MENU */
+    .fcc-nav { position: fixed; width: 100%; height: 70px; background: var(--nav-bg); display: flex; align-items: center; justify-content: space-between; padding: 0 20px; z-index: 10000; }
+    .fcc-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; }
+    .fcc-logo img { height: 32px; width: auto; display: block; }
+    .fcc-logo span { background: linear-gradient(to bottom right, var(--pink), var(--cyan)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; font-weight: bold; font-size: 20px; }
+    .nav-right { display: flex; align-items: center; gap: 15px; }
+    .theme-icon { cursor: pointer; font-size: 20px; transition: 0.3s; }
+    .menu-toggle { background: #3b3b4f; border: 1px solid #fff; color: #fff; padding: 5px 10px; cursor: pointer; border-radius: 4px; }
+    .side-menu { position: fixed; top: 50px; right: -100%; width: 250px; height: calc(100vh - 50px); background: var(--nav-bg); transition: 0.4s; z-index: 9999; padding: 20px; display: flex; flex-direction: column; gap: 20px; border-left: 1px solid #3b3b4f; }
+    .side-menu.open { right: 0; }
+    .side-menu a { color: #fff; text-decoration: none; font-size: 18px; border-bottom: 1px solid #3b3b4f; padding-bottom: 10px; }
+    .lang-icon { cursor: pointer; font-size: 20px; }
+    .lang-menu { position: fixed; top: 55px; right: 80px; background: #0a0a23; border: 1px solid #3b3b4f; border-radius: 10px; display: none; z-index: 10002; overflow: hidden; }
+    .lang-menu div { padding: 10px 16px; color: #fff; cursor: pointer; font-size: 14px; }
+    .lang-menu div:hover { background: #EE1D52; }
+
+    /* ARTICLE STYLING */
+    #article-content { padding-top: 100px; min-height: 100vh; display: flex; flex-direction: column; align-items: center; }
+    .article-wrap { max-width: 800px; width: 100%; padding: 0 20px; margin-bottom: 60px; }
+    
+    .article-header { text-align: center; margin-bottom: 40px; }
+    .article-category { display: inline-block; background: rgba(37, 244, 238, 0.1); color: var(--cyan); padding: 6px 15px; border-radius: 20px; font-weight: bold; font-size: 14px; margin-bottom: 15px; border: 1px solid var(--cyan); }
+    .article-title { font-size: 42px; color: var(--text-main); margin-bottom: 15px; line-height: 1.2; }
+    .article-meta { color: var(--muted); font-size: 15px; }
+    
+    .hero-img { width: 100%; height: auto; border-radius: 16px; margin-bottom: 40px; border: 1px solid var(--border); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+    
+    .article-body { font-size: 18px; line-height: 1.8; color: var(--text-dim); }
+    .article-body h2 { font-size: 28px; color: var(--text-main); margin: 40px 0 20px; border-left: 4px solid var(--pink); padding-left: 15px; }
+    .article-body h3 { font-size: 22px; color: var(--text-main); margin: 30px 0 15px; }
+    .article-body p { margin-bottom: 20px; }
+    .article-body strong { color: var(--text-main); }
+    .article-body ul, .article-body ol { margin-left: 20px; margin-bottom: 25px; }
+    .article-body li { margin-bottom: 10px; }
+
+    .cta-box { background: linear-gradient(to right, rgba(238, 29, 82, 0.1), rgba(37, 244, 238, 0.1)); border: 2px dashed var(--pink); border-radius: 12px; padding: 30px; text-align: center; margin: 40px 0; }
+    .cta-box h3 { margin-top: 0; color: var(--text-main); }
+    .cta-button { display: inline-block; background: var(--cyan); color: #000; padding: 15px 30px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 18px; margin-top: 15px; transition: 0.3s; }
+    .cta-button:hover { background: var(--pink); color: #fff; transform: translateY(-3px); }
+    
+    /* FOOTER */
+    .footer { padding: 60px 6% 40px; background: var(--pink); border-radius: 12px; margin-top: 50px; text-align: left; color: #000; }
+    .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+    .footer h3, .footer h4 { margin-bottom: 12px; }
+    .footer p, .footer a { color: black; font-size: 14px; text-decoration: none; display: block; margin-bottom: 8px; }
+    .footer a:hover { color: var(--text); }
+    .footer-bottom { margin-top: 40px; text-align: center; font-size: 13px; opacity: 0.7; border-top: 1px solid rgba(0,0,0,0.1); padding-top: 20px; padding-bottom: 40px; }
+
+    @media (max-width: 768px) { .article-title { font-size: 32px; } .article-body { font-size: 16px; } }
+    
+    /* SCROLL TO TOP */
+    #scrollTop { position: fixed; bottom: 30px; right: 30px; width: 55px; height: 55px; background: linear-gradient(45deg, #EE1D52, #25F4EE); border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 25px; cursor: pointer; z-index: 5000; color: white; box-shadow: 0 8px 20px rgba(0,0,0,0.3); transition: 0.3s ease; }
+    #scrollTop:hover { transform: translateY(-5px) scale(1.05); }
+    
+    /* TOC */
+    .toc { margin:30px 0; background:var(--card); border:1px solid var(--border); border-radius:12px; overflow:hidden; }
+    .toc summary { list-style:none; cursor:pointer; padding:18px 20px; font-size:20px; font-weight:700; color:var(--text-main); position:relative; }
+    .toc summary::-webkit-details-marker { display:none; }
+    .toc summary::after { content:"+"; position:absolute; right:20px; font-size:28px; color:var(--cyan); transition:.3s; }
+    .toc[open] summary::after { content:"−"; }
+    .toc ul { list-style:none; padding:0 20px 20px; }
+    .toc ul ul { margin-left:18px; margin-top:8px; }
+    .toc li { margin:10px 0; }
+    .toc a { color:var(--cyan); text-decoration:none; }
+    .toc a:hover { color:var(--pink); }
+    
+    /* FAQ */
+    .faq { margin-top:30px; }
+    .faq details { background:var(--card); border:1px solid var(--border); border-radius:12px; margin-bottom:15px; overflow:hidden; transition:.3s; }
+    .faq details[open] { border-color:var(--cyan); box-shadow:0 0 15px rgba(37,244,238,.15); }
+    .faq summary { list-style:none; cursor:pointer; padding:18px 20px; font-size:18px; font-weight:600; color:var(--text-main); position:relative; }
+    .faq summary::-webkit-details-marker { display:none; }
+    .faq summary::after { content:"+"; position:absolute; right:20px; top:50%; transform:translateY(-50%); font-size:24px; font-weight:bold; color:var(--cyan); }
+    .faq details[open] summary::after { content:"−"; }
+    .faq p { padding:0 20px 20px; color:var(--text-dim); line-height:1.8; }
+  </style>
+</head>
+
+<body>
+  <div id="page-preloader">
+    <div class="neon-loader"><div class="neon-ring ring-1"></div><div class="neon-ring ring-2"></div><div class="neon-ring ring-3"></div></div>
+    <p class="loader-text-neon">TikTop</p>
+  </div>
+
+  <nav class="fcc-nav">
+    <a href="./index.html" class="fcc-logo">
+      <img src="https://i.ibb.co/wZjXcKz9/file-00000000e22871fd9cb25a4586788b91.png" alt="TikTop Logo">
+      <span>TikTop</span>
+    </a>
+    <div class="nav-right">
+      <span class="lang-icon" onclick="toggleLangMenu()">🌐</span>
+      <span class="theme-icon" onclick="toggleTheme()" id="theme-icon">🌙</span>
+      <button class="menu-toggle" onclick="toggleMenu()">Menu ☰</button>
+    </div>
+
+    <div class="lang-menu" id="lang-menu">
+      <div onclick="changeLang('en')">English</div>
+      <div onclick="changeLang('fr')">Français</div>
+      <div onclick="changeLang('es')">Español</div>
+      <div onclick="changeLang('de')">Deutsch</div>
+      <div onclick="changeLang('it')">Italiano</div>
+      <div onclick="changeLang('pt')">Português</div>
+      <div onclick="changeLang('ar')">العربية</div>
+      <div onclick="changeLang('hi')">हिन्दी</div>
+      <div onclick="changeLang('sw')">Swahili</div>
+      <div onclick="changeLang('tr')">Türkçe</div>
+      <div onclick="changeLang('ru')">Русский</div>
+    </div>
+  </nav>
+
+  <div class="side-menu" id="side-menu">
+    <a href="./index.html">Home</a>
+    <a href="./blogs.html">Blog</a>
+    <a href="./history.html">History</a>
+    <a href="./support.html">Support Us</a>
+    <a href="./contact.html">Contact Us</a>
+  </div>
+
+  <div id="article-content">
+    <article class="article-wrap">
+      
+      <div class="article-header">
+        <span class="article-category">Creator Tips</span>
+        <h1 class="article-title">How to Save a TikTok Draft to Your Gallery Without Posting It</h1>
+        <div class="article-meta">Published on July 8, 2026 • 6 min read</div>
+      </div>
+
+      <img src="https://images.unsplash.com/photo-1616469829581-73993eb86b02?q=80&w=1000&auto=format&fit=crop" alt="Person editing video on mobile" class="hero-img">
+
+      <!-- Table of Contents -->
+      <details class="toc">
+        <summary>Table of Contents</summary>
+        <ul>
+          <li><a href="#why-save-drafts">Why Save Drafts Locally?</a></li>
+          <li><a href="#the-problem">The Missing "Save to Camera Roll" Button</a></li>
+          <li>
+            <a href="#methods">Top Methods to Save Your Drafts</a>
+            <ul>
+              <li><a href="#method-1">Method 1: The "Private Post" Technique (Recommended)</a></li>
+              <li><a href="#method-2">Method 2: Screen Recording the Preview</a></li>
+              <li><a href="#method-3">Method 3: External Editing Tools</a></li>
+            </ul>
+          </li>
+          <li><a href="#losing-drafts">Protecting Drafts Before Deleting the App</a></li>
+          <li><a href="#watermark-removal">Removing the Watermark from Private Drafts</a></li>
+          <li><a href="#faq">Frequently Asked Questions</a></li>
+          <li><a href="#conclusion">Final Thoughts</a></li>
+        </ul>
+      </details>
+
+      <div class="article-body">
+        <h2 id="why-save-drafts">Why Save Drafts Locally?</h2>
+        <p>Creating content on TikTok is an artistic endeavor. You might spend an hour perfectly aligning transitions, syncing your lip-sync to the precise millisecond of a trending audio track, and applying the exact right color-grade filters. However, once that video sits in your Drafts folder, it exists in a precarious state. Drafts on TikTok are stored locally within the app's cache on your specific device, meaning they are not backed up to TikTok's cloud servers.</p>
+        <p>If you accidentally uninstall the app, if your phone gets damaged, or if you simply need to clear space and clear your app cache, your drafts will be permanently deleted with no way to recover them. Additionally, many creators use TikTok's incredibly robust internal editor to create videos that they ultimately intend to post on other platforms, like Instagram Reels or YouTube Shorts, without ever intending to post them publicly on their TikTok profile. For these reasons, knowing how to securely extract and save your drafts to your phone’s physical camera roll is a vital skill for any modern creator.</p>
+
+        <h2 id="the-problem">The Missing "Save to Camera Roll" Button</h2>
+        <p>A common point of frustration for new creators is realizing that TikTok does not provide a simple, direct "Save to Gallery" button from the drafts page. While you can save a video *while* you are in the editing phase (before filters and final audio are fully baked in), you cannot natively export a finalized draft without pushing it through TikTok's publishing pipeline. The platform is designed this way intentionally to encourage users to post content rather than using the app purely as a free video editing software.</p>
+        <p>Fortunately, the creative community has discovered several highly effective workarounds to bypass this limitation. By leveraging the app's privacy settings and utilizing third-party tools, you can easily get your drafts onto your camera roll.</p>
+
+        <h2 id="methods">Top Methods to Save Your Drafts</h2>
+
+        <h3 id="method-1">Method 1: The "Private Post" Technique (Recommended)</h3>
+        <p>This is the absolute best, most reliable, and highest quality method to get your draft out of the app. It tricks the app into finalizing the video file without ever showing it to your followers or the algorithm.</p>
+        <ol>
+          <li>Open TikTok and navigate to your <strong>Profile</strong> tab.</li>
+          <li>Tap on your <strong>Drafts</strong> folder and select the specific video you want to save.</li>
+          <li>Make any final edits to text or audio, then tap <strong>Next</strong> to reach the final "Post" screen where you normally write your caption.</li>
+          <li>Look for the setting that says <strong>"Who can watch this video"</strong> and change it from "Everyone" or "Friends" to <strong>"Only me"</strong>.</li>
+          <li>Scroll down slightly and ensure the toggle for <strong>"Save to device"</strong> is turned ON.</li>
+          <li>Hit <strong>Post</strong>. Because the video is set to "Only me," it will upload privately to your profile (denoted by a small lock icon) and nobody else will see it.</li>
+          <li>As soon as the private upload completes, the app will automatically save a finalized copy of the video directly to your phone's camera roll.</li>
+        </ol>
+
+        <h3 id="method-2">Method 2: Screen Recording the Preview</h3>
+        <p>If you absolutely refuse to post the video—even privately—or if you don't have an active internet connection to facilitate the upload process, you can use your phone's native screen recording function.</p>
+        <ol>
+          <li>Open your draft and tap on the video to enter the editing mode.</li>
+          <li>Locate the "Preview" button (usually an icon that looks like a small square or arrows pointing outwards) to view the video in full screen without the editing interface.</li>
+          <li>Swipe down your device's control center and start a <strong>Screen Recording</strong>.</li>
+          <li>Let the video play from start to finish, ensuring your device's volume is up so the internal audio is captured.</li>
+          <li>Stop the screen recording. You can then go into your camera roll and crop the beginning and end of the recording to hide the fact that it was screen-recorded.</li>
+        </ol>
+        <p><em>Note: This method often results in lower visual quality and can sometimes cause slight audio desynchronization.</em></p>
+
+        <h3 id="method-3">Method 3: External Editing Tools</h3>
+        <p>To avoid the hassle of drafts entirely, many professional creators are shifting to editing outside of the TikTok app. ByteDance (TikTok's parent company) owns an incredibly powerful, free editing app called <strong>CapCut</strong>. CapCut features almost identical tools, transitions, and text options as the native TikTok editor.</p>
+        <p>By creating your video entirely in CapCut, you can export the finalized file directly to your camera roll in stunning 4K resolution whenever you please, bypassing the TikTok drafts system completely. You can then upload that saved file to TikTok, Instagram, or YouTube at your convenience.</p>
+
+        <div class="cta-box">
+          <h3>Need to Remove a Watermark?</h3>
+          <p>If you saved a private video and it has the TikTok logo, use our free tool to clean it up.</p>
+          <a href="./index.html" class="cta-button">Remove Watermarks Instantly</a>
+        </div>
+
+        <h2 id="losing-drafts">Protecting Drafts Before Deleting the App</h2>
+        <p>A terrifying reality for many users is discovering their drafts vanished after they uninstalled and reinstalled TikTok to fix a glitch. Because drafts are not tied to your cloud account, logging back in will not restore them. Before you ever delete the app, you <em>must</em> use the Private Post technique (Method 1) to push all of your valuable drafts onto the private cloud servers of your account, or physically save them to your gallery. Once they are uploaded privately, they are safe from app deletion.</p>
+
+        <h2 id="watermark-removal">Removing the Watermark from Private Drafts</h2>
+        <p>One caveat to using Method 1 is that when TikTok auto-saves the privately posted video to your gallery, it slaps your TikTok username and a bouncing watermark onto the footage. If you plan to use this video for another platform, watermarks can limit your reach (for example, Instagram's algorithm famously suppresses Reels that contain TikTok watermarks).</p>
+        <p>To get a perfectly clean version of your private draft:</p>
+        <ul>
+          <li>Go to the padlock tab on your profile where your private video lives.</li>
+          <li>Tap the three dots (options) and tap <strong>Copy Link</strong>.</li>
+          <li>Open a web browser and go to a dedicated downloader like TikTop.</li>
+          <li>Paste the link. <em>(Note: Some downloaders require the video to be temporarily set to public to fetch the file. If so, quickly set it to public, download the watermark-free version via TikTop, and then immediately set it back to private or delete it).</em></li>
+        </ul>
+
+        <h2 id="faq">Frequently Asked Questions</h2>
+        <div class="faq">
+          <details>
+            <summary>If I post it as "Only me", can anyone see it on the For You Page?</summary>
+            <p>No. Videos set to "Only me" are completely hidden from the algorithm, your followers, and the general public. They exist purely in the private lock folder on your personal profile.</p>
+          </details>
+          <details>
+            <summary>Do TikTok drafts take up phone storage?</summary>
+            <p>Yes, significantly. Every draft retains the high-resolution source clips you used to create it. Having 50 or 100 drafts sitting in your app can easily consume gigabytes of precious storage space on your smartphone.</p>
+          </details>
+          <details>
+            <summary>Can I access my drafts from a different phone?</summary>
+            <p>No. Drafts are locally stored on the physical device where they were created. If you log into your TikTok account on a friend's phone or a brand-new upgrade device, your drafts folder will be empty.</p>
+          </details>
+          <details>
+            <summary>Why is the "Save to device" toggle greyed out?</summary>
+            <p>In some regions, or due to specific audio copyright restrictions (especially if you are using a commercial sound), TikTok may disable the ability to save the video directly. If this happens, you will have to rely on the screen recording method.</p>
+          </details>
+          <details>
+            <summary>Can I recover a draft I accidentally deleted?</summary>
+            <p>Unfortunately, no. Once you swipe and delete a draft from within the TikTok app, it is permanently erased from your device's memory. There is no "recently deleted" folder for drafts.</p>
+          </details>
+        </div>
+
+        <h2 id="conclusion">Final Thoughts</h2>
+        <p>Relying exclusively on TikTok's internal draft system to store your hard work is a risky game. Between unexpected app crashes, required reinstalls, and the lack of cloud syncing, it is incredibly easy to lose hours of creative effort in the blink of an eye. Learning how to properly extract your drafts without broadcasting them to the world gives you total control over your content.</p>
+        <p>By utilizing the "Private Post" method, you ensure that a finalized, high-quality version of your video is safely archived on your device's local camera roll. You can then back it up to your computer, share it on your own terms across different social media platforms, or run it through third-party tools to strip away the watermarks. Take a few minutes today to go through your drafts folder and back up your most prized creations—you’ll thank yourself later.</p>
+      </div>
+    </article>
+  </div>
+
+  <footer class="footer">
+    <div class="footer-grid">
+      <div>
+        <h3>TikTop</h3>
+        <p>Fast and simple TikTok downloader</p>
+        <p>with no watermark.</p>
+      </div>
+      <div>
+        <h4>Tools</h4>
+        <a href="./index.html">Tiktok Downloader</a>
+        <a href="./instagram.html">Instagram Downloader</a>
+        <a href="./youtube.html">Youtube Downloader</a>
+        <a href="./facebook.html">Facebook Downloader</a>
+        <a href="./twitter.html">Twitter Downloader</a>
+      </div>
+      <div>
+        <h4>Legal & Info</h4>
+        <a href="./about.html">About Us</a>
+        <a href="./privacy.html">Privacy Policy</a>
+        <a href="./terms.html">Terms of Service</a>
+        <a href="./dmca.html">DMCA / Copyright</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      © 2025 TikTop. All rights reserved.
+    </div>
+  </footer>
+
+  <div id="google_translate_element" style="display:none;"></div>
+  <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+  <script>
+    function toggleTheme() { document.body.classList.toggle('light-mode'); const isLight = document.body.classList.contains('light-mode'); localStorage.setItem('theme', isLight ? 'light' : 'dark'); document.getElementById('theme-icon').textContent = isLight ? "☀️" : "🌙"; }
+    (function() { if (localStorage.getItem('theme') === 'light') { document.body.classList.add('light-mode'); document.getElementById('theme-icon').textContent = "☀️"; } })();
+    window.addEventListener('load', function() { const preloader = document.getElementById('page-preloader'); setTimeout(() => { preloader.classList.add('hidden'); setTimeout(() => { preloader.style.display = 'none'; }, 500); }, 500); });
+    function toggleMenu() { document.getElementById('side-menu').classList.toggle('open'); }
+    function toggleLangMenu() { const menu = document.getElementById('lang-menu'); menu.style.display = menu.style.display === 'block' ? 'none' : 'block'; }
+    function googleTranslateElementInit() { new google.translate.TranslateElement({ pageLanguage: 'en', autoDisplay: false }, 'google_translate_element'); }
+    function setLanguage(lang) { const current = getCurrentLang(); if (current === lang) return; document.cookie = "googtrans=/en/" + lang + ";path=/"; document.cookie = "googtrans=/en/" + lang + ";domain=" + window.location.hostname + ";path=/"; location.reload(); }
+    function changeLang(lang) { localStorage.setItem('site_lang', lang); setLanguage(lang); document.getElementById('lang-menu').style.display = 'none'; }
+    function getCurrentLang() { const match = document.cookie.match(/googtrans=\/en\/([^;]+)/); return match ? match[1] : 'en'; }
+    window.addEventListener('load', () => { const savedLang = localStorage.getItem('site_lang'); const currentLang = getCurrentLang(); if (savedLang && savedLang !== currentLang) { setLanguage(savedLang); } });
+    (function() { function fixGoogleTranslateLayout() { document.body.style.top = "0px"; document.body.style.marginTop = "0px"; document.documentElement.style.marginTop = "0px"; document.documentElement.style.height = "100%"; const banner = document.querySelector('.goog-te-banner-frame'); if (banner) banner.style.display = "none"; } fixGoogleTranslateLayout(); const observer = new MutationObserver(fixGoogleTranslateLayout); observer.observe(document.documentElement, { attributes: true, childList: true, subtree: true, attributeFilter: ['style'] }); })();
+  </script>
+  <div id="scrollTop" onclick="scrollToTop()">🚀</div>
+  <script>
+    window.addEventListener("scroll", () => { const btn = document.getElementById("scrollTop"); if (window.pageYOffset > 400) { btn.style.display = "flex"; } else { btn.style.display = "none"; } });
+    function scrollToTop() { window.scrollTo({ top: 0, behavior: "smooth" }); }
+  </script>
+</body>
+</html>
+
