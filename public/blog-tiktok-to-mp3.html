@@ -243,6 +243,60 @@
 .toc a:hover{
     color:var(--pink);
 }
+    /* FAQ +/- */
+
+.faq{
+    margin-top:30px;
+}
+
+.faq details{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:12px;
+    margin-bottom:15px;
+    overflow:hidden;
+    transition:.3s;
+}
+
+.faq details[open]{
+    border-color:var(--cyan);
+    box-shadow:0 0 15px rgba(37,244,238,.15);
+}
+
+.faq summary{
+    list-style:none;
+    cursor:pointer;
+    padding:18px 20px;
+    font-size:18px;
+    font-weight:600;
+    color:var(--text-main);
+    position:relative;
+}
+
+.faq summary::-webkit-details-marker{
+    display:none;
+}
+
+.faq summary::after{
+    content:"+";
+    position:absolute;
+    right:20px;
+    top:50%;
+    transform:translateY(-50%);
+    font-size:24px;
+    font-weight:bold;
+    color:var(--cyan);
+}
+
+.faq details[open] summary::after{
+    content:"−";
+}
+
+.faq p{
+    padding:0 20px 20px;
+    color:var(--text-dim);
+    line-height:1.8;
+}
   </style>
 </head>
 
