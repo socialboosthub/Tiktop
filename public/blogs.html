@@ -11,7 +11,6 @@
   <meta name="theme-color" content="#EE1D52">
   <link rel="canonical" href="https://tiktop.online/blogs.html">
 
-  <!-- Social Sharing Meta Tags -->
   <meta property="og:type" content="website">
   <meta property="og:title" content="TikTop Blog - TikTok Guides & Tips">
   <meta property="og:description" content="Discover the best ways to save TikTok videos, trending audios, and viral strategies.">
@@ -97,6 +96,15 @@
     .blog-title { font-size: 20px; color: var(--text-main); margin-bottom: 10px; line-height: 1.4; }
     .blog-excerpt { font-size: 15px; color: var(--text-dim); line-height: 1.6; margin-bottom: 20px; flex: 1; }
     .read-more { color: var(--cyan); font-weight: 600; font-size: 14px; margin-top: auto; display: inline-block; }
+
+    /* PAGINATION STYLING */
+    .pagination-wrap { display: flex; justify-content: center; align-items: center; gap: 20px; margin-top: 50px; }
+    .page-btn { background: var(--box-bg); border: 1px solid var(--border); color: var(--text-main); padding: 12px 24px; border-radius: 30px; cursor: pointer; font-weight: 600; font-size: 14px; transition: 0.3s; display: flex; align-items: center; gap: 8px; }
+    body.light-mode .page-btn { border: 1px solid rgba(0,0,0,0.15); }
+    .page-btn:hover:not(:disabled) { border-color: var(--cyan); color: var(--cyan); box-shadow: 0 0 10px rgba(37, 244, 238, 0.2); }
+    .page-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+    .page-info { color: var(--text-dim); font-size: 15px; font-weight: 500; letter-spacing: 0.5px; }
+
     /* FOOTER */
     .footer {
       padding: 60px 6% 40px;
@@ -126,70 +134,58 @@
     .footer a:hover {
       color: var(--text);
     }
-/* Update this block in your mp3-download.html <style> section */
-.footer-bottom { 
-    margin-top: 40px; 
-    text-align: center; 
-    font-size: 13px; 
-    opacity: 0.7; 
-    border-top: 1px solid rgba(0,0,0,0.1); 
-    padding-top: 20px;
-    padding-bottom: 40px; /* <--- ADD THIS EXTRA PADDING */
-}
-    
 
-/* Also ensure the footer itself doesn't cut off */
-.footer { 
-    padding: 60px 6% 40px; /* Increase last value from 30px to 40px */
-    background: var(--pink); 
-    border-radius: 12px; 
-    margin-top: 50px; 
-    text-align: left; 
-    color: #000; 
-}
-/* =========================
-   SCROLL TO TOP CSS
-========================= */
+    .footer-bottom { 
+        margin-top: 40px; 
+        text-align: center; 
+        font-size: 13px; 
+        opacity: 0.7; 
+        border-top: 1px solid rgba(0,0,0,0.1); 
+        padding-top: 20px;
+        padding-bottom: 40px; 
+    }
+        
+    .footer { 
+        padding: 60px 6% 40px; 
+        background: var(--pink); 
+        border-radius: 12px; 
+        margin-top: 50px; 
+        text-align: left; 
+        color: #000; 
+    }
 
-#scrollTop {
-  position: fixed;
-  bottom: 30px;
-  right: 30px;
-  width: 55px;
-  height: 55px;
+    /* SCROLL TO TOP CSS */
+    #scrollTop {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 55px;
+      height: 55px;
+      background: linear-gradient(45deg, #EE1D52, #25F4EE);
+      border-radius: 50%;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      font-size: 25px;
+      cursor: pointer;
+      z-index: 5000;
+      color: white;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+      transition: 0.3s ease;
+    }
 
-  background: linear-gradient(45deg, #EE1D52, #25F4EE);
-
-  border-radius: 50%;
-  display: none;
-
-  align-items: center;
-  justify-content: center;
-
-  font-size: 25px;
-  cursor: pointer;
-  z-index: 5000;
-
-  color: white;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-
-  transition: 0.3s ease;
-}
-
-#scrollTop:hover {
-  transform: translateY(-5px) scale(1.05);
-}
+    #scrollTop:hover {
+      transform: translateY(-5px) scale(1.05);
+    }
   </style>
 </head>
 
 <body>
-  <!-- Preloader -->
   <div id="page-preloader">
     <div class="neon-loader"><div class="neon-ring ring-1"></div><div class="neon-ring ring-2"></div><div class="neon-ring ring-3"></div></div>
     <p class="loader-text-neon">TikTop</p>
   </div>
 
-  <!-- Navbar -->
   <nav class="fcc-nav">
     <a href="./index.html" class="fcc-logo">
       <img src="https://i.ibb.co/wZjXcKz9/file-00000000e22871fd9cb25a4586788b91.png" alt="TikTop Logo">
@@ -201,7 +197,6 @@
       <button class="menu-toggle" onclick="toggleMenu()">Menu ☰</button>
     </div>
 
-    <!-- Exact 11 Languages -->
     <div class="lang-menu" id="lang-menu">
       <div onclick="changeLang('en')">English</div>
       <div onclick="changeLang('fr')">Français</div>
@@ -217,7 +212,6 @@
     </div>
   </nav>
 
-  <!-- Side Menu (Added Blog Link) -->
   <div class="side-menu" id="side-menu">
     <a href="./index.html">Home</a>
     <a href="./blogs.html">Blog</a>
@@ -226,16 +220,13 @@
     <a href="./contact.html">Contact Us</a>
   </div>
 
-  <!-- Main Content -->
   <div id="main-content">
     <div class="section-wrap">
       <h1 class="page-title">TikTop Blog</h1>
       <p class="page-desc">Stay updated with the best strategies, tutorials, and news to maximize your TikTok experience.</p>
       
-      <!-- BLOG POST GRID -->
-      <div class="blog-grid">
+      <div class="blog-grid" id="blog-grid">
         
-        <!-- Highly Searched SEO Post 1 -->
         <a href="./blog-tiktok-no-watermark.html" class="blog-card">
           <img src="https://images.unsplash.com/photo-1611162617474-5b21e879e113?q=80&w=600&auto=format&fit=crop" alt="Phone with TikTok" class="blog-image">
           <div class="blog-content">
@@ -246,7 +237,6 @@
           </div>
         </a>
 
-        <!-- Highly Searched SEO Post 2 -->
         <a href="blog-tiktok-to-mp3.html" class="blog-card">
           <img src="https://images.unsplash.com/photo-1614680376573-df3480f0c6ff?q=80&w=600&auto=format&fit=crop" alt="Music Audio Waves" class="blog-image">
           <div class="blog-content">
@@ -257,7 +247,6 @@
           </div>
         </a>
 
-        <!-- Highly Searched SEO Post 3 -->
         <a href="blog-tiktok-algorithm-secrets.html" class="blog-card">
           <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=600&auto=format&fit=crop" alt="Analytics Graph" class="blog-image">
           <div class="blog-content">
@@ -268,7 +257,7 @@
           </div>
         </a>
 
-                <a href="./blog-troubleshoot-tiktok-downloads.html" class="blog-card">
+        <a href="./blog-troubleshoot-tiktok-downloads.html" class="blog-card">
           <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?q=80&w=600&auto=format&fit=crop" alt="Troubleshooting Error Screen" class="blog-image">
           <div class="blog-content">
             <div class="blog-date">Support & Guides</div>
@@ -298,9 +287,7 @@
           </div>
         </a>
 
-               <!-- Blog 7: Welcome to TikTop -->
         <a href="./blog-welcome-to-tiktop.html" class="blog-card">
-          <!-- Using your logo with a neat dark background so it fits the image box perfectly -->
           <img src="https://i.ibb.co/wZjXcKz9/file-00000000e22871fd9cb25a4586788b91.png" alt="TikTop Logo" class="blog-image" style="object-fit: contain; background: #0a0a23; padding: 30px;">
           <div class="blog-content">
             <div class="blog-date">Inside TikTop</div>
@@ -310,11 +297,47 @@
           </div>
         </a>
 
+        <a href="./blog-download-tiktok-slideshow.html" class="blog-card">
+          <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=600&auto=format&fit=crop" alt="Photo grid layout" class="blog-image">
+          <div class="blog-content">
+            <div class="blog-date">Advanced Tutorials</div>
+            <h2 class="blog-title">How to Download TikTok Photo Slideshows as Video or Images</h2>
+            <p class="blog-excerpt">Want to save a trending photo swipe deck? Read how to safely extract individual HD pictures or convert full slideshows into clean MP4 files instantly.</p>
+            <span class="read-more">Read Article &rarr;</span>
+          </div>
+        </a>
+
+        <a href="./blog-tiktok-seo-guide.html" class="blog-card">
+          <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=600&auto=format&fit=crop" alt="Search engine visibility analytics" class="blog-image">
+          <div class="blog-content">
+            <div class="blog-date">TikTok Marketing</div>
+            <h2 class="blog-title">TikTok SEO 2026: Master Optimization to Rank on Top of Search</h2>
+            <p class="blog-excerpt">Unlock massive traffic outside the For You Page. Learn how to optimize your descriptions, keyword hooks, and in-video text for maximum discoverability.</p>
+            <span class="read-more">Read Article &rarr;</span>
+          </div>
+        </a>
+
+        <a href="./blog-save-tiktok-drafts.html" class="blog-card">
+          <img src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?q=80&w=600&auto=format&fit=crop" alt="Phone gallery interface" class="blog-image">
+          <div class="blog-content">
+            <div class="blog-date">Creator Hacks</div>
+            <h2 class="blog-title">How to Save a TikTok Draft to Your Gallery Without Posting It</h2>
+            <p class="blog-excerpt">Need to edit your TikTok content in external apps without publishing it to your followers? Here is the secret bypass method to download clean drafts safely.</p>
+            <span class="read-more">Read Article &rarr;</span>
+          </div>
+        </a>
+
       </div>
+
+      <div class="pagination-wrap">
+        <button class="page-btn" id="prev-btn" disabled>&larr; Previous</button>
+        <span class="page-info" id="page-info">Page 1 of 2</span>
+        <button class="page-btn" id="next-btn">Next &larr;</button>
+      </div>
+
     </div>
   </div>
 
-  <!-- Footer (Added Blog Link under Tools) -->
   <footer class="footer">
     <div class="footer-grid">
       <div>
@@ -343,7 +366,6 @@
     </div>
   </footer>
 
-  <!-- Scripts -->
   <div id="google_translate_element" style="display:none;"></div>
   <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
   <script>
@@ -416,31 +438,84 @@
         observer.observe(document.documentElement, { attributes: true, childList: true, subtree: true, attributeFilter: ['style'] });
     })();
   </script>
+
   <div id="scrollTop" onclick="scrollToTop()">🚀</div>
-<script>
-/* =========================
-   SCROLL TO TOP JS
-========================= */
+  <script>
+    // Scroll To Top Execution
+    window.addEventListener("scroll", () => {
+      const btn = document.getElementById("scrollTop");
+      if (window.pageYOffset > 400) {
+        btn.style.display = "flex";
+      } else {
+        btn.style.display = "none";
+      }
+    });
 
-// Show button after scrolling down
-window.addEventListener("scroll", () => {
-  const btn = document.getElementById("scrollTop");
+    function scrollToTop() {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
 
-  if (window.pageYOffset > 400) {
-    btn.style.display = "flex";
-  } else {
-    btn.style.display = "none";
-  }
-});
+    /* ====================================================
+       AUTOMATED DYNAMIC PAGINATION CONTROLLER
+       As you add up to 100 blog cards, this script loops 
+       through them without breaking layout logic!
+       ==================================================== */
+    const cardsPerPage = 7;
+    let currentPage = 1;
 
-// Smooth scroll to top
-function scrollToTop() {
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth"
-  });
-}
-</script>
+    function renderPagination() {
+      const blogGrid = document.getElementById('blog-grid');
+      const cards = Array.from(blogGrid.getElementsByClassName('blog-card'));
+      const totalCards = cards.length;
+      const totalPages = Math.ceil(totalCards / cardsPerPage);
+
+      const prevBtn = document.getElementById('prev-btn');
+      const nextBtn = document.getElementById('next-btn');
+      const pageInfo = document.getElementById('page-info');
+
+      // Boundary fallback logic
+      if (currentPage > totalPages) currentPage = totalPages;
+      if (currentPage < 1) currentPage = 1;
+
+      // Slice logic visibility control
+      cards.forEach((card, index) => {
+        const startBound = (currentPage - 1) * cardsPerPage;
+        const endBound = startBound + cardsPerPage;
+        
+        if (index >= startBound && index < endBound) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      // Update indicators and buttons
+      pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
+      prevBtn.disabled = (currentPage === 1);
+      nextBtn.disabled = (currentPage === totalPages);
+    }
+
+    // Event Handlers
+    document.getElementById('prev-btn').addEventListener('click', () => {
+      if (currentPage > 1) {
+        currentPage--;
+        renderPagination();
+        document.getElementById('main-content').scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+
+    document.getElementById('next-btn').addEventListener('click', () => {
+      const totalCards = document.getElementsByClassName('blog-card').length;
+      if (currentPage < Math.ceil(totalCards / cardsPerPage)) {
+        currentPage++;
+        renderPagination();
+        document.getElementById('main-content').scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+
+    // Kick off view states instantly
+    document.addEventListener("DOMContentLoaded", renderPagination);
+  </script>
 </body>
 </html>
 
