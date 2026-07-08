@@ -185,6 +185,64 @@
 #scrollTop:hover {
   transform: translateY(-5px) scale(1.05);
 }
+    /* TOC */
+.toc{
+    margin:30px 0;
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:12px;
+    overflow:hidden;
+}
+
+.toc summary{
+    list-style:none;
+    cursor:pointer;
+    padding:18px 20px;
+    font-size:20px;
+    font-weight:700;
+    color:var(--text-main);
+    position:relative;
+}
+
+.toc summary::-webkit-details-marker{
+    display:none;
+}
+
+.toc summary::after{
+    content:"+";
+    position:absolute;
+    right:20px;
+    font-size:28px;
+    color:var(--cyan);
+    transition:.3s;
+}
+
+.toc[open] summary::after{
+    content:"−";
+}
+
+.toc ul{
+    list-style:none;
+    padding:0 20px 20px;
+}
+
+.toc ul ul{
+    margin-left:18px;
+    margin-top:8px;
+}
+
+.toc li{
+    margin:10px 0;
+}
+
+.toc a{
+    color:var(--cyan);
+    text-decoration:none;
+}
+
+.toc a:hover{
+    color:var(--pink);
+}
   </style>
 </head>
 
@@ -239,44 +297,184 @@
 
       <img src="https://images.unsplash.com/photo-1614680376573-df3480f0c6ff?q=80&w=1000&auto=format&fit=crop" alt="Audio equalizer waves" class="hero-img">
 
+      <!-- Table of Contents -->
+<details class="toc">
+  <summary>Table of Contents</summary>
+
+  <ul>
+    <li><a href="#why-mp3">Why Download TikTok Audio as MP3?</a></li>
+    <li><a href="#benefits">Benefits of Using TikTop MP3 Downloader</a></li>
+
+    <li>
+      <a href="#steps">How to Convert TikTok to MP3</a>
+      <ul>
+        <li><a href="#step1">Step 1 — Copy the TikTok Link</a></li>
+        <li><a href="#step2">Step 2 — Open TikTop</a></li>
+        <li><a href="#step3">Step 3 — Paste the Link</a></li>
+        <li><a href="#step4">Step 4 — Process</a></li>
+        <li><a href="#step5">Step 5 — Download</a></li>
+      </ul>
+    </li>
+
+    <li><a href="#quality">Audio Quality</a></li>
+    <li><a href="#uses">Popular Ways People Use TikTok MP3 Files</a></li>
+    <li><a href="#devices">Works on All Devices</a></li>
+    <li><a href="#safe">Is TikTop Safe?</a></li>
+    <li><a href="#legal">Is Downloading TikTok Audio Legal?</a></li>
+    <li><a href="#faq">Frequently Asked Questions</a></li>
+    <li><a href="#final-thoughts">Final Thoughts</a></li>
+  </ul>
+</details>
       <div class="article-body">
-        <p>TikTok isn't just about the visuals; it dictates the global music industry. A 15-second viral sound can propel an unknown artist to the top of the Billboard charts overnight. But what happens when you find a mashup, a hilarious voiceover, or an unreleased song on TikTok and want to save it?</p>
-        
-        <p>You can't download pure audio directly from the TikTok app. Fortunately, converting a TikTok video into a high-quality <strong>MP3 file</strong> is incredibly easy with TikTop.</p>
 
-        <h2>Why Download TikTok Audio as MP3?</h2>
-        <p>Extracting the audio track from a video opens up a lot of creative possibilities:</p>
-        <ul>
-            <li><strong>Custom Ringtones:</strong> Turn that funny meme sound or viral beat into your alarm or ringtone.</li>
-            <li><strong>Video Editing (CapCut/Premiere):</strong> Download trending sounds to overlay onto your own videos without having to screen-record and detach audio manually.</li>
-            <li><strong>Offline Listening:</strong> Save remixes and sped-up tracks that aren't available on Spotify or Apple Music to listen to at the gym.</li>
-        </ul>
+<p>TikTok has become one of the world's biggest platforms for discovering music, podcasts, remixes, motivational speeches, comedy clips, and viral sounds. Sometimes you don't need the video—you only want the audio. That's where converting TikTok videos to MP3 becomes incredibly useful.</p>
 
-        <h2>How to Convert TikTok to MP3</h2>
-        <p>Our server-side parsing engine separates the AAC audio track from the MP4 video stream, giving you a clean, 320kbps MP3 file. Here is how to do it:</p>
-        
-        <h3>1. Find the Video</h3>
-        <p>Open TikTok, find the video containing the sound you want, and tap the <strong>"Share" icon</strong>. Select <strong>"Copy Link"</strong>.</p>
+<p>With TikTop, you can extract audio from public TikTok videos quickly without installing software or creating an account. Whether you're saving a song, a podcast clip, or your own content, the process only takes a few seconds.</p>
 
-        <h3>2. Use the MP3 Downloader</h3>
-        <p>Head over to <a href="./mp3-download.html" style="color:var(--cyan); text-decoration:none; font-weight:bold;">TikTop's MP3 Tool</a>. You can also just go to our homepage and switch to the "MP3" tab.</p>
+<h2 id="why-mp3">Why Download TikTok Audio as MP3?</h2>
 
-        <h3>3. Paste and Extract</h3>
-        <p>Paste the URL into the search box and hit <strong>"Process Link"</strong>. The system will instantly strip the video and present you with an audio-only download button.</p>
+<p>MP3 is one of the most widely supported audio formats. Nearly every smartphone, computer, car stereo, music player, and editing application can play MP3 files without additional software.</p>
 
-        <div class="cta-box">
-            <h3>Extract Audio Now</h3>
-            <p>Get that viral beat saved directly to your device right now.</p>
-            <a href="./mp3-download.html" class="cta-button">Go to MP3 Extractor</a>
-        </div>
+<ul>
+<li>Create custom ringtones.</li>
+<li>Listen offline anywhere.</li>
+<li>Save motivational speeches.</li>
+<li>Keep educational audio.</li>
+<li>Collect favorite music clips.</li>
+<li>Use sounds in personal editing projects.</li>
+<li>Store audio with less storage than video.</li>
+</ul>
 
-        <h2>Is the Audio Quality Good?</h2>
-        <p>Yes. Many other converters record the audio, which causes massive quality loss. TikTop fetches the source audio file directly from TikTok's Content Delivery Network (CDN), meaning you get the exact quality the original creator uploaded.</p>
+<h2 id="benefits">Benefits of Using TikTop MP3 Downloader</h2>
+
+<ul>
+<li>No registration required.</li>
+<li>No TikTok account required.</li>
+<li>Works directly in your browser.</li>
+<li>Compatible with phones, tablets, and computers.</li>
+<li>Fast conversion.</li>
+<li>Clean and simple interface.</li>
+<li>No software installation.</li>
+</ul>
+
+<h2 id="steps">How to Convert TikTok to MP3</h2>
+
+<h3 id="step1">Step 1 — Copy the TikTok Link</h3>
+
+<p>Open TikTok and find the video containing the sound you want. Tap the <strong>Share</strong> button and choose <strong>Copy Link</strong>.</p>
+
+<h3 id="step2">Step 2 — Open TikTop</h3>
+
+<p>Visit TikTop and select the MP3 Downloader. You can also use the MP3 tab directly from the homepage.</p>
+
+<h3 id="step3">Step 3 — Paste the Link</h3>
+
+<p>Paste the copied TikTok URL into the download box.</p>
+
+<h3 id="step4">Step 4 — Process</h3>
+
+<p>Click <strong>Process Link</strong>. TikTop analyzes the public TikTok video and prepares the audio.</p>
+
+<h3 id="step5">Step 5 — Download</h3>
+
+<p>Once processing finishes, simply tap the MP3 download button to save the audio file.</p>
+
+<div class="cta-box">
+<h3>Convert TikTok to MP3 Now</h3>
+<p>Extract your favorite TikTok sounds in seconds using TikTop's free MP3 downloader.</p>
+<a href="./mp3-download.html" class="cta-button">Open MP3 Downloader</a>
+</div>
+
+<h2 id="quality">Audio Quality</h2>
+
+<p>High-quality audio makes a big difference. TikTop retrieves the available audio stream from public TikTok videos to provide clear sound suitable for everyday listening.</p>
+
+<p>The final quality depends on the quality of the original upload. If the creator uploaded excellent audio, you'll receive excellent audio as well.</p>
+
+<h2 id="uses">Popular Ways People Use TikTok MP3 Files</h2>
+
+<ul>
+<li>Workout playlists.</li>
+<li>Study sessions.</li>
+<li>Language learning.</li>
+<li>Motivational speeches.</li>
+<li>Comedy clips.</li>
+<li>Podcast snippets.</li>
+<li>Dance practice.</li>
+<li>Content inspiration.</li>
+<li>Offline travel listening.</li>
+</ul>
+
+<h2 id="devices">Works on All Devices</h2>
+
+<p>TikTop is designed to work across nearly every modern device.</p>
+
+<ul>
+<li>Android phones</li>
+<li>iPhone</li>
+<li>Windows PCs</li>
+<li>Mac computers</li>
+<li>Linux devices</li>
+<li>Tablets</li>
+</ul>
+
+<h2 id="safe">Is TikTop Safe?</h2>
+
+<p>Yes. TikTop does not require your TikTok password or account login. Simply paste a public TikTok link and download the audio directly through your browser.</p>
+
+<h2 id="legal">Is Downloading TikTok Audio Legal?</h2>
+
+<p>Downloading publicly available content for personal offline listening may be permitted depending on your local laws. However, copyright remains with the original creator. Always respect creators' rights and applicable copyright laws before redistributing or commercially using downloaded audio.</p>
+
+<h2 id="faq">Frequently Asked Questions</h2>
+
+<div class="faq">
+
+<details>
+<summary>Can I convert TikTok videos to MP3 for free?</summary>
+<p>Yes. TikTop allows you to convert public TikTok videos into MP3 files for free.</p>
+</details>
+
+<details>
+<summary>Do I need to install software?</summary>
+<p>No. Everything works directly in your web browser.</p>
+</details>
+
+<details>
+<summary>Can I use it on my phone?</summary>
+<p>Yes. TikTop works on Android phones, iPhones, tablets, and desktop computers.</p>
+</details>
+
+<details>
+<summary>Do I need a TikTok account?</summary>
+<p>No. You only need the public TikTok video link.</p>
+</details>
+
+<details>
+<summary>Can I download private videos?</summary>
+<p>No. TikTop only processes publicly available TikTok videos.</p>
+</details>
+
+<details>
+<summary>Is there a download limit?</summary>
+<p>You can convert as many public TikTok videos as you need, subject to fair use and responsible usage.</p>
+</details>
+
+<details>
+<summary>What format will I receive?</summary>
+<p>Your audio will be available as an MP3 file that works on almost every device.</p>
+</details>
+
+</div>
+
+<h2 id="final-thoughts">Final Thoughts</h2>
+
+<p>Whether you're saving a viral song, a motivational speech, educational content, or your own audio, TikTop makes converting TikTok videos into MP3 files quick and straightforward.</p>
+
+<p>Simply copy the TikTok link, paste it into TikTop, process the video, and download your MP3 in just a few clicks.</p>
+
       </div>
-
-    </article>
-  </div>
-
+      
   <!-- EXACT ORIGINAL FOOTER -->
   <footer class="footer">
     <div class="footer-grid">
