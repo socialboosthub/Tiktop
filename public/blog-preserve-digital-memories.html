@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How TikTop Helps Preserve Your Memories</title>
+  
+  <meta name="description" content="Social media is highly ephemeral. Learn why you shouldn't rely on apps to save your memories and how TikTop helps you preserve your digital history forever.">
+  <meta name="keywords" content="preserve tiktok memories, save tiktok offline, download my tiktok, digital archiving, tiktop video backup">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <meta name="theme-color" content="#EE1D52">
+  <link rel="canonical" href="https://tiktop.online/blog-preserve-memories.html">
+
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="How TikTop Helps Preserve Your Memories">
+  <meta property="og:description" content="Safeguard your digital history. Learn how to archive your most precious TikTok moments before they vanish.">
+  <meta property="og:url" content="https://tiktop.online/blog-preserve-memories.html">
+  <meta property="og:site_name" content="TikTop">
+  <meta property="og:image" content="https://images.unsplash.com/photo-1505322022379-7c3353ee6291?q=80&w=1000&auto=format&fit=crop">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="How TikTop Helps Preserve Your Memories">
+  <meta name="twitter:description" content="Safeguard your digital history. Learn how to archive your most precious TikTok moments before they vanish.">
+  <meta name="twitter:image" content="https://images.unsplash.com/photo-1505322022379-7c3353ee6291?q=80&w=1000&auto=format&fit=crop">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="https://tiktop.online/assets/Logo.ico" type="image/x-icon">
+
+  <style>
+    /* BASE CSS */
+    iframe.goog-te-banner-frame { display: none !important; visibility: hidden !important; height: 0 !important; }
+    body > .skiptranslate { display: none !important; }
+    body { top: 0px !important; position: static !important; margin-top: 0px !important; }
+    html { margin-top: 0px !important; height: 100% !important; }
+    .goog-tooltip, .goog-tooltip:hover, .goog-text-highlight { display: none !important; box-shadow: none !important; background: none !important; }
+    .fcc-nav { top: 0 !important; }
+
+    :root {
+      --bg: #000000; --card: #111111; --text: #ffffff; --text-main: #ffffff;
+      --text-dim: #b0b0b0; --muted: #aaaaaa; --border: rgba(255, 255, 255, 0.08);
+      --box-bg: #111111; --pink: #EE1D52; --cyan: #25F4EE; --nav-bg: #0a0a23;
+    }
+    body.light-mode {
+      --bg: #f5f5f7; --card: #ffffff; --text: #111111; --text-main: #000000;
+      --text-dim: #222222; --muted: #666666; --border: rgba(0,0,0,0.08);
+      --box-bg: #ffffff; --nav-bg: #0a0a23;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: Inter, sans-serif; }
+    body { background: var(--bg); color: var(--text-main); transition: background 0.3s, color 0.3s; overflow-x: hidden; }
+    
+    /* PRELOADER */
+    #page-preloader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); z-index: 999999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.5s ease, visibility 0.5s ease; }
+    #page-preloader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+    .neon-loader { position: relative; width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; }
+    .neon-ring { position: absolute; border: 4px solid transparent; border-radius: 50%; animation: ring-pulse 2s cubic-bezier(0.455, 0.03, 0.515, 0.955) infinite; }
+    .ring-1 { width: 100%; height: 100%; border-top-color: var(--cyan); border-bottom-color: var(--cyan); animation-delay: 0s; }
+    .ring-2 { width: 70%; height: 70%; border-left-color: var(--pink); border-right-color: var(--pink); animation-delay: 0.5s; }
+    .ring-3 { width: 40%; height: 40%; border-top-color: var(--text-main); border-bottom-color: var(--text-main); animation-delay: 1s; } 
+    @keyframes ring-pulse { 0% { transform: rotate(0deg) scale(1); opacity: 1; } 50% { transform: rotate(180deg) scale(1.2); opacity: 0.5; } 100% { transform: rotate(360deg) scale(1); opacity: 1; } }
+    .loader-text-neon { margin-top: 25px; font-size: 11px; letter-spacing: 4px; color: var(--text-main); font-weight: bold; text-transform: uppercase; animation: fade-blink 1s infinite; }
+    @keyframes fade-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+    /* NAV & SIDE MENU */
+    .fcc-nav { position: fixed; width: 100%; height: 70px; background: var(--nav-bg); display: flex; align-items: center; justify-content: space-between; padding: 0 20px; z-index: 10000; }
+    .fcc-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; }
+    .fcc-logo img { height: 32px; width: auto; display: block; }
+    .fcc-logo span { background: linear-gradient(to bottom right, var(--pink), var(--cyan)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; font-weight: bold; font-size: 20px; }
+    .nav-right { display: flex; align-items: center; gap: 15px; }
+    .theme-icon { cursor: pointer; font-size: 20px; transition: 0.3s; }
+    .menu-toggle { background: #3b3b4f; border: 1px solid #fff; color: #fff; padding: 5px 10px; cursor: pointer; border-radius: 4px; }
+    .side-menu { position: fixed; top: 50px; right: -100%; width: 250px; height: calc(100vh - 50px); background: var(--nav-bg); transition: 0.4s; z-index: 9999; padding: 20px; display: flex; flex-direction: column; gap: 20px; border-left: 1px solid #3b3b4f; }
+    .side-menu.open { right: 0; }
+    .side-menu a { color: #fff; text-decoration: none; font-size: 18px; border-bottom: 1px solid #3b3b4f; padding-bottom: 10px; }
+    .lang-icon { cursor: pointer; font-size: 20px; }
+    .lang-menu { position: fixed; top: 55px; right: 80px; background: #0a0a23; border: 1px solid #3b3b4f; border-radius: 10px; display: none; z-index: 10002; overflow: hidden; }
+    .lang-menu div { padding: 10px 16px; color: #fff; cursor: pointer; font-size: 14px; }
+    .lang-menu div:hover { background: #EE1D52; }
+
+    /* ARTICLE STYLING */
+    #article-content { padding-top: 100px; min-height: 100vh; display: flex; flex-direction: column; align-items: center; }
+    .article-wrap { max-width: 800px; width: 100%; padding: 0 20px; margin-bottom: 60px; }
+    
+    .article-header { text-align: center; margin-bottom: 40px; }
+    .article-category { display: inline-block; background: rgba(37, 244, 238, 0.1); color: var(--cyan); padding: 6px 15px; border-radius: 20px; font-weight: bold; font-size: 14px; margin-bottom: 15px; border: 1px solid var(--cyan); }
+    .article-title { font-size: 42px; color: var(--text-main); margin-bottom: 15px; line-height: 1.2; }
+    .article-meta { color: var(--muted); font-size: 15px; }
+    
+    .hero-img { width: 100%; height: auto; border-radius: 16px; margin-bottom: 40px; border: 1px solid var(--border); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+    
+    .article-body { font-size: 18px; line-height: 1.8; color: var(--text-dim); }
+    .article-body h2 { font-size: 28px; color: var(--text-main); margin: 40px 0 20px; border-left: 4px solid var(--pink); padding-left: 15px; }
+    .article-body h3 { font-size: 22px; color: var(--text-main); margin: 30px 0 15px; }
+    .article-body p { margin-bottom: 20px; }
+    .article-body strong { color: var(--text-main); }
+    .article-body ul { margin-left: 20px; margin-bottom: 25px; }
+    .article-body li { margin-bottom: 10px; }
+
+    .cta-box { background: linear-gradient(to right, rgba(238, 29, 82, 0.1), rgba(37, 244, 238, 0.1)); border: 2px dashed var(--pink); border-radius: 12px; padding: 30px; text-align: center; margin: 40px 0; }
+    .cta-box h3 { margin-top: 0; color: var(--text-main); }
+    .cta-button { display: inline-block; background: var(--cyan); color: #000; padding: 15px 30px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 18px; margin-top: 15px; transition: 0.3s; }
+    .cta-button:hover { background: var(--pink); color: #fff; transform: translateY(-3px); }
+    
+    /* FOOTER */
+    .footer { padding: 60px 6% 40px; background: var(--pink); margin-top: 50px; text-align: left; color: #000; border-radius: 12px; }
+    .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+    .footer h3, .footer h4 { margin-bottom: 12px; }
+    .footer p, .footer a { color: black; font-size: 14px; text-decoration: none; display: block; margin-bottom: 8px; }
+    .footer a:hover { color: var(--text); }
+    .footer-bottom { margin-top: 40px; text-align: center; font-size: 13px; opacity: 0.7; border-top: 1px solid rgba(0,0,0,0.1); padding-top: 20px; padding-bottom: 40px; }
+
+    @media (max-width: 768px) { .article-title { font-size: 32px; } .article-body { font-size: 16px; } }
+    
+    /* SCROLL TO TOP CSS */
+    #scrollTop { position: fixed; bottom: 30px; right: 30px; width: 55px; height: 55px; background: linear-gradient(45deg, #EE1D52, #25F4EE); border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 25px; cursor: pointer; z-index: 5000; color: white; box-shadow: 0 8px 20px rgba(0,0,0,0.3); transition: 0.3s ease; }
+    #scrollTop:hover { transform: translateY(-5px) scale(1.05); }
+    
+    /* TOC */
+    .toc { margin: 30px 0; background: var(--card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+    .toc summary { list-style: none; cursor: pointer; padding: 18px 20px; font-size: 20px; font-weight: 700; color: var(--text-main); position: relative; }
+    .toc summary::-webkit-details-marker { display: none; }
+    .toc summary::after { content: "+"; position: absolute; right: 20px; font-size: 28px; color: var(--cyan); transition: .3s; }
+    .toc[open] summary::after { content: "−"; }
+    .toc ul { list-style: none; padding: 0 20px 20px; }
+    .toc ul ul { margin-left: 18px; margin-top: 8px; }
+    .toc li { margin: 10px 0; }
+    .toc a { color: var(--cyan); text-decoration: none; }
+    .toc a:hover { color: var(--pink); }
+    
+    /* FAQ +/- */
+    .faq { margin-top: 30px; }
+    .faq details { background: var(--card); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 15px; overflow: hidden; transition: .3s; }
+    .faq details[open] { border-color: var(--cyan); box-shadow: 0 0 15px rgba(37,244,238,.15); }
+    .faq summary { list-style: none; cursor: pointer; padding: 18px 20px; font-size: 18px; font-weight: 600; color: var(--text-main); position: relative; }
+    .faq summary::-webkit-details-marker { display: none; }
+    .faq summary::after { content: "+"; position: absolute; right: 20px; top: 50%; transform: translateY(-50%); font-size: 24px; font-weight: bold; color: var(--cyan); }
+    .faq details[open] summary::after { content: "−"; }
+    .faq p { padding: 0 20px 20px; color: var(--text-dim); line-height: 1.8; }
+  </style>
+</head>
+
+<body>
+  <div id="page-preloader">
+    <div class="neon-loader"><div class="neon-ring ring-1"></div><div class="neon-ring ring-2"></div><div class="neon-ring ring-3"></div></div>
+    <p class="loader-text-neon">TikTop</p>
+  </div>
+
+  <nav class="fcc-nav">
+    <a href="./index.html" class="fcc-logo">
+      <img src="https://i.ibb.co/wZjXcKz9/file-00000000e22871fd9cb25a4586788b91.png" alt="TikTop Logo">
+      <span>TikTop</span>
+    </a>
+    <div class="nav-right">
+      <span class="lang-icon" onclick="toggleLangMenu()">🌐</span>
+      <span class="theme-icon" onclick="toggleTheme()" id="theme-icon">🌙</span>
+      <button class="menu-toggle" onclick="toggleMenu()">Menu ☰</button>
+    </div>
+
+    <div class="lang-menu" id="lang-menu">
+      <div onclick="changeLang('en')">English</div>
+      <div onclick="changeLang('fr')">Français</div>
+      <div onclick="changeLang('es')">Español</div>
+      <div onclick="changeLang('de')">Deutsch</div>
+      <div onclick="changeLang('it')">Italiano</div>
+      <div onclick="changeLang('pt')">Português</div>
+      <div onclick="changeLang('ar')">العربية</div>
+      <div onclick="changeLang('hi')">हिन्दी</div>
+      <div onclick="changeLang('sw')">Swahili</div>
+      <div onclick="changeLang('tr')">Türkçe</div>
+      <div onclick="changeLang('ru')">Русский</div>
+    </div>
+  </nav>
+
+  <div class="side-menu" id="side-menu">
+    <a href="./index.html">Home</a>
+    <a href="./blogs.html">Blog</a>
+    <a href="./history.html">History</a>
+    <a href="./support.html">Support Us</a>
+    <a href="./contact.html">Contact Us</a>
+  </div>
+
+  <div id="article-content">
+    <article class="article-wrap">
+      
+      <div class="article-header">
+        <span class="article-category">Digital Archiving</span>
+        <h1 class="article-title">How TikTop Helps Preserve Your Memories</h1>
+        <div class="article-meta">Published on July 8, 2026 • 6 min read</div>
+      </div>
+
+      <img src="https://images.unsplash.com/photo-1505322022379-7c3353ee6291?q=80&w=1000&auto=format&fit=crop" alt="Old photographs and memories" class="hero-img">
+
+      <details class="toc">
+  <summary>Table of Contents</summary>
+  <ul>
+    <li><a href="#ephemeral">The Ephemeral Nature of the Internet</a></li>
+    <li><a href="#why-disappear">Why Do TikTok Videos Disappear?</a></li>
+    <li>
+      <a href="#use-cases">Crucial Memories You Should Be Archiving</a>
+      <ul>
+        <li><a href="#family">Family and Personal Milestones</a></li>
+        <li><a href="#business">Small Business and Entrepreneurial Journeys</a></li>
+      </ul>
+    </li>
+    <li><a href="#how-to">How to Build Your Digital Archive</a></li>
+    <li><a href="#faq">Frequently Asked Questions</a></li>
+    <li><a href="#final-thoughts">Final Thoughts</a></li>
+  </ul>
+</details>
+
+      <div class="article-body">
+
+<h2 id="ephemeral">The Ephemeral Nature of the Internet</h2>
+
+<p>There is a dangerous misconception in the modern digital age: we tend to believe that once something is uploaded to the internet, it remains there forever. This couldn't be further from the truth. The internet is incredibly ephemeral. Websites shut down, social media platforms change their algorithms, server farms experience data loss, and user accounts are frequently deleted. When we entrust platforms like TikTok to act as the sole digital scrapbooks for our lives, we are taking a massive, unnecessary risk with our most precious memories.</p>
+
+<p>Every day, millions of people use short-form video platforms to document their lives. We record everything from major life events like weddings and graduations to simple, hilarious moments with our pets. Yet, because these videos are stored on external servers owned by massive tech conglomerates, we do not truly own them until we have a local copy saved on our own hardware. TikTop serves a critical purpose beyond just providing offline entertainment; it acts as an essential archiving tool, helping individuals take back ownership of their personal histories before they vanish into the digital void.</p>
+
+<h2 id="why-disappear">Why Do TikTok Videos Disappear?</h2>
+
+<p>If you have spent any significant amount of time on TikTok, you have likely scrolled back through your own profile or your "Favorites" tab only to find blank grey squares staring back at you. Videos disappear constantly, and often without any prior warning. Understanding why this happens is the first step toward realizing why downloading your content is so crucial.</p>
+
+<p>First and foremost, there are copyright issues. TikTok’s entire ecosystem relies heavily on trending audio tracks and popular music. However, licensing agreements between the platform and major record labels frequently expire or break down entirely. When this happens, TikTok will instantly mute the audio on millions of videos that used that sound. If you recorded a heartfelt family video using a popular song in the background, a muted video completely ruins the memory.</p>
+
+<p>Secondly, account bans and community guideline strikes happen more often than you might think, and sometimes by mistake due to automated moderation bots. If a platform decides to suspend an account, the entire catalog of videos associated with that account is wiped from public view instantly. Finally, there is the risk of accidental deletion. We have all experienced the dread of tapping the wrong button on a touchscreen. Once a video is deleted from the platform, there is no "undo" button or recycling bin. The memory is gone forever.</p>
+
+<h2 id="use-cases">Crucial Memories You Should Be Archiving</h2>
+
+<p>While everyone uses social media differently, there are a few specific categories of memories that are far too important to leave floating vulnerably in the cloud.</p>
+
+<h3 id="family">Family and Personal Milestones</h3>
+<p>Our personal lives are filled with fleeting moments that we never want to forget. A child's first steps, a surprise proposal caught on camera, or a hilarious holiday dinner conversation. People increasingly use TikTok's powerful built-in video editor to stitch these moments together, adding text overlays, voiceovers, and filters. The resulting video is a beautiful digital artifact. By using TikTop to download these videos, you ensure that even 20 years from now, long after current social media platforms have been replaced by new technology, you will still have that MP4 file to show your family.</p>
+
+<h3 id="business">Small Business and Entrepreneurial Journeys</h3>
+<p>The entrepreneurial journey is another area where digital archiving is vital. Think about local shopkeepers, or "dukas" as they are affectionately called in East Africa, or ambitious founders starting a new delivery service, like an egg distribution platform. Many of these business owners document their very first day of operations, their first physical shop layout, or their very first customer delivery on TikTok. These initial, raw videos are an incredible testament to how far a business has come. They are the digital equivalent of framing your first dollar bill.</p>
+
+<p>If a business owner loses access to their account, they lose the entire documented history of their company's growth. By actively using TikTop to download and archive these business milestones, founders ensure they have the marketing material and historical records they need, safely stored offline on their own hard drives.</p>
+
+<h2 id="how-to">How to Build Your Digital Archive</h2>
+
+<p>Creating a reliable archive for your digital memories doesn't require a degree in computer science. It simply requires a bit of discipline and the right tools.</p>
+
+<p>Start by setting a routine. For instance, at the end of every month, take 15 minutes to review the videos you have posted or favorited. Identify the ones that hold genuine sentimental value. Once you have identified them, copy the links and use TikTop to download the high-quality MP4 files directly to your computer or smartphone.</p>
+
+<p>After downloading, organization is key. Don't just leave them sitting in your "Downloads" folder. Create a structured folder system on your computer—perhaps categorized by year and month, or by event type (e.g., "2025 Family Vacations" or "Business Launch Videos"). For tech-savvy users, you might even consider setting up mobile automation tools on your phone. Much like using applications like MacroDroid to automate repetitive tasks or database entries on your device, you can use automation tools to automatically move any video file containing the word "TikTok" from your general downloads folder into a secure, dedicated cloud-synced archive folder. This guarantees that your downloaded memories are backed up securely without requiring manual sorting every single time.</p>
+
+<div class="cta-box">
+<h3>Secure Your Memories Today</h3>
+<p>Don't wait until a video gets deleted. Archive your favorite moments instantly with our free tool.</p>
+<a href="./index.html" class="cta-button">Start Archiving Now</a>
+</div>
+
+<h2 id="faq">Frequently Asked Questions</h2>
+
+<div class="faq">
+
+<details>
+<summary>Does downloading a video preserve the original audio?</summary>
+<p>Yes. When you use TikTop to download a video, it captures the video file exactly as it currently exists on the platform, complete with the attached audio. This is why it is so important to download videos before copyright issues cause the audio to be muted.</p>
+</details>
+
+<details>
+<summary>Can I download my own private videos using TikTop?</summary>
+<p>TikTop requires a public link to access and process the video file. If you wish to download your own private videos, you can temporarily set the video to "public," process the link through TikTop, download your file, and then immediately switch the video back to private.</p>
+</details>
+
+<details>
+<summary>What is the best way to store downloaded MP4 files?</summary>
+<p>For true preservation, we recommend the 3-2-1 backup strategy. Keep three total copies of your data, on two different types of media, with one copy stored offsite. For example, keep the original on your computer's hard drive, copy it to an external USB drive, and upload a final copy to a secure cloud storage provider like Google Drive or Dropbox.</p>
+</details>
+
+<details>
+<summary>Will the video quality degrade over time?</summary>
+<p>No. An MP4 file is a digital container. Unlike physical VHS tapes or printed photographs that fade and degrade as the years go by, a digital MP4 file will look exactly as sharp and clear decades from now as the exact moment you downloaded it via TikTop.</p>
+</details>
+
+</div>
+
+<h2 id="final-thoughts">Final Thoughts</h2>
+
+<p>We are currently living in one of the most thoroughly documented eras in human history, yet we are at the greatest risk of experiencing a "digital dark age" if we do not take control of our data. Social media apps are fantastic tools for sharing and connecting, but they make terrible long-term storage solutions. Your memories belong to you, not to a server farm halfway across the world. By making a habit of using TikTop to download and archive your most cherished videos, you ensure that your personal history remains safe, secure, and entirely in your control for generations to come.</p>
+
+      </div>
+    </article>
+  </div>
+
+  <footer class="footer">
+    <div class="footer-grid">
+      <div>
+        <h3>TikTop</h3>
+        <p>Fast and simple TikTok downloader</p>
+        <p>with no watermark.</p>
+      </div>
+      <div>
+        <h4>Tools</h4>
+        <a href="./index.html">Tiktok Downloader</a>
+        <a href="./instagram.html">Instagram Downloader</a>
+        <a href="./youtube.html">Youtube Downloader</a>
+        <a href="./facebook.html">Facebook Downloader</a>
+        <a href="./twitter.html">Twitter Downloader</a>
+      </div>
+      <div>
+        <h4>Legal & Info</h4>
+        <a href="./about.html">About Us</a>
+        <a href="./privacy.html">Privacy Policy</a>
+        <a href="./terms.html">Terms of Service</a>
+        <a href="./dmca.html">DMCA / Copyright</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      © 2026 TikTop. All rights reserved.
+    </div>
+  </footer>
+
+  <div id="google_translate_element" style="display:none;"></div>
+  <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+  <script>
+    function toggleTheme() { document.body.classList.toggle('light-mode'); const isLight = document.body.classList.contains('light-mode'); localStorage.setItem('theme', isLight ? 'light' : 'dark'); document.getElementById('theme-icon').textContent = isLight ? "☀️" : "🌙"; }
+    (function() { if (localStorage.getItem('theme') === 'light') { document.body.classList.add('light-mode'); document.getElementById('theme-icon').textContent = "☀️"; } })();
+    window.addEventListener('load', function() { const preloader = document.getElementById('page-preloader'); setTimeout(() => { preloader.classList.add('hidden'); setTimeout(() => { preloader.style.display = 'none'; }, 500); }, 500); });
+    function toggleMenu() { document.getElementById('side-menu').classList.toggle('open'); }
+    function toggleLangMenu() { const menu = document.getElementById('lang-menu'); menu.style.display = menu.style.display === 'block' ? 'none' : 'block'; }
+    function googleTranslateElementInit() { new google.translate.TranslateElement({ pageLanguage: 'en', autoDisplay: false }, 'google_translate_element'); }
+    function setLanguage(lang) { const current = getCurrentLang(); if (current === lang) return; document.cookie = "googtrans=/en/" + lang + ";path=/"; document.cookie = "googtrans=/en/" + lang + ";domain=" + window.location.hostname + ";path=/"; location.reload(); }
+    function changeLang(lang) { localStorage.setItem('site_lang', lang); setLanguage(lang); document.getElementById('lang-menu').style.display = 'none'; }
+    function getCurrentLang() { const match = document.cookie.match(/googtrans=\/en\/([^;]+)/); return match ? match[1] : 'en'; }
+    window.addEventListener('load', () => { const savedLang = localStorage.getItem('site_lang'); const currentLang = getCurrentLang(); if (savedLang && savedLang !== currentLang) { setLanguage(savedLang); } });
+    (function() { function fixGoogleTranslateLayout() { document.body.style.top = "0px"; document.body.style.marginTop = "0px"; document.documentElement.style.marginTop = "0px"; document.documentElement.style.height = "100%"; const banner = document.querySelector('.goog-te-banner-frame'); if (banner) banner.style.display = "none"; } fixGoogleTranslateLayout(); const observer = new MutationObserver(fixGoogleTranslateLayout); observer.observe(document.documentElement, { attributes: true, childList: true, subtree: true, attributeFilter: ['style'] }); })();
+  </script>
+  <div id="scrollTop" onclick="scrollToTop()">🚀</div>
+<script>
+window.addEventListener("scroll", () => {
+  const btn = document.getElementById("scrollTop");
+  if (window.pageYOffset > 400) { btn.style.display = "flex"; } else { btn.style.display = "none"; }
+});
+function scrollToTop() { window.scrollTo({ top: 0, behavior: "smooth" }); }
+</script>
+</body>
+</html>
