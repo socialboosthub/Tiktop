@@ -1,274 +1,373 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>How to Download TikTok Photo Slideshows & Image Carousels in HD - Downloader Blog</title>
-  <meta name="description" content="Learn how to extract and download every individual high-definition picture from a TikTok photo carousel swipe deck without converting them into a compressed MP4 video.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --bg-color: #fafafa;
-      --card-bg: #ffffff;
-      --text-main: #1a1a1a;
-      --text-muted: #555555;
-      --accent: #fe2c55;
-      --accent-hover: #e02247;
-      --border-color: #eaeaea;
-    }
+<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+  <meta charset="UTF-8">  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+  <title>How to Download TikTok Slideshows (Photos) | TikTop</title>     
+  <meta name="description" content="Learn how to easily download TikTok slideshows and photos without watermarks using TikTop. Save individual images or whole photo carousels in seconds.">
+  <meta name="keywords" content="download tiktok slideshow, tiktok photo downloader, save tiktok images, tiktok carousel downloader, download all photos tiktok">  
+  <meta name="robots" content="index, follow, max-image-preview:large">  
+  <meta name="theme-color" content="#EE1D52">  
+  <link rel="canonical" href="https://tiktop.online/blog-download-tiktok-slideshow.html">    
+  <meta property="og:type" content="article">  
+  <meta property="og:title" content="How to Download TikTok Slideshows (Photos) for Free">
+  <meta property="og:description" content="A step-by-step guide to saving TikTok photo slides to your device using TikTop's free slideshow downloader.">  
+  <meta property="og:url" content="https://tiktop.online/blog-download-tiktok-slideshow.html">  
+  <meta property="og:site_name" content="TikTop">  
+  <meta property="og:image" content="https://images.unsplash.com/photo-1611162617474-5b21e879e113?q=80&w=1000&auto=format&fit=crop">    
+  <link rel="preconnect" href="https://fonts.googleapis.com">  
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>  
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">  
+  <link rel="icon" href="https://tiktop.online/assets/Logo.ico" type="image/x-icon">    
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+  <style>  
+    iframe.goog-te-banner-frame { display: none !important; visibility: hidden !important; height: 0 !important; }  
+    body > .skiptranslate { display: none !important; }  
+    body { top: 0px !important; position: static !important; margin-top: 0px !important; }  
+    html { margin-top: 0px !important; height: 100% !important; }  
+    .goog-tooltip, .goog-tooltip:hover, .goog-text-highlight { display: none !important; box-shadow: none !important; background: none !important; }  
+    .fcc-nav { top: 0 !important; }  
+  
+    :root {  
+      --bg: #000000; --card: #111111; --text: #ffffff; --text-main: #ffffff;  
+      --text-dim: #b0b0b0; --muted: #aaaaaa; --border: rgba(255, 255, 255, 0.08);  
+      --box-bg: #111111; --pink: #EE1D52; --cyan: #25F4EE; --nav-bg: #0a0a23;  
+    }  
+    body.light-mode {  
+      --bg: #f5f5f7; --card: #ffffff; --text: #111111; --text-main: #000000;  
+      --text-dim: #222222; --muted: #666666; --border: rgba(0,0,0,0.08);  
+      --box-bg: #ffffff; --nav-bg: #0a0a23;  
+    }  
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: Inter, sans-serif; }  
+    body { background: var(--bg); color: var(--text-main); transition: background 0.3s, color 0.3s; overflow-x: hidden; }  
+      
+    #page-preloader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); z-index: 999999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.5s ease, visibility 0.5s ease; }  
+    #page-preloader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }  
+    .neon-loader { position: relative; width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; }  
+    .neon-ring { position: absolute; border: 4px solid transparent; border-radius: 50%; animation: ring-pulse 2s cubic-bezier(0.455, 0.03, 0.515, 0.955) infinite; }  
+    .ring-1 { width: 100%; height: 100%; border-top-color: var(--cyan); border-bottom-color: var(--cyan); animation-delay: 0s; }  
+    .ring-2 { width: 70%; height: 70%; border-left-color: var(--pink); border-right-color: var(--pink); animation-delay: 0.5s; }  
+    .ring-3 { width: 40%; height: 40%; border-top-color: var(--text-main); border-bottom-color: var(--text-main); animation-delay: 1s; }   
+    @keyframes ring-pulse { 0% { transform: rotate(0deg) scale(1); opacity: 1; } 50% { transform: rotate(180deg) scale(1.2); opacity: 0.5; } 100% { transform: rotate(360deg) scale(1); opacity: 1; } }  
+    .loader-text-neon { margin-top: 25px; font-size: 11px; letter-spacing: 4px; color: var(--text-main); font-weight: bold; text-transform: uppercase; animation: fade-blink 1s infinite; }  
+    @keyframes fade-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }  
+  
+    .fcc-nav { position: fixed; width: 100%; height: 70px; background: var(--nav-bg); display: flex; align-items: center; justify-content: space-between; padding: 0 20px; z-index: 10000; }  
+    .fcc-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; }  
+    .fcc-logo img { height: 32px; width: auto; display: block; }  
+    .fcc-logo span { background: linear-gradient(to bottom right, var(--pink), var(--cyan)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; font-weight: bold; font-size: 20px; }  
+    .nav-right { display: flex; align-items: center; gap: 15px; }  
+    .theme-icon { cursor: pointer; font-size: 20px; transition: 0.3s; }  
+    .menu-toggle { background: #3b3b4f; border: 1px solid #fff; color: #fff; padding: 5px 10px; cursor: pointer; border-radius: 4px; }  
+    .side-menu { position: fixed; top: 50px; right: -100%; width: 250px; height: calc(100vh - 50px); background: var(--nav-bg); transition: 0.4s; z-index: 9999; padding: 20px; display: flex; flex-direction: column; gap: 20px; border-left: 1px solid #3b3b4f; }  
+    .side-menu.open { right: 0; }  
+    .side-menu a { color: #fff; text-decoration: none; font-size: 18px; border-bottom: 1px solid #3b3b4f; padding-bottom: 10px; }  
+    .lang-icon { cursor: pointer; font-size: 20px; }  
+    .lang-menu { position: fixed; top: 55px; right: 80px; background: #0a0a23; border: 1px solid #3b3b4f; border-radius: 10px; display: none; z-index: 10002; overflow: hidden; }  
+    .lang-menu div { padding: 10px 16px; color: #fff; cursor: pointer; font-size: 14px; }  
+    .lang-menu div:hover { background: #EE1D52; }  
+  
+    #article-content { padding-top: 100px; min-height: 100vh; display: flex; flex-direction: column; align-items: center; }  
+    .article-wrap { max-width: 800px; width: 100%; padding: 0 20px; margin-bottom: 60px; }  
+      
+    .article-header { text-align: center; margin-bottom: 40px; }  
+    .article-category { display: inline-block; background: rgba(37, 244, 238, 0.1); color: var(--cyan); padding: 6px 15px; border-radius: 20px; font-weight: bold; font-size: 14px; margin-bottom: 15px; border: 1px solid var(--cyan); }  
+    .article-title { font-size: 42px; color: var(--text-main); margin-bottom: 15px; line-height: 1.2; }  
+    .article-meta { color: var(--muted); font-size: 15px; }  
+      
+    .hero-img { width: 100%; height: auto; border-radius: 16px; margin-bottom: 40px; border: 1px solid var(--border); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }  
+      
+    .article-body { font-size: 18px; line-height: 1.8; color: var(--text-dim); }  
+    .article-body h2 { font-size: 28px; color: var(--text-main); margin: 40px 0 20px; border-left: 4px solid var(--cyan); padding-left: 15px; }  
+    .article-body h3 { font-size: 22px; color: var(--text-main); margin: 30px 0 15px; }  
+    .article-body p { margin-bottom: 20px; }  
+    .article-body strong { color: var(--text-main); }  
+    .article-body ul, .article-body ol { margin-left: 20px; margin-bottom: 25px; }  
+    .article-body li { margin-bottom: 10px; }  
+  
+    .cta-box { background: linear-gradient(to right, rgba(238, 29, 82, 0.1), rgba(37, 244, 238, 0.1)); border: 2px dashed var(--pink); border-radius: 12px; padding: 30px; text-align: center; margin: 40px 0; }  
+    .cta-box h3 { margin-top: 0; color: var(--text-main); }  
+    .cta-button { display: inline-block; background: var(--pink); color: #fff; padding: 15px 30px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 18px; margin-top: 15px; transition: 0.3s; }  
+    .cta-button:hover { background: var(--cyan); color: #000; transform: translateY(-3px); }  
+  
+    .footer { padding: 60px 6% 40px; background: var(--pink); border-radius: 12px; margin-top: 50px; text-align: left; color: #000; }  
+    .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }  
+    .footer h3, .footer h4 { margin-bottom: 12px; }  
+    .footer p, .footer a { color: black; font-size: 14px; text-decoration: none; display: block; margin-bottom: 8px; }  
+    .footer a:hover { color: var(--text); }  
+    .footer-bottom { margin-top: 40px; text-align: center; font-size: 13px; opacity: 0.7; border-top: 1px solid rgba(0,0,0,0.1); padding-top: 20px; padding-bottom: 40px; }  
+  
+    @media (max-width: 768px) { .article-title { font-size: 32px; } .article-body { font-size: 16px; } }  
 
-    body {
-      font-family: 'Inter', sans-serif;
-      background-color: var(--bg-color);
-      color: var(--text-main);
-      line-height: 1.7;
-      padding: 20px;
-    }
+/* =========================  
+   SCROLL TO TOP CSS  
+========================= */  
+#scrollTop {  
+  position: fixed;  
+  bottom: 30px;  
+  right: 30px;  
+  width: 55px;  
+  height: 55px;  
+  background: linear-gradient(45deg, #EE1D52, #25F4EE);  
+  border-radius: 50%;  
+  display: none;  
+  align-items: center;  
+  justify-content: center;  
+  font-size: 25px;  
+  cursor: pointer;  
+  z-index: 5000;  
+  color: white;  
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);  
+  transition: 0.3s ease;  
+}  
+#scrollTop:hover {  
+  transform: translateY(-5px) scale(1.05);  
+}  
 
-    /* Simple Header */
-    header {
-      max-width: 800px;
-      margin: 20px auto 40px auto;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+/* FAQ */
+.faq{ margin-top:30px; }
+.faq details{ background:var(--card); border:1px solid var(--border); border-radius:12px; margin-bottom:15px; overflow:hidden; transition:.3s; }
+.faq details[open]{ border-color:var(--cyan); box-shadow:0 0 15px rgba(37,244,238,.15); }
+.faq summary{ list-style:none; cursor:pointer; padding:18px 20px; font-size:18px; font-weight:600; color:var(--text-main); position:relative; }
+.faq summary::-webkit-details-marker{ display:none; }
+.faq summary::after{ content:"+"; position:absolute; right:20px; font-size:24px; color:var(--cyan); transition:.3s; }
+.faq details[open] summary::after{ content:"−"; }
+.faq p{ padding:0 20px 20px; color:var(--text-dim); line-height:1.8; }
 
-    header a {
-      text-decoration: none;
-      color: var(--text-main);
-      font-weight: 700;
-      font-size: 1.2rem;
-    }
+/* =========================
+   TABLE OF CONTENTS
+========================= */
+.toc{ background:var(--card); border:1px solid var(--border); border-radius:14px; margin:35px 0; overflow:hidden; }
+.toc-header{ padding:18px 20px; display:flex; justify-content:space-between; align-items:center; cursor:pointer; user-select:none; }
+.toc-header h2{ margin:0 !important; padding:0 !important; border:none !important; font-size:24px !important; color:var(--text-main); }
+.toc-icon{ font-size:28px; color:var(--cyan); font-weight:bold; transition:.3s; }
+.toc-content{ max-height:1000px; overflow:hidden; transition:max-height .35s ease; }
+.toc.collapsed .toc-content{ max-height:0; }
+.toc ul{ list-style:none; margin:0; padding:0 20px 20px; }
+.toc li{ margin:12px 0; }
+.toc a{ color:var(--text-dim); text-decoration:none; transition:.25s; }
+.toc a:hover{ color:var(--cyan); }
+  </style>  
+</head>  
+<body>  
 
-    header .back-link {
-      font-size: 0.95rem;
-      font-weight: 500;
-      color: var(--accent);
-    }
+  <div id="page-preloader">  
+    <div class="neon-loader"><div class="neon-ring ring-1"></div><div class="neon-ring ring-2"></div><div class="neon-ring ring-3"></div></div>  
+    <p class="loader-text-neon">TikTop</p>  
+  </div>    
 
-    /* Main Container */
-    .blog-container {
-      max-width: 800px;
-      margin: 0 auto;
-      background: var(--card-bg);
-      padding: 40px;
-      border-radius: 16px;
-      border: 1px solid var(--border-color);
-      box-shadow: 0 4px 20px rgba(0,0,0,0.02);
-    }
+  <nav class="fcc-nav">  
+    <a href="./index.html" class="fcc-logo">  
+      <img src="https://i.ibb.co/wZjXcKz9/file-00000000e22871fd9cb25a4586788b91.png" alt="TikTop Logo">  
+      <span>TikTop</span>  
+    </a>  
+    <div class="nav-right">  
+      <span class="lang-icon" onclick="toggleLangMenu()">🌐</span>  
+      <span class="theme-icon" onclick="toggleTheme()" id="theme-icon">🌙</span>  
+      <button class="menu-toggle" onclick="toggleMenu()">Menu ☰</button>  
+    </div>  
+    <div class="lang-menu" id="lang-menu">  
+      <div onclick="changeLang('en')">English</div>  
+      <div onclick="changeLang('fr')">Français</div>  
+      <div onclick="changeLang('es')">Español</div>  
+      <div onclick="changeLang('de')">Deutsch</div>  
+      <div onclick="changeLang('it')">Italiano</div>  
+      <div onclick="changeLang('pt')">Português</div>  
+      <div onclick="changeLang('ar')">العربية</div>  
+      <div onclick="changeLang('hi')">हिन्दी</div>  
+      <div onclick="changeLang('sw')">Swahili</div>  
+      <div onclick="changeLang('tr')">Türkçe</div>  
+      <div onclick="changeLang('ru')">Русский</div>  
+    </div>
+  </nav>    
 
-    /* Meta details */
-    .blog-meta {
-      font-size: 0.9rem;
-      color: var(--accent);
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 12px;
-    }
+  <div class="side-menu" id="side-menu">  
+    <a href="./index.html">Home</a>  
+    <a href="./blogs.html">Blog</a>  
+    <a href="./history.html">History</a>  
+    <a href="./support.html">Support Us</a>  
+    <a href="./contact.html">Contact Us</a>  
+  </div>    
 
-    h1 {
-      font-size: 2.25rem;
-      font-weight: 700;
-      line-height: 1.3;
-      margin-bottom: 24px;
-      color: var(--text-main);
-    }
+  <div id="article-content">  
+    <article class="article-wrap">  
+      <div class="article-header">  
+        <span class="article-category">Guides & Tutorials</span>  
+        <h1 class="article-title">How to Download TikTok Slideshows (Photos) for Free</h1>
+        <div class="article-meta">Published on July 17, 2026 • 5 min read</div>  
+      </div>  
 
-    .hero-image {
-      width: 100%;
-      height: auto;
-      border-radius: 12px;
-      margin-bottom: 30px;
-      object-fit: cover;
-    }
+      <img src="https://images.unsplash.com/photo-1611162617474-5b21e879e113?q=80&w=1000&auto=format&fit=crop" alt="Smartphones showing photo galleries" class="hero-img">  
 
-    p {
-      margin-bottom: 20px;
-      font-size: 1.05rem;
-      color: var(--text-main);
-    }
+      <div class="article-body">
 
-    h2 {
-      font-size: 1.5rem;
-      font-weight: 700;
-      margin: 35px 0 15px 0;
-    }
+        <p>TikTok is famous for short videos, but its <strong>Photo Slideshow</strong> feature has taken the app by storm. Creators frequently upload amazing carousels filled with wallpapers, memes, fashion lookbooks, and aesthetic photography. But how do you save these photos without taking a messy screenshot?</p>
 
-    /* Blockquotes/Callout boxes */
-    blockquote {
-      background-color: #fff1f3;
-      border-left: 4px solid var(--accent);
-      padding: 20px;
-      border-radius: 4px 12px 12px 4px;
-      margin: 25px 0;
-      font-weight: 500;
-    }
+        <p>If you're wondering how to <strong>download TikTok slideshows and photos</strong> directly to your device in high quality and without a watermark, you are in the right place. Our dedicated <strong>slider downloader</strong> was built exactly for this purpose.</p>
 
-    /* Step Sequence UI Layout */
-    .step-list {
-      margin: 25px 0;
-      list-style: none;
-    }
-
-    .step-item {
-      display: flex;
-      margin-bottom: 20px;
-      background: #fdfdfd;
-      border: 1px solid var(--border-color);
-      padding: 20px;
-      border-radius: 12px;
-    }
-
-    .step-number {
-      background: var(--accent);
-      color: #fff;
-      font-weight: 700;
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-right: 15px;
-      flex-shrink: 0;
-      font-size: 0.9rem;
-    }
-
-    .step-body h3 {
-      font-size: 1.1rem;
-      font-weight: 600;
-      margin-bottom: 6px;
-    }
-
-    .step-body p {
-      font-size: 0.95rem;
-      color: var(--text-muted);
-      margin-bottom: 0;
-    }
-
-    .step-badge {
-      display: inline-block;
-      background: #f1f1f1;
-      color: #333;
-      font-size: 0.75rem;
-      padding: 2px 8px;
-      border-radius: 4px;
-      margin-top: 6px;
-      font-weight: 500;
-    }
-
-    /* Footer styling */
-    footer {
-      text-align: center;
-      margin-top: 60px;
-      padding: 20px;
-      font-size: 0.9rem;
-      color: var(--text-muted);
-      border-top: 1px solid var(--border-color);
-    }
-
-    /* Mobile adjustments */
-    @media (max-width: 600px) {
-      body {
-        padding: 10px;
-      }
-      .blog-container {
-        padding: 20px;
-        border-radius: 12px;
-      }
-      h1 {
-        font-size: 1.75rem;
-      }
-      .step-item {
-        padding: 15px;
-      }
-    }
-  </style>
-</head>
-<body>
-
-  <header>
-    <a href="./index.html">TTDownloader</a>
-    <a href="./blog-index.html" class="back-link">&larr; Back to Blog</a>
-  </header>
-
-  <main class="blog-container">
-    <div class="blog-meta">Advanced Tutorials</div>
-    <h1>How to Download TikTok Photo Slideshows & Image Carousels in Original Quality</h1>
-    
-    <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=800&auto=format&fit=crop" alt="Photo grid presentation layout mockup" class="hero-image">
-
-    <p>TikTok’s photo mode slideshows have completely taken over the ecosystem. Whether it is an aesthetic dump of high-resolution wallpapers, step-by-step recipe instructions, or multi-slide memes, image carousels are generating millions of views daily.</p>
-
-    <p>But if you have ever tried to save an entire deck using standard tools, you have likely run into a frustrating limitation: <strong>most basic online downloaders convert the swipeable images into a single compressed MP4 video file.</strong> You lose the ability to swipe at your own pace, and the overall compression destroys the image details.</p>
-
-    <p>In this guide, we will break down why video conversions ruin your downloads and show you the exact process to extract individual, uncompressed raw image files instantly.</p>
-
-    <h2>Why Converting Carousels to Video Files Destroys Content</h2>
-    <p>When an online tool forcefully compiles an image slideshow into a video container file, you suffer three major issues:</p>
-    
-    <ul>
-      <li style="margin-left: 20px; margin-bottom: 10px;"><strong>Resolution Downgrade:</strong> Crisp, vertical 1080x1920 source photos get flattened down by video encoding bitrates, leading to noticeable blurring and pixelation.</li>
-      <li style="margin-left: 20px; margin-bottom: 10px;"><strong>Loss of User Navigation:</strong> You completely lose interactive swipe controls. If a specific slide features text you want to carefully read, you are forced to constantly pause and scan along an awkward video playhead timeline.</li>
-      <li style="margin-left: 20px; margin-bottom: 0;"><strong>Zero Individual Extraction:</strong> If you only care about saving the 5th picture out of a 10-slide deck, your only option is to screenshot a moving video, lowering image quality even further.</li>
-    </ul>
-
-    <blockquote>
-      <strong>The Solution:</strong> Instead of processing the post into a video format, a dedicated image downloader targets the underlying source metadata to isolate each individual static picture file directly.
-    </blockquote>
-
-    <h2>Step-by-Step: How to Save the Raw Images Properly</h2>
-    <p>Our slideshow processing engine connects directly to the media array metadata. It identifies each image asset within the uploaded deck and lets you download them cleanly without watermarks.</p>
-
-    <ul class="step-list">
-      <li class="step-item">
-        <div class="step-number">1</div>
-        <div class="step-body">
-          <h3>Copy the TikTok Link</h3>
-          <p>Open the TikTok app on your device, navigate to the specific photo carousel you wish to extract, tap the Share arrow icon on the bottom right, and select "Copy Link".</p>
+        <div class="toc collapsed" id="toc">
+          <div class="toc-header" onclick="toggleTOC()">
+            <h2>Contents</h2>
+            <span class="toc-icon" id="tocIcon">+</span>
+          </div>
+          <div class="toc-content">
+            <ul>
+              <li><a href="#what-is-slideshow">What is a TikTok Slideshow?</a></li>
+              <li><a href="#how-to">How to Download Slideshows Using TikTop</a></li>
+              <li><a href="#how-it-works">Understanding the Slideshow Interface</a></li>
+              <li><a href="#individual-vs-all">Downloading Individual Images vs. All Images</a></li>
+              <li><a href="#watermarks">Are There Any Watermarks?</a></li>
+              <li><a href="#faq">Frequently Asked Questions</a></li>
+            </ul>
+          </div>
         </div>
-      </li>
-      <li class="step-item">
-        <div class="step-number">2</div>
-        <div class="step-body">
-          <h3>Paste Link Into Our Tool</h3>
-          <p>Navigate to our Slideshow Extraction page. Simply paste the link straight into the URL input box container field and hit the "Download" trigger button.</p>
-        </div>
-      </li>
-      <li class="step-item">
-        <div class="step-number">3</div>
-        <div class="step-body">
-          <h3>Preview the Extracted Photo Grid</h3>
-          <p>The processing framework will dynamically read the endpoint link and arrange every individual image component in a responsive, clean grid preview panel below the search block.</p>
-        </div>
-      </li>
-      <li class="step-item">
-        <div class="step-number">4</div>
-        <div class="step-body">
-          <h3>Download Single or Execute Batch Save</h3>
-          <p>You can choose to click the individual download buttons under specific images to only grab files you need. Alternatively, tap "Download All Images" to run our automated background extraction script.</p>
-          <div class="step-badge">Pro Tip: 2-second security interval built in between batch files</div>
-        </div>
-      </li>
-    </ul>
+        
+        <h2 id="what-is-slideshow">What is a TikTok Slideshow?</h2>
+        <p>A TikTok slideshow (also known as a photo carousel) is a post format where creators upload multiple images instead of a video. Users can swipe left and right to view the images while an audio track plays in the background.</p>
 
-    <h2>Wrapping Up</h2>
-    <p>By extracting the raw image format assets rather than stitching them together into a compressed video container, you preserve the precise clarity, detail, and flexibility of the original layout. Use this method next time you need to capture wall art, complex diagrams, or high-end design inspiration directly from your feed!</p>
-  </main>
+        <h2 id="how-to">How to Download Slideshows Using TikTop</h2>
+        <p>Saving a slideshow is incredibly easy with our built-in slider tool. You don't need to install any apps or create an account. Just follow these simple steps:</p>
+        
+        <ol>
+          <li><strong>Open TikTok:</strong> Find the photo slideshow you want to download.</li>
+          <li><strong>Copy the Link:</strong> Tap the "Share" arrow icon on the right side of the screen and select <strong>"Copy Link"</strong>.</li>
+          <li><strong>Paste it in TikTop:</strong> Go to the TikTop homepage and paste the link into the download bar, then click the download button.</li>
+          <li><strong>View the Gallery:</strong> TikTop's system will automatically detect that the link is a slideshow and redirect you to our dedicated <strong>Slideshow Viewer page</strong>.</li>
+        </ol>
 
-  <footer>
-    <p>&copy; 2026 TTDownloader. All rights reserved.</p>
-  </footer>
+        <h2 id="how-it-works">Understanding the Slideshow Interface</h2>
+        <p>Once TikTop processes your link, you will be taken to a horizontal scrolling gallery. Here is exactly what our tool does to give you the best experience:</p>
+        
+        <ul>
+          <li><strong>Horizontal Swipe Gallery:</strong> You can swipe left and right to preview all the photos in the TikTok post, just like on the original app.</li>
+          <li><strong>Author Information:</strong> Each card displays the creator's avatar, their username (`@username`), and the post's caption so you have the full context of the image.</li>
+          <li><strong>High Quality:</strong> Our system communicates with an API to fetch the raw image files directly from TikTok's servers, ensuring maximum quality.</li>
+        </ul>
 
-</body>
+        <h2 id="individual-vs-all">Downloading Individual Images vs. All Images</h2>
+        <p>We built our slideshow tool to give you full control over what you save. On the gallery screen, you will see two main ways to download your photos:</p>
+        
+        <h3>1. Download Specific Images</h3>
+        <p>Under every single photo in the gallery, you will see a button labeled <strong>"Download Image X"</strong> (where X is the number of the photo). Tapping this button instantly forces the browser to download that specific picture to your camera roll or downloads folder. It will be saved cleanly as a <code>.jpeg</code> file named <code>tiktop-[id]-img-[index].jpeg</code>.</p>
+
+        <h3>2. Download ALL Images</h3>
+        <p>If you want to save the entire carousel at once, scroll down slightly below the gallery and click the large <strong>"DOWNLOAD ALL IMAGES"</strong> button. </p>
+        
+        <p><strong>Note on how "Download All" works:</strong> When you click this button, the system triggers the download for each image one by one. <em>We purposely added a 2-second delay between each download.</em> Why? Because web browsers (like Chrome and Safari) will block multiple files from downloading at the exact same time to protect you from spam. This 2-second delay ensures your browser has time to ask you: <em>"Allow this site to download multiple files?"</em> Always click <strong>Allow</strong> so you get all your pictures!</p>
+
+        <h2 id="watermarks">Are There Any Watermarks?</h2>
+        <p>No! The best part about using TikTop's slideshow downloader is that we extract the pure, raw images. When you take a screenshot on your phone, you get all the TikTok UI buttons (hearts, comments, share arrows) blocking the view. When you use TikTop, you get the pure photo <strong>without any TikTok watermarks or UI elements</strong>.</p>
+
+        <h2 id="faq">Frequently Asked Questions</h2>
+        <div class="faq">
+          <details>
+            <summary>Why didn't all my images download when I clicked "Download All"?</summary>
+            <p>Your browser's pop-up or multi-download blocker might be active. When you click "Download All", watch out for a browser prompt asking to "Allow downloading multiple files" and accept it.</p>
+          </details>
+
+          <details>
+            <summary>Can I download the audio from the slideshow?</summary>
+            <p>Our slideshow tool focuses specifically on extracting the high-quality photos. To get the audio, you can paste the link on our main page and choose an MP3 download option if available.</p>
+          </details>
+
+          <details>
+            <summary>What format are the photos saved in?</summary>
+            <p>The photos are saved in standard <strong>.jpeg</strong> format, which is perfect for opening on any device, setting as a wallpaper, or sharing with friends.</p>
+          </details>
+
+          <details>
+            <summary>Is this feature free?</summary>
+            <p>Yes, completely free! You can use our slideshow gallery downloader as many times as you like without any hidden fees.</p>
+          </details>
+        </div>
+
+        <p>Ready to start saving those aesthetic wallpapers and photo dumps? Head back to our homepage and paste your link!</p>
+
+      </div>
+      
+      <div class="cta-box">  
+          <h3>Try the Slideshow Downloader</h3>  
+          <p>Paste a TikTok photo link to preview and download your images in high quality.</p>  
+          <a href="./index.html" class="cta-button">Go to Downloader</a>  
+      </div>  
+    </article>
+  </div>    
+
+  <footer class="footer">  
+    <div class="footer-grid">  
+      <div>  
+        <h3>TikTop</h3>  
+        <p>Fast and simple TikTok downloader</p>  
+        <p>with no watermark.</p>  
+      </div>  
+      <div>  
+        <h4>Tools</h4>  
+        <a href="./index.html">Tiktok Downloader</a>  
+        <a href="./instagram.html">Instagram Downloader</a>  
+        <a href="./youtube.html">Youtube Downloader</a>  
+        <a href="./facebook.html">Facebook Downloader</a>  
+        <a href="./twitter.html">Twitter Downloader</a>  
+      </div>  
+      <div>  
+        <h4>Legal & Info</h4>  
+        <a href="./about.html">About Us</a>  
+        <a href="./privacy.html">Privacy Policy</a>  
+        <a href="./terms.html">Terms of Service</a>  
+        <a href="./dmca.html">DMCA / Copyright</a>  
+      </div>  
+    </div>  
+    <div class="footer-bottom">  
+      © 2026 TikTop. All rights reserved.  
+    </div>  
+  </footer>    
+
+  <div id="google_translate_element" style="display:none;"></div>  
+  <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>  
+  <script>  
+    function toggleTheme() { document.body.classList.toggle('light-mode'); const isLight = document.body.classList.contains('light-mode'); localStorage.setItem('theme', isLight ? 'light' : 'dark'); document.getElementById('theme-icon').textContent = isLight ? "☀️" : "🌙"; }  
+    (function() { if (localStorage.getItem('theme') === 'light') { document.body.classList.add('light-mode'); document.getElementById('theme-icon').textContent = "☀️"; } })();  
+    window.addEventListener('load', function() { const preloader = document.getElementById('page-preloader'); setTimeout(() => { preloader.classList.add('hidden'); setTimeout(() => { preloader.style.display = 'none'; }, 500); }, 500); });  
+    function toggleMenu() { document.getElementById('side-menu').classList.toggle('open'); }  
+    function toggleLangMenu() { const menu = document.getElementById('lang-menu'); menu.style.display = menu.style.display === 'block' ? 'none' : 'block'; }  
+    function googleTranslateElementInit() { new google.translate.TranslateElement({ pageLanguage: 'en', autoDisplay: false }, 'google_translate_element'); }  
+    function setLanguage(lang) { const current = getCurrentLang(); if (current === lang) return; document.cookie = "googtrans=/en/" + lang + ";path=/"; document.cookie = "googtrans=/en/" + lang + ";domain=" + window.location.hostname + ";path=/"; location.reload(); }  
+    function changeLang(lang) { localStorage.setItem('site_lang', lang); setLanguage(lang); document.getElementById('lang-menu').style.display = 'none'; }  
+    function getCurrentLang() { const match = document.cookie.match(/googtrans=\/en\/([^;]+)/); return match ? match[1] : 'en'; }  
+    window.addEventListener('load', () => { const savedLang = localStorage.getItem('site_lang'); const currentLang = getCurrentLang(); if (savedLang && savedLang !== currentLang) { setLanguage(savedLang); } });  
+    (function() { function fixGoogleTranslateLayout() { document.body.style.top = "0px"; document.body.style.marginTop = "0px"; document.documentElement.style.marginTop = "0px"; document.documentElement.style.height = "100%"; const banner = document.querySelector('.goog-te-banner-frame'); if (banner) banner.style.display = "none"; } fixGoogleTranslateLayout(); const observer = new MutationObserver(fixGoogleTranslateLayout); observer.observe(document.documentElement, { attributes: true, childList: true, subtree: true, attributeFilter: ['style'] }); })();  
+  </script>  
+  
+  <div id="scrollTop" onclick="scrollToTop()">🚀</div>  
+  
+  <script>  
+  /* =========================  
+     SCROLL TO TOP JS  
+  ========================= */  
+  window.addEventListener("scroll", () => {
+    const btn = document.getElementById("scrollTop");
+    if (window.pageYOffset > 400) {
+      btn.style.display = "flex";
+    } else {
+      btn.style.display = "none";
+    }
+  });
+
+  function scrollToTop() {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+  }
+  </script>
+  
+  <script>
+  function toggleTOC(){
+    const toc = document.getElementById("toc");
+    const icon = document.getElementById("tocIcon");
+    toc.classList.toggle("collapsed");
+    icon.textContent = toc.classList.contains("collapsed") ? "+" : "−";
+  }
+  </script>
+</body>  
 </html>
+
