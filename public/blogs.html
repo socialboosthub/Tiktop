@@ -148,6 +148,20 @@
       transition: 0.3s ease;
     }
     #scrollTop:hover { transform: translateY(-5px) scale(1.05); }
+
+    /* Hide the container until it's loaded */
+#google_translate_element {
+    display: block; 
+}
+
+/* 
+   If you really want to hide the banner, add this. 
+   Do NOT use !important on the iframe itself.
+*/
+.goog-te-banner-frame {
+    display: none !important;
+}
+
   </style>
 </head>
 
@@ -417,8 +431,14 @@
 
     // Google Translate Logic
     function googleTranslateElementInit() {
-      new google.translate.TranslateElement({ pageLanguage: 'en', autoDisplay: false }, 'google_translate_element');
-    }
+    new google.translate.TranslateElement({
+        pageLanguage: 'en',
+        // 'SIMPLE' layout avoids the massive banner you are trying to hide
+        layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+        autoDisplay: false
+    }, 'google_translate_element');
+}
+
     function setLanguage(lang) {
       const current = getCurrentLang();
       if (current === lang) return;
@@ -450,8 +470,7 @@
             if (banner) banner.style.display = "none";
         }
         fixGoogleTranslateLayout();
-        const observer = new MutationObserver(fixGoogleTranslateLayout);
-        observer.observe(document.documentElement, { attributes: true, childList: true, subtree: true, attributeFilter: ['style'] });
+  
     })();
   </script>
 
