@@ -200,6 +200,19 @@ background:rgba(255,255,255,.03);
 .faq-answer.show{
 display:block;
 }
+        /* Hide the container until it's loaded */
+#google_translate_element {
+    display: none; 
+}
+
+/* 
+   If you really want to hide the banner, add this. 
+   Do NOT use !important on the iframe itself.
+*/
+.goog-te-banner-frame {
+    display: none !important;
+}
+
   </style>
 </head>
 
@@ -484,22 +497,34 @@ Yes. TikTop is completely free to use without creating an account.
       © 2026 TikTop. All rights reserved.
     </div>
   </footer>
+    <!-- 1. The Container -->
+<div id="google_translate_element"></div>
+  
+<!-- 2. The Function Definition (Must come BEFORE the script) -->
+<script>
+    function googleTranslateElementInit() {
+        new google.translate.TranslateElement({
+            pageLanguage: 'en',
+            layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+            autoDisplay: false
+        }, 'google_translate_element');
+    }
+</script>
 
-  <div id="google_translate_element" style="display:none;"></div>
-  <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-  <script>
+<!-- 3. The Google Script (Must come AFTER the function) -->
+<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+<script>
     function toggleTheme() { document.body.classList.toggle('light-mode'); const isLight = document.body.classList.contains('light-mode'); localStorage.setItem('theme', isLight ? 'light' : 'dark'); document.getElementById('theme-icon').textContent = isLight ? "☀️" : "🌙"; }
     (function() { if (localStorage.getItem('theme') === 'light') { document.body.classList.add('light-mode'); document.getElementById('theme-icon').textContent = "☀️"; } })();
     window.addEventListener('load', function() { const preloader = document.getElementById('page-preloader'); setTimeout(() => { preloader.classList.add('hidden'); setTimeout(() => { preloader.style.display = 'none'; }, 500); }, 500); });
     function toggleMenu() { document.getElementById('side-menu').classList.toggle('open'); }
     function toggleLangMenu() { const menu = document.getElementById('lang-menu'); menu.style.display = menu.style.display === 'block' ? 'none' : 'block'; }
-    function googleTranslateElementInit() { new google.translate.TranslateElement({ pageLanguage: 'en', autoDisplay: false }, 'google_translate_element'); }
     function setLanguage(lang) { const current = getCurrentLang(); if (current === lang) return; document.cookie = "googtrans=/en/" + lang + ";path=/"; document.cookie = "googtrans=/en/" + lang + ";domain=" + window.location.hostname + ";path=/"; location.reload(); }
     function changeLang(lang) { localStorage.setItem('site_lang', lang); setLanguage(lang); document.getElementById('lang-menu').style.display = 'none'; }
     function getCurrentLang() { const match = document.cookie.match(/googtrans=\/en\/([^;]+)/); return match ? match[1] : 'en'; }
     window.addEventListener('load', () => { const savedLang = localStorage.getItem('site_lang'); const currentLang = getCurrentLang(); if (savedLang && savedLang !== currentLang) { setLanguage(savedLang); } });
-    (function() { function fixGoogleTranslateLayout() { document.body.style.top = "0px"; document.body.style.marginTop = "0px"; document.documentElement.style.marginTop = "0px"; document.documentElement.style.height = "100%"; const banner = document.querySelector('.goog-te-banner-frame'); if (banner) banner.style.display = "none"; } fixGoogleTranslateLayout(); const observer = new MutationObserver(fixGoogleTranslateLayout); observer.observe(document.documentElement, { attributes: true, childList: true, subtree: true, attributeFilter: ['style'] }); })();
-  </script>
+ </script>
   <div id="scrollTop" onclick="scrollToTop()">🚀</div>
 <script>
 /* =========================
