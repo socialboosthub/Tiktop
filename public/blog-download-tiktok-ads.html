@@ -341,8 +341,7 @@
     function changeLang(lang) { localStorage.setItem('site_lang', lang); setLanguage(lang); document.getElementById('lang-menu').style.display = 'none'; }
     function getCurrentLang() { const match = document.cookie.match(/googtrans=\/en\/([^;]+)/); return match ? match[1] : 'en'; }
     window.addEventListener('load', () => { const savedLang = localStorage.getItem('site_lang'); const currentLang = getCurrentLang(); if (savedLang && savedLang !== currentLang) { setLanguage(savedLang); } });
-    }
-})();
+  
     
   </script>
   <div id="scrollTop" onclick="scrollToTop()">🚀</div>
