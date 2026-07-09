@@ -395,9 +395,6 @@
       © 2026 TikTop. All rights reserved.
     </div>
   </footer>
-
-  <div id="google_translate_element" style="display:none;"></div>
-  <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
   <script>
     // Theme logic
     function toggleTheme() {
@@ -428,17 +425,25 @@
       const menu = document.getElementById('lang-menu');
       menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
     }
-
-    // Google Translate Logic
+  </script>
+    <!-- 1. The Container -->
+<div id="google_translate_element"></div>
+  
+<!-- 2. The Function Definition (Must come BEFORE the script) -->
+<script>
     function googleTranslateElementInit() {
-    new google.translate.TranslateElement({
-        pageLanguage: 'en',
-        // 'SIMPLE' layout avoids the massive banner you are trying to hide
-        layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
-        autoDisplay: false
-    }, 'google_translate_element');
-}
+        new google.translate.TranslateElement({
+            pageLanguage: 'en',
+            layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+            autoDisplay: false
+        }, 'google_translate_element');
+    }
+</script>
 
+<!-- 3. The Google Script (Must come AFTER the function) -->
+<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+<script>
     function setLanguage(lang) {
       const current = getCurrentLang();
       if (current === lang) return;
