@@ -137,6 +137,19 @@
     .faq summary::after { content: "+"; position: absolute; right: 20px; top: 50%; transform: translateY(-50%); font-size: 24px; font-weight: bold; color: var(--cyan); }
     .faq details[open] summary::after { content: "−"; }
     .faq p { padding: 0 20px 20px; color: var(--text-dim); line-height: 1.8; }
+        /* Hide the container until it's loaded */
+#google_translate_element {
+    display: block; 
+}
+
+/* 
+   If you really want to hide the banner, add this. 
+   Do NOT use !important on the iframe itself.
+*/
+.goog-te-banner-frame {
+    display: none !important;
+}
+
   </style>
 </head>
 
