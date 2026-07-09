@@ -351,7 +351,6 @@
     window.addEventListener('load', function() { const preloader = document.getElementById('page-preloader'); setTimeout(() => { preloader.classList.add('hidden'); setTimeout(() => { preloader.style.display = 'none'; }, 500); }, 500); });
     function toggleMenu() { document.getElementById('side-menu').classList.toggle('open'); }
     function toggleLangMenu() { const menu = document.getElementById('lang-menu'); menu.style.display = menu.style.display === 'block' ? 'none' : 'block'; }
-    function googleTranslateElementInit() { new google.translate.TranslateElement({ pageLanguage: 'en', autoDisplay: false }, 'google_translate_element'); }
     function setLanguage(lang) { const current = getCurrentLang(); if (current === lang) return; document.cookie = "googtrans=/en/" + lang + ";path=/"; document.cookie = "googtrans=/en/" + lang + ";domain=" + window.location.hostname + ";path=/"; location.reload(); }
     function changeLang(lang) { localStorage.setItem('site_lang', lang); setLanguage(lang); document.getElementById('lang-menu').style.display = 'none'; }
     function getCurrentLang() { const match = document.cookie.match(/googtrans=\/en\/([^;]+)/); return match ? match[1] : 'en'; }
