@@ -339,6 +339,19 @@ body.light-mode .toc-toggle:hover{
 body.light-mode .toc-list a:hover{
     background:#eefefe;
 }
+        /* Hide the container until it's loaded */
+#google_translate_element {
+    display: none; 
+}
+
+/* 
+   If you really want to hide the banner, add this. 
+   Do NOT use !important on the iframe itself.
+*/
+.goog-te-banner-frame {
+    display: none !important;
+}
+
   </style>
 </head>
 
@@ -726,9 +739,24 @@ Remember to always respect content creators and applicable copyright laws. Downl
   </footer>
 
   <!-- Scripts -->
-  <div id="google_translate_element" style="display:none;"></div>
-  <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-  <script>
+    <!-- 1. The Container -->
+<div id="google_translate_element"></div>
+  
+<!-- 2. The Function Definition (Must come BEFORE the script) -->
+<script>
+    function googleTranslateElementInit() {
+        new google.translate.TranslateElement({
+            pageLanguage: 'en',
+            layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+            autoDisplay: false
+        }, 'google_translate_element');
+    }
+</script>
+
+<!-- 3. The Google Script (Must come AFTER the function) -->
+<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+<script>
     // Theme logic
     function toggleTheme() {
       document.body.classList.toggle('light-mode');
@@ -759,10 +787,7 @@ Remember to always respect content creators and applicable copyright laws. Downl
       menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
     }
 
-    // Google Translate Logic
-    function googleTranslateElementInit() {
-      new google.translate.TranslateElement({ pageLanguage: 'en', autoDisplay: false }, 'google_translate_element');
-    }
+
     function setLanguage(lang) {
       const current = getCurrentLang();
       if (current === lang) return;
@@ -794,9 +819,6 @@ Remember to always respect content creators and applicable copyright laws. Downl
             if (banner) banner.style.display = "none";
         }
         fixGoogleTranslateLayout();
-        const observer = new MutationObserver(fixGoogleTranslateLayout);
-        observer.observe(document.documentElement, { attributes: true, childList: true, subtree: true, attributeFilter: ['style'] });
-    })();
   </script>
   <div id="scrollTop" onclick="scrollToTop()">🚀</div>
 <script>
