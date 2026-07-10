@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TikTok Analytics Guide: Understand Your Video Performance</title>
+  
+  <meta name="description" content="Demystify your creator dashboard. Master the metrics that matter, interpret retention retention curves, and leverage audience data to optimize growth.">
+  <meta name="keywords" content="tiktok analytics guide, analyze tiktok metrics, creator dashboard explained, video retention curve, profile growth strategy">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <meta name="theme-color" content="#EE1D52">
+  <link rel="canonical" href="https://tiktop.online/blog-tiktok-analytics-guide.html">
+
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="TikTok Analytics Guide: Understand Your Video Performance">
+  <meta property="og:description" content="Stop guessing what works. Learn how to break down individual video data nodes and transform raw profile metrics into an actionable content engine.">
+  <meta property="og:url" content="https://tiktop.online/blog-tiktok-analytics-guide.html">
+  <meta property="og:site_name" content="TikTop">
+  <meta property="og:image" content="https://tiktop.online/assets/Tiktop_guide.png">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="TikTok Analytics Guide: Understand Your Video Performance">
+  <meta name="twitter:description" content="Stop guessing what works. Learn how to break down individual video data nodes and transform raw profile metrics into an actionable content engine.">
+  <meta name="twitter:image" content="https://tiktop.online/assets/Tiktop_guide.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="https://tiktop.online/assets/Logo.ico" type="image/x-icon">
+
+  <style>
+    /* BASE CSS */
+    iframe.goog-te-banner-frame { display: none !important; visibility: hidden !important; height: 0 !important; }
+    body > .skiptranslate { display: none !important; }
+    body { top: 0px !important; position: static !important; margin-top: 0px !important; }
+    html { margin-top: 0px !important; height: 100% !important; }
+    .goog-tooltip, .goog-tooltip:hover, .goog-text-highlight { display: none !important; box-shadow: none !important; background: none !important; }
+    .fcc-nav { top: 0 !important; }
+
+    :root {
+      --bg: #000000; --card: #111111; --text: #ffffff; --text-main: #ffffff;
+      --text-dim: #b0b0b0; --muted: #aaaaaa; --border: rgba(255, 255, 255, 0.08);
+      --box-bg: #111111; --pink: #EE1D52; --cyan: #25F4EE; --nav-bg: #0a0a23;
+    }
+    body.light-mode {
+      --bg: #f5f5f7; --card: #ffffff; --text: #111111; --text-main: #000000;
+      --text-dim: #222222; --muted: #666666; --border: rgba(0,0,0,0.08);
+      --box-bg: #ffffff; --nav-bg: #0a0a23;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: Inter, sans-serif; }
+    body { background: var(--bg); color: var(--text-main); transition: background 0.3s, color 0.3s; overflow-x: hidden; }
+    
+    /* PRELOADER */
+    #page-preloader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); z-index: 999999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.5s ease, visibility 0.5s ease; }
+    #page-preloader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+    .neon-loader { position: relative; width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; }
+    .neon-ring { position: absolute; border: 4px solid transparent; border-radius: 50%; animation: ring-pulse 2s cubic-bezier(0.455, 0.03, 0.515, 0.955) infinite; }
+    .ring-1 { width: 100%; height: 100%; border-top-color: var(--cyan); border-bottom-color: var(--cyan); animation-delay: 0s; }
+    .ring-2 { width: 70%; height: 70%; border-left-color: var(--pink); border-right-color: var(--pink); animation-delay: 0.5s; }
+    .ring-3 { width: 40%; height: 40%; border-top-color: var(--text-main); border-bottom-color: var(--text-main); animation-delay: 1s; } 
+    @keyframes ring-pulse { 0% { transform: rotate(0deg) scale(1); opacity: 1; } 50% { transform: rotate(180deg) scale(1.2); opacity: 0.5; } 100% { transform: rotate(360deg) scale(1); opacity: 1; } }
+    .loader-text-neon { margin-top: 25px; font-size: 11px; letter-spacing: 4px; color: var(--text-main); font-weight: bold; text-transform: uppercase; animation: fade-blink 1s infinite; }
+    @keyframes fade-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+    /* NAV & SIDE MENU */
+    .fcc-nav { position: fixed; width: 100%; height: 70px; background: var(--nav-bg); display: flex; align-items: center; justify-content: space-between; padding: 0 20px; z-index: 10000; }
+    .fcc-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; }
+    .fcc-logo img { height: 32px; width: auto; display: block; }
+    .fcc-logo span { background: linear-gradient(to bottom right, var(--pink), var(--cyan)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; font-weight: bold; font-size: 20px; }
+    .nav-right { display: flex; align-items: center; gap: 15px; }
+    .theme-icon { cursor: pointer; font-size: 20px; transition: 0.3s; }
+    .menu-toggle { background: #3b3b4f; border: 1px solid #fff; color: #fff; padding: 5px 10px; cursor: pointer; border-radius: 4px; }
+    .side-menu { position: fixed; top: 50px; right: -100%; width: 250px; height: calc(100vh - 50px); background: var(--nav-bg); transition: 0.4s; z-index: 9999; padding: 20px; display: flex; flex-direction: column; gap: 20px; border-left: 1px solid #3b3b4f; }
+    .side-menu.open { right: 0; }
+    .side-menu a { color: #fff; text-decoration: none; font-size: 18px; border-bottom: 1px solid #3b3b4f; padding-bottom: 10px; }
+    .lang-icon { cursor: pointer; font-size: 20px; }
+    .lang-menu { position: fixed; top: 55px; right: 80px; background: #0a0a23; border: 1px solid #3b3b4f; border-radius: 10px; display: none; z-index: 10002; overflow: hidden; }
+    .lang-menu div { padding: 10px 16px; color: #fff; cursor: pointer; font-size: 14px; }
+    .lang-menu div:hover { background: #EE1D52; }
+
+    /* ARTICLE STYLING */
+    #article-content { padding-top: 100px; min-height: 100vh; display: flex; flex-direction: column; align-items: center; }
+    .article-wrap { max-width: 800px; width: 100%; padding: 0 20px; margin-bottom: 60px; }
+    
+    .article-header { text-align: center; margin-bottom: 40px; }
+    .article-category { display: inline-block; background: rgba(37, 244, 238, 0.1); color: var(--cyan); padding: 6px 15px; border-radius: 20px; font-weight: bold; font-size: 14px; margin-bottom: 15px; border: 1px solid var(--cyan); }
+    .article-title { font-size: 42px; color: var(--text-main); margin-bottom: 15px; line-height: 1.2; }
+    .article-meta { color: var(--muted); font-size: 15px; }
+    
+    .hero-img { width: 100%; height: auto; border-radius: 16px; margin-bottom: 40px; border: 1px solid var(--border); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+    
+    .article-body { font-size: 18px; line-height: 1.8; color: var(--text-dim); }
+    .article-body h2 { font-size: 28px; color: var(--text-main); margin: 40px 0 20px; border-left: 4px solid var(--pink); padding-left: 15px; }
+    .article-body h3 { font-size: 22px; color: var(--text-main); margin: 30px 0 15px; }
+    .article-body p { margin-bottom: 20px; }
+    .article-body strong { color: var(--text-main); }
+    .article-body ul { margin-left: 20px; margin-bottom: 25px; }
+    .article-body li { margin-bottom: 10px; }
+
+    .cta-box { background: linear-gradient(to right, rgba(238, 29, 82, 0.1), rgba(37, 244, 238, 0.1)); border: 2px dashed var(--pink); border-radius: 12px; padding: 30px; text-align: center; margin: 40px 0; }
+    .cta-box h3 { margin-top: 0; color: var(--text-main); }
+    .cta-button { display: inline-block; background: var(--cyan); color: #000; padding: 15px 30px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 18px; margin-top: 15px; transition: 0.3s; }
+    .cta-button:hover { background: var(--pink); color: #fff; transform: translateY(-3px); }
+    
+    /* FOOTER */
+    .footer { padding: 60px 6% 40px; background: var(--pink); margin-top: 50px; text-align: left; color: #000; border-radius: 12px; }
+    .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+    .footer h3, .footer h4 { margin-bottom: 12px; }
+    .footer p, .footer a { color: black; font-size: 14px; text-decoration: none; display: block; margin-bottom: 8px; }
+    .footer a:hover { color: var(--text); }
+    .footer-bottom { margin-top: 40px; text-align: center; font-size: 13px; opacity: 0.7; border-top: 1px solid rgba(0,0,0,0.1); padding-top: 20px; padding-bottom: 40px; }
+
+    @media (max-width: 768px) { .article-title { font-size: 32px; } .article-body { font-size: 16px; } }
+    
+    /* SCROLL TO TOP CSS */
+    #scrollTop { position: fixed; bottom: 30px; right: 30px; width: 55px; height: 55px; background: linear-gradient(45deg, #EE1D52, #25F4EE); border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 25px; cursor: pointer; z-index: 5000; color: white; box-shadow: 0 8px 20px rgba(0,0,0,0.3); transition: 0.3s ease; }
+    #scrollTop:hover { transform: translateY(-5px) scale(1.05); }
+    
+    /* TOC */
+    .toc { margin: 30px 0; background: var(--card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+    .toc summary { list-style: none; cursor: pointer; padding: 18px 20px; font-size: 20px; font-weight: 700; color: var(--text-main); position: relative; }
+    .toc summary::-webkit-details-marker { display: none; }
+    .toc summary::after { content: "+"; position: absolute; right: 20px; font-size: 28px; color: var(--cyan); transition: .3s; }
+    .toc[open] summary::after { content: "−"; }
+    .toc ul { list-style: none; padding: 0 20px 20px; }
+    .toc ul ul { margin-left: 18px; margin-top: 8px; }
+    .toc li { margin: 10px 0; }
+    .toc a { color: var(--cyan); text-decoration: none; }
+    .toc a:hover { color: var(--pink); }
+    
+    /* FAQ +/- */
+    .faq { margin-top: 30px; }
+    .faq details { background: var(--card); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 15px; overflow: hidden; transition: .3s; }
+    .faq details[open] { border-color: var(--cyan); box-shadow: 0 0 15px rgba(37,244,238,.15); }
+    .faq summary { list-style: none; cursor: pointer; padding: 18px 20px; font-size: 18px; font-weight: 600; color: var(--text-main); position: relative; }
+    .faq summary::-webkit-details-marker { display: none; }
+    .faq summary::after { content: "+"; position: absolute; right: 20px; top: 50%; transform: translateY(-50%); font-size: 24px; font-weight: bold; color: var(--cyan); }
+    .faq details[open] summary::after { content: "−"; }
+    .faq p { padding: 0 20px 20px; color: var(--text-dim); line-height: 1.8; }
+    #google_translate_element { display: none; }
+    .goog-te-banner-frame { display: none !important; }
+  </style>
+</head>
+
+<body>
+  <div id="page-preloader">
+    <div class="neon-loader"><div class="neon-ring ring-1"></div><div class="neon-ring ring-2"></div><div class="neon-ring ring-3"></div></div>
+    <p class="loader-text-neon">TikTop</p>
+  </div>
+
+  <nav class="fcc-nav">
+    <a href="./index.html" class="fcc-logo">
+      <img src="https://i.ibb.co/wZjXcKz9/file-00000000e22871fd9cb25a4586788b91.png" alt="TikTop Logo">
+      <span>TikTop</span>
+    </a>
+    <div class="nav-right">
+      <span class="lang-icon" onclick="toggleLangMenu()">🌐</span>
+      <span class="theme-icon" onclick="toggleTheme()" id="theme-icon">🌙</span>
+      <button class="menu-toggle" onclick="toggleMenu()">Menu ☰</button>
+    </div>
+
+    <div class="lang-menu" id="lang-menu">
+      <div onclick="changeLang('en')">English</div>
+      <div onclick="changeLang('fr')">Français</div>
+      <div onclick="changeLang('es')">Español</div>
+      <div onclick="changeLang('de')">Deutsch</div>
+      <div onclick="changeLang('it')">Italiano</div>
+      <div onclick="changeLang('pt')">Português</div>
+      <div onclick="changeLang('ar')">العربية</div>
+      <div onclick="changeLang('hi')">हिन्दी</div>
+      <div onclick="changeLang('sw')">Swahili</div>
+      <div onclick="changeLang('tr')">Türkçe</div>
+      <div onclick="changeLang('ru')">Русский</div>
+    </div>
+  </nav>
+
+  <div class="side-menu" id="side-menu">
+    <a href="./index.html">Home</a>
+    <a href="./blogs.html">Blog</a>
+    <a href="./history.html">History</a>
+    <a href="./support.html">Support Us</a>
+    <a href="./contact.html">Contact Us</a>
+  </div>
+
+  <div id="article-content">
+    <article class="article-wrap">
+      
+      <div class="article-header">
+        <span class="article-category">Data & Analytics</span>
+        <h1 class="article-title">TikTok Analytics Guide: Understand Your Video Performance</h1>
+        <div class="article-meta">Published on July 10, 2026 • 12 min read</div>
+      </div>
+
+      <img src="https://tiktop.online/assets/Tiktop_guide.png" alt="TikTok Analytics comprehensive operational guide banner" class="hero-img">
+      
+      <details class="toc">
+        <summary>Table of Contents</summary>
+        <ul>
+          <li><a href="#foundations">Setting Up for Success: Activating Creator Pro Views</a></li>
+          <li><a href="#overview">Profile Overview Metrics vs. Real Impact</a></li>
+          <li><a href="#retention">The Holy Grail: Decoding the Retention Curve</a></li>
+          <li><a href="#demographics">Audience Tracking and Peak Activity Syncing</a></li>
+          <li><a href="#traffic">Traffic Source Types: Where Do Your Views Come From?</a></li>
+          <li><a href="#actionable">Transforming Analytics Insights Into Better Content</a></li>
+          <li><a href="#faq">Frequently Asked Questions</a></li>
+        </ul>
+      </details>
+
+      <div class="article-body">
+
+        <h2 id="foundations">Setting Up for Success: Activating Creator Pro Views</h2>
+        <p>Many video creators publish content for months without looking at their data, relying entirely on vanity metrics like view counts. To build a sustainable growth engine on TikTok, you must switch from guesswork to precise analytics tracking. Accessing this data requires verifying that you are using a complimentary <strong>Creator Account</strong> or <strong>Business Account</strong> via your profile settings panel.</p>
+        <p>Once activated, the analytics console opens up a deep look into your performance data, tracking trends over 7-day, 28-day, or 60-day custom windows. Viewing these numbers on a desktop browser provides a much clearer picture than looking at them on a phone screen, allowing you to export CSV spreadsheets to track long-term performance growth patterns across your content portfolio.</p>
+
+        <h2 id="overview">Profile Overview Metrics vs. Real Impact</h2>
+        <p>When you first open your dashboard, the system presents the <strong>Overview Tab</strong>. This view offers a broad look at your digital presence by tracking three primary metrics:</p>
+        <ul>
+          <li><strong>Video Views:</strong> The absolute volume of times your content pieces were rendered across user feeds. A core baseline metric, but it lacks depth on its own.</li>
+          <li><strong>Profile Views:</strong> How many users were intrigued enough by a specific video to click through to your main landing channel. This acts as a primary indicator of your profile's conversion power.</li>
+          <li><strong>Net Follower Velocity:</strong> The net growth speed of your audience base. If video views spike but profile views and followers remain flat, your content is driving short-term attention rather than building long-term audience loyalty.</li>
+        </ul>
+        <p>To evaluate these metrics effectively, calculate your profile conversion rate: divide your total profile views by your overall video views. If this metric drops below 2%, your video content isn't providing a clear enough reason for viewers to discover who is behind the camera. Consider refining your profile branding or pinning high-value introductory videos to your grid.</p>
+
+        <h2 id="retention">The Holy Grail: Decoding the Retention Curve</h2>
+        <p>Navigate deeper into individual video metrics to find the most critical chart in modern social media management: the <strong>Audience Retention Curve Chart</strong>. This chart maps out the exact percentage of viewers watching at any precise timestamp throughout your video's duration.</p>
+        <p>A typical retention curve shows a sharp decline in the first two seconds, followed by a gradual slope downward. Your goal is to flatten this curve as much as possible. Look for sudden drops in the line—these indicate moments where your pacing slowed down, a visual transition dragged, or your messaging lost its focus. Conversely, look for upward spikes in the graph; these show moments where viewers paused, rewound, or looped the video to catch a detail they missed. Identifying these high-value moments tells you exactly what kind of content formats you should repeat in future videos.</p>
+
+        <h2 id="demographics">Audience Tracking and Peak Activity Syncing</h2>
+        <p>The <strong>Followers Tab</strong> reveals exactly who is consuming your content. This section provides critical demographic breakdowns, including gender distribution percentages and top country locations. For brands and creators targeting localized audiences, ensuring your primary viewer base matches your target geography is essential for monetization success.</p>
+        <p>Scroll down further to find the **Follower Activity Graph**. This module tracks exactly what hour of the day your followers are actively scrolling through their feeds. Do not blindly follow generic internet advice about the best overall times to post. Instead, look at your unique audience graph, find the peak hour, and post your content roughly 45 to 60 minutes before that wave hits. This timing ensures your video is fully processed and indexed by the system right as your primary audience opens the app.</p>
+
+        <h2 id="traffic">Traffic Source Types: Where Do Your Views Come From?</h2>
+        <p>Understanding exactly how users land on your content is critical for refining your optimization strategy. The engine breaks down traffic sources into four primary categories:</p>
+        <p><strong>For You Feed:</strong> This represents the gold standard of distribution. It indicates that the system recommendation engine is actively pushing your content to non-followers' primary feeds. For a video to go viral, this value should ideally sit above 85% of your total view volume.</p>
+        <p><strong>Personal Profile & Following Feed:</strong> These metrics reveal how your existing community interacts with your content. If your personal profile traffic is high, it means viewers are actively searching for your handle or exploring your pinned grid items to watch past videos. Meanwhile, the following feed tracks distribution to users who already follow you, helping you gauge core community loyalty.</p>
+        <p><strong>Search Indexing:</strong> This tracking node reflects traffic generated by users typing specific terms into the search bar. If you see a steady stream of traffic from search queries weeks after a video drops, your keyword optimization is working, transforming that video into a long-tail discovery asset.</p>
+
+        <h2 id="actionable">Transforming Analytics Insights Into Better Content</h2>
+        <p>Data without action is just numbers. To scale your platform presence, build a weekly workflow around reviewing your analytics. Group your top three highest-performing assets from the past seven days and find their common elements. Did they use similar hook structures? Was the visual pacing faster? Did they feature a specific audio track or sound format?</p>
+        <p>Likewise, look closely at your lowest-performing assets to identify common friction points. If your video views are hitting a ceiling at 200 to 300 views, the data is telling you that your test groups are swiping away early, or your content is failing to trigger engagement loops. Use these insights to constantly adjust your production framework—doubling down on formats that hold viewer attention and phasing out visual structures that cause people to scroll away.</p>
+
+        <h2 id="faq">Frequently Asked Questions</h2>
+        <div class="faq">
+          <details>
+            <summary>Why does a video sometimes get stuck at exactly 200 views?</summary>
+            <p>This is often called the "200-view jail." It means your video passed through the initial test pool, but its watch time velocity or completion rate fell short of the threshold needed to trigger the next tier of distribution. Focus on upgrading your first 3 seconds to keep viewers from swiping away early.</p>
+          </details>
+          <details>
+            <summary>How long does it take for video performance data to appear in the dashboard?</summary>
+            <p>While basic view and like counts update in near real-time on your public profile, deeper performance metrics—like retention curves, traffic source breakdowns, and viewer demographics—take 24 to 48 hours to process and display in your analytics console.</p>
+          </details>
+          <details>
+            <summary>What is a good average watch time percentage for a 15-second video?</summary>
+            <p>For a short 15-second video, aim for an average watch time percentage of 70% or higher, alongside a total completion rate above 40%. For longer-form content running over 60 seconds, maintaining a completion rate between 15% and 20% is considered strong performance.</p>
+          </details>
+        </div>
+
+        <div class="cta-box">
+          <h3>Track and Study Viral Content Formats</h3>
+          <p>Want to break down high-performing videos offline? Use our free tool suite to download public benchmark clips smoothly and analyze their pacing frameworks frame by frame.</p>
+          <a href="./index.html" class="cta-button">Open TikTop Downloader</a>
+        </div>
+
+      </div>
+    </article>
+  </div>
+
+  <footer class="footer">
+    <div class="footer-grid">
+      <div>
+        <h3>TikTop</h3>
+        <p>Fast and simple TikTok downloader</p>
+        <p>with no watermark.</p>
+      </div>
+      <div>
+        <h4>Tools</h4>
+        <a href="./index.html">Tiktok Downloader</a>
+        <a href="./instagram.html">Instagram Downloader</a>
+        <a href="./youtube.html">Youtube Downloader</a>
+        <a href="./facebook.html">Facebook Downloader</a>
+        <a href="./twitter.html">Twitter Downloader</a>
+      </div>
+      <div>
+        <h4>Legal & Info</h4>
+        <a href="./about.html">About Us</a>
+        <a href="./privacy.html">Privacy Policy</a>
+        <a href="./terms.html">Terms of Service</a>
+        <a href="./dmca.html">DMCA / Copyright</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      © 2026 TikTop. All rights reserved.
+    </div>
+  </footer>
+
+  <div id="google_translate_element"></div>
+  
+  <script>
+    function googleTranslateElementInit() {
+        new google.translate.TranslateElement({
+            pageLanguage: 'en',
+            layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+            autoDisplay: false
+        }, 'google_translate_element');
+    }
+  </script>
+  <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+  <script>
+    function toggleTheme() { document.body.classList.toggle('light-mode'); const isLight = document.body.classList.contains('light-mode'); localStorage.setItem('theme', isLight ? 'light' : 'dark'); document.getElementById('theme-icon').textContent = isLight ? "☀️" : "🌙"; }
+    (function() { if (localStorage.getItem('theme') === 'light') { document.body.classList.add('light-mode'); document.getElementById('theme-icon').textContent = "☀️"; } })();
+    window.addEventListener('load', function() { const preloader = document.getElementById('page-preloader'); setTimeout(() => { preloader.classList.add('hidden'); setTimeout(() => { preloader.style.display = 'none'; }, 500); }, 500); });
+    function toggleMenu() { document.getElementById('side-menu').classList.toggle('open'); }
+    function toggleLangMenu() { const menu = document.getElementById('lang-menu'); menu.style.display = menu.style.display === 'block' ? 'none' : 'block'; }
+    function setLanguage(lang) { const current = getCurrentLang(); if (current === lang) return; document.cookie = "googtrans=/en/" + lang + ";path=/"; document.cookie = "googtrans=/en/" + lang + ";domain=" + window.location.hostname + ";path=/"; location.reload(); }
+    function changeLang(lang) { localStorage.setItem('site_lang', lang); setLanguage(lang); document.getElementById('lang-menu').style.display = 'none'; }
+    function getCurrentLang() { const match = document.cookie.match(/googtrans=\/en\/([^;]+)/); return match ? match[1] : 'en'; }
+    window.addEventListener('load', () => { const savedLang = localStorage.getItem('site_lang'); const currentLang = getCurrentLang(); if (savedLang && savedLang !== currentLang) { setLanguage(savedLang); } });
+  </script>
+  
+  <div id="scrollTop" onclick="scrollToTop()">🚀</div>
+  <script>
+    window.addEventListener("scroll", () => {
+      const btn = document.getElementById("scrollTop");
+      if (window.pageYOffset > 400) { btn.style.display = "flex"; } else { btn.style.display = "none"; }
+    });
+    function scrollToTop() { window.scrollTo({ top: 0, behavior: "smooth" }); }
+  </script>
+</body>
+</html>
+
