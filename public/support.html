@@ -731,11 +731,29 @@ function renderPayPal() {
                 }]
               });
             };
-            config.onApprove = function(data, actions) {
-              return actions.order.capture().then(function(details) {
-                window.parent.postMessage({ type: 'PAYPAL_SUCCESS', mode: 'one-time' }, '*');
-              });
-            };
+           config.onApprove = function(data, actions) {
+  return actions.order.capture().then(async function(details) {
+
+    await fetch("/api/donation-success", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        email: "${userEmail}",
+        amount: ${finalAmount},
+        mode: "one-time",
+        orderId: data.orderID
+      })
+    });
+
+    window.parent.postMessage({
+      type: "PAYPAL_SUCCESS",
+      mode: "one-time"
+    }, "*");
+
+  });
+}; 
           } else {
             config.createSubscription = function(data, actions) {
               let planId = '';
@@ -748,10 +766,27 @@ function renderPayPal() {
               }
               return actions.subscription.create({ 'plan_id': planId });
             };
-            config.onApprove = function(data, actions) {
-              window.parent.postMessage({ type: 'PAYPAL_SUCCESS', mode: 'monthly' }, '*');
-            };
-          }
+            config.onApprove = async function(data, actions) {
+
+  await fetch("/api/donation-success", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      email: "${userEmail}",
+      amount: ${finalAmount},
+      mode: "monthly",
+      orderId: data.subscriptionID
+    })
+  });
+
+  window.parent.postMessage({
+    type: "PAYPAL_SUCCESS",
+    mode: "monthly"
+  }, "*");
+
+};
           
           paypal.Buttons(config).render('#render-target').then(function() {
             setTimeout(emitResize, 400);
