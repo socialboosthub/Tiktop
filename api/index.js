@@ -1,11 +1,12 @@
 require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
-const nodemailer = require("nodemailer");
+const { Resend } = require("resend");
 const axios = require("axios");
 const fetch = require("node-fetch"); // Ensure you are using node-fetch@2 for require() support
 
 const app = express();
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 // ==========================================
 // 1. MONGODB SERVERLESS CONNECTION CACHE
@@ -37,41 +38,44 @@ const Support = mongoose.model("Support", SupportSchema);
 // ==========================================
 // 2. MAILER & PAYPAL OAUTH SETUP
 // ==========================================
-const emailTransporter = nodemailer.createTransport({
-  host: process.env.EMAIL_HOST,
-  port: process.env.EMAIL_PORT,
-  secure: true,
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-});
+
 
 async function sendThankYouEmail(userEmail, amount, type) {
-  const subject =
-    type === "monthly"
-      ? "Welcome to TikTop Membership Circle! 🚀"
-      : "Thank you for supporting TikTop! ❤️";
-  const messageText =
-    type === "monthly"
-      ? `Thank you for becoming an official active TikTop member! Your monthly subscription tier of $${amount} preserves ad-free, high-speed access tools globally.`
-      : `We have successfully tracked your one-time platform support contribution of $${amount}. Thank you for helping keep our infrastructure scalable and completely free!`;
-
   try {
-    await emailTransporter.sendMail({
-      from: `"TikTop Support" <${process.env.EMAIL_USER}>`,
+    await resend.emails.send({
+      from: "TikTop <support@tiktop.online>",
       to: userEmail,
-      subject: subject,
-      html: `<div style="font-family:sans-serif; padding:25px; max-width:600px; border:2px solid #ee1d52; border-radius:16px; background-color:#050515; color:#fff;">
-              <h2 style="color:#25f4ee;">TikTop Platform Infrastructure</h2>
-              <p style="font-size:15px; line-height:1.6; color:#e0e0e0;">${messageText}</p>
-              <br><hr style="border:none; border-top:1px solid rgba(255,255,255,0.1);">
-              <p style="font-size:11px; color:#888;">This is an automated system confirmation verification ledger for your transaction records on TikTop.online.</p>
-             </div>`,
+      subject:
+        type === "monthly"
+          ? "Welcome to TikTop Membership ❤️"
+          : "Thank you for supporting TikTop ❤️",
+
+      html: `
+      <div style="font-family:Arial;padding:30px;background:#050515;color:white">
+        <h2 style="color:#25F4EE">Thank You!</h2>
+
+        <p>
+        ${
+          type === "monthly"
+            ? `Thank you for becoming a TikTop monthly member.`
+            : `Thank you for donating <b>$${amount}</b> to TikTop.`
+        }
+        </p>
+
+        <p>Your support keeps TikTop fast, free and ad-light.</p>
+
+        <hr>
+
+        <p style="font-size:12px;color:#999">
+        TikTop.online
+        </p>
+      </div>
+      `,
     });
-    console.log(`Dispatched receipt pipeline directly to customer: ${userEmail}`);
+
+    console.log("Email sent.");
   } catch (err) {
-    console.error("System mailer dispatch error:", err.message);
+    console.error(err);
   }
 }
 
