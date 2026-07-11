@@ -216,7 +216,51 @@ app.post("/api/webhooks/paypal", async (req, res) => {
 
   res.sendStatus(200);
 });
+app.post("/api/donation-success", async (req, res) => {
+  await connectDB();
 
+  try {
+    const { email, amount, mode, orderId } = req.body;
+
+    if (!email || !amount || !orderId) {
+      return res.status(400).json({
+        error: "Missing required fields"
+      });
+    }
+
+    await Support.findOneAndUpdate(
+      { referenceId: orderId },
+      {
+        email,
+        amount: Number(amount),
+        type: mode === "monthly" ? "monthly" : "one-time",
+        gateway: "paypal",
+        status: "completed",
+        referenceId: orderId
+      },
+      {
+        upsert: true,
+        new: true
+      }
+    );
+
+    await sendThankYouEmail(
+      email,
+      amount,
+      mode === "monthly" ? "monthly" : "one-time"
+    );
+
+    res.json({
+      success: true
+    });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      error: "Internal server error"
+    });
+  }
+});
 // ==========================================
 // 5. TIKTOK MEDIA DOWNLOAD ROUTES
 // ==========================================
