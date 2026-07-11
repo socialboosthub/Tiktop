@@ -520,31 +520,6 @@ function closeCustomAlert() {
 }
 
 // Listen for secure payment and error messages from our internal sandbox frame
-window.addEventListener('message', function(event) {
-  if (event.data && event.data.type === 'PAYPAL_SUCCESS') {
-    if (event.data.mode === 'one-time') {
-      triggerStyledModal('success', 'Generous Contribution Received!', 'Thank you for your incredible support to help keep TikTop fast and ad-free!');
-      document.getElementById('donor-email').value = '';
-    } else {
-      triggerStyledModal('success', 'Welcome to the Club!', 'Thank you for becoming a monthly member! Your automatic subscription billing details receipt has been successfully logged.');
-    }
-  }
-  if (event.data && event.data.type === 'PAYPAL_RESIZE') {
-    const frame = document.getElementById('paypal-sandbox-frame');
-    if (frame) {
-      frame.style.height = event.data.height + 'px';
-    }
-  }
-  // Catch exact system runtime execution initialization errors or size restrictions thrown directly from PayPal's platform
-  if (event.data && event.data.type === 'PAYPAL_ERROR') {
-    triggerStyledModal('error', 'PayPal Gateway Refused', 'The secure checkout engine closed because PayPal rejected this specific transaction payload amount or processing request. Please reduce the numeric scale and try again.');
-    
-    // Smooth reset pipeline
-    const customInput = document.getElementById('custom-amount');
-    if(customInput) customInput.value = '';
-    setAmount(10, document.querySelectorAll('.amount-btn')[1]);
-  }
-});
 
 // Remove preloader
 window.addEventListener('load', function() {
@@ -654,157 +629,106 @@ function debouncedRender() {
 
 // === SANDBOXED PAYPAL ENGINE ===
 function renderPayPal() {
-  const container = document.getElementById('paypal-button-container');
-  if (!container) return;
-  
-  container.innerHTML = '<p style="color: var(--cyan); text-align: center; margin-top: 20px;">Loading Secure Checkout...</p>';
 
-  let finalAmount = isCustom ? parseFloat(document.getElementById('custom-amount').value) : currentAmount;
-  if (!finalAmount || finalAmount <= 0) finalAmount = 5; 
-  
-  const userEmail = document.getElementById('donor-email').value || "anonymous@tiktop.online";
-  const clientId = "AQP059oCAgQi3RxCHICt95GjIU7R6U4jvqVdRofXPh7X5ZLuJ0tNPJ-ENBy7E2KImlojhHaj3dwIdfCP";
-  
-  let scriptSrc = `https://www.paypal.com/sdk/js?client-id=${clientId}`;
-  if (donationMode === 'monthly') {
-    scriptSrc += "&vault=true&intent=subscription";
-  } else {
-    scriptSrc += "&currency=USD";
-  }
+    const container = document.getElementById("paypal-button-container");
+    container.innerHTML = "";
 
-  const iframe = document.createElement('iframe');
-  iframe.id = 'paypal-sandbox-frame';
-  iframe.style.width = '100%';
-  iframe.style.border = 'none';
-  iframe.style.height = '220px'; 
-  iframe.style.background = 'transparent';
-  iframe.style.overflow = 'hidden';
-  iframe.setAttribute('allowtransparency', 'true');
+    let amount = isCustom
+        ? parseFloat(document.getElementById("custom-amount").value)
+        : currentAmount;
 
-  container.innerHTML = '';
-  container.appendChild(iframe);
+    if (!amount || amount <= 0) amount = 5;
 
-  const iframeContent = `
-    <!DOCTYPE html>
-    <html>
-    <head>
-      <meta charset="UTF-8">
-      <style>
-        body { margin: 0; padding: 0; background: transparent; overflow: hidden; }
-        #render-target { width: 100%; min-height: 160px; }
-      </style>
-    </head>
-    <body>
-      <div id="render-target"></div>
-      <script src="${scriptSrc}"><\/script>
-      <script>
-        function emitResize() {
-          window.parent.postMessage({ type: 'PAYPAL_RESIZE', height: document.body.scrollHeight || 250 }, '*');
-        }
-        
-        window.onload = function() {
-          if (!window.paypal || !window.paypal.Buttons) {
-            window.parent.postMessage({ type: 'PAYPAL_RESIZE', height: 160 }, '*');
-            return;
-          }
-          
-          let config = {
-            style: { 
-              shape: 'rect', 
-              color: 'blue', 
-              layout: 'vertical', 
-              label: '${donationMode === 'monthly' ? 'subscribe' : 'pay'}',
-              height: 50
-            },
-            // PayPal's SDK error boundary catcher handles exact payment runtime failures natively
-            onError: function(err) {
-              window.parent.postMessage({ type: 'PAYPAL_ERROR' }, '*');
+    const email = document.getElementById("donor-email").value || "";
+
+    paypal.Buttons({
+
+        style: {
+            layout: "vertical",
+            color: "blue",
+            shape: "rect",
+            label: donationMode === "monthly" ? "subscribe" : "pay"
+        },
+
+        createOrder: donationMode === "one-time"
+            ? (data, actions) => {
+                return actions.order.create({
+                    purchase_units: [{
+                        amount: {
+                            value: amount
+                        }
+                    }]
+                });
             }
-          };
-          
-          if ('${donationMode}' === 'one-time') {
-            config.createOrder = function(data, actions) {
-              return actions.order.create({
-                purchase_units: [{
-                  amount: { value: "${finalAmount}", currency_code: "USD" },
-                  custom_id: "${userEmail}"
-                }]
-              });
-            };
-           config.onApprove = function(data, actions) {
-  return actions.order.capture().then(async function(details) {
+            : undefined,
 
-    await fetch("/api/donation-success", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        email: "${userEmail}",
-        amount: ${finalAmount},
-        mode: "one-time",
-        orderId: data.orderID
-      })
-    });
+        createSubscription: donationMode === "monthly"
+            ? (data, actions) => {
 
-    window.parent.postMessage({
-      type: "PAYPAL_SUCCESS",
-      mode: "one-time"
-    }, "*");
+                let planId = "";
 
-  });
-}; 
-          } else {
-            config.createSubscription = function(data, actions) {
-              let planId = '';
-              if (${finalAmount} === 5) planId = 'P-1E5594289E451083PNJDDJIQ';
-              else if (${finalAmount} === 10) planId = 'P-2FX85876F6040730ANJDC3YY';
-              else if (${finalAmount} === 25) planId = 'P-09975017VX501805FNJDHH2A';
-              else {
-                alert("Custom amounts are not supported for subscriptions. Please select $5, $10, or $25.");
-                throw new Error("Invalid plan amount");
-              }
-              return actions.subscription.create({ 'plan_id': planId });
-            };
-            config.onApprove = async function(data, actions) {
+                if (amount == 5)
+                    planId = "YOUR_$5_PLAN";
 
-  await fetch("/api/donation-success", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      email: "${userEmail}",
-      amount: ${finalAmount},
-      mode: "monthly",
-      orderId: data.subscriptionID
-    })
-  });
+                else if (amount == 10)
+                    planId = "YOUR_$10_PLAN";
 
-  window.parent.postMessage({
-    type: "PAYPAL_SUCCESS",
-    mode: "monthly"
-  }, "*");
+                else
+                    planId = "YOUR_$25_PLAN";
 
-};
-          
-          paypal.Buttons(config).render('#render-target').then(function() {
-            setTimeout(emitResize, 400);
-          });
-          
-          setInterval(emitResize, 800);
-        };
-      <\/script>
-    </body>
-    </html>
-  `;
+                return actions.subscription.create({
+                    plan_id: planId
+                });
 
-  const doc = iframe.contentWindow.document;
-  doc.open();
-  doc.write(iframeContent);
-  doc.close();
+            }
+            : undefined,
+
+        onApprove: async function(data, actions) {
+
+            await fetch("/api/donation-success", {
+
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify({
+
+                    email: email,
+
+                    amount: amount,
+
+                    mode: donationMode,
+
+                    orderId:
+                        donationMode === "monthly"
+                            ? data.subscriptionID
+                            : data.orderID
+                })
+            });
+
+            triggerStyledModal(
+                "success",
+                "Thank You ❤️",
+                "Your support helps keep TikTop free."
+            );
+
+        },
+
+        onError(err) {
+
+            triggerStyledModal(
+                "error",
+                "Payment Failed",
+                "Please try again."
+            );
+
+        }
+
+    }).render("#paypal-button-container");
+
 }
-
 // Google Layout Fixer
 (function() {
   function fixGoogleTranslateLayout() {
