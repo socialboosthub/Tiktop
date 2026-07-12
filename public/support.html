@@ -638,11 +638,11 @@ function toggleCustomInput() {
 }
 
 function debouncedRender() {
-  clearTimeout(renderTimer);
+  clearTimeout(renderTimer);https://www.paypal.com/sdk/js?client-id=BAAomD4fABG8-ky8RB0K03YNMmwOwBeFynVBwRxc6uNsHTMdyEAJS2aOS8Kp1E0gpO8xmXHewft11eUsTE&currency=USD&intent=capture
   renderTimer = setTimeout(renderPayPal, 400); 
 }
   </script>
-<script src="https://www.paypal.com/sdk/js?client-id=AQP059oCAgQi3RxCHICt95GjIU7R6U4jvqVdRofXPh7X5ZLuJ0tNPJ-ENBy7E2KImlojhHaj3dwIdfCP&currency=USD&intent=capture"></script>
+<script src=""></script>
   <script>
 // === SANDBOXED PAYPAL ENGINE ===
 function renderPayPal() {
@@ -727,13 +727,13 @@ const email = emailInput.value.trim();
                 let planId = "";
 
                 if (amount == 5)
-                    planId = "YOUR_$5_PLAN";
+                    planId = "P-1E5594289E451083PNJDDJIQ";
 
                 else if (amount == 10)
-                    planId = "YOUR_$10_PLAN";
+                    planId = "P-2FX85876F6040730ANJDC3YY";
 
                 else
-                    planId = "YOUR_$25_PLAN";
+                    planId = "P-09975017VX501805FNJDHH2A";
 
                 return actions.subscription.create({
                     plan_id: planId
