@@ -150,6 +150,57 @@
     display: none !important;
 }
 
+    /* AUTHOR BOX */
+.author-box{
+  margin:50px 0 20px;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:25px;
+  display:flex;
+  align-items:center;
+  gap:20px;
+  transition:.3s;
+}
+
+.author-box:hover{
+  transform:translateY(-3px);
+  box-shadow:0 10px 30px rgba(0,0,0,.2);
+}
+
+.author-avatar{
+  width:85px;
+  height:85px;
+  border-radius:50%;
+  object-fit:cover;
+  border:3px solid var(--pink);
+  flex-shrink:0;
+}
+
+.author-info h3{
+  color:var(--text-main);
+  font-size:24px;
+  margin-bottom:5px;
+}
+
+.author-role{
+  color:var(--cyan);
+  font-weight:600;
+  margin-bottom:12px;
+}
+
+.author-info p{
+  color:var(--text-dim);
+  line-height:1.8;
+  margin:0;
+}
+
+@media(max-width:700px){
+  .author-box{
+    flex-direction:column;
+    text-align:center;
+  }
+}
   </style>
 </head>
 
