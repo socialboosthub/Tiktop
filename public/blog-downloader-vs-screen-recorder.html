@@ -149,6 +149,57 @@
 .goog-te-banner-frame {
     display: none !important;
 }
+    /* AUTHOR BOX */
+.author-box{
+  margin:50px 0 20px;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:25px;
+  display:flex;
+  align-items:center;
+  gap:20px;
+  transition:.3s;
+}
+
+.author-box:hover{
+  transform:translateY(-3px);
+  box-shadow:0 10px 30px rgba(0,0,0,.2);
+}
+
+.author-avatar{
+  width:85px;
+  height:85px;
+  border-radius:50%;
+  object-fit:cover;
+  border:3px solid var(--pink);
+  flex-shrink:0;
+}
+
+.author-info h3{
+  color:var(--text-main);
+  font-size:24px;
+  margin-bottom:5px;
+}
+
+.author-role{
+  color:var(--cyan);
+  font-weight:600;
+  margin-bottom:12px;
+}
+
+.author-info p{
+  color:var(--text-dim);
+  line-height:1.8;
+  margin:0;
+}
+
+@media(max-width:700px){
+  .author-box{
+    flex-direction:column;
+    text-align:center;
+  }
+}
 
   </style>
 </head>
@@ -318,6 +369,27 @@
         <p>When you place both methods side-by-side, the victor is overwhelmingly clear. While screen recording is a convenient, built-in feature for quickly capturing fleeting moments on your phone, it is arguably the worst way to archive video content. The intrusive UI elements, the presence of the bouncing watermark, the degraded video quality, and the massive, unoptimized file sizes make it a deeply flawed method for saving TikToks.</p>
         <p>Using a dedicated TikTok Video Downloader provides a vastly superior experience across the board. By spending an extra three seconds to copy a link and paste it into a tool like TikTop, you are rewarded with a pristine, watermark-free, original-quality video file that takes up a fraction of the storage space on your device. The audio remains perfectly synced, you don't have to waste time cropping the video, and you never have to worry about an embarrassing text message popping up and ruining your saved clip.</p>
         <p>For anyone serious about collecting high-quality videos, creating compilations, or simply enjoying clean content offline, making the switch from screen recording to a dedicated downloader is an absolute no-brainer.</p>
+      </div>
+      <div class="author-box">
+
+<img src="https://tiktop.online/assets/Ceo.jpg"
+alt="Abdulrahman Hamza, CEO of TikTop"
+class="author-avatar">
+
+<div class="author-info">
+
+<h3>About the Author</h3>
+
+<div class="author-role">
+Abdulrahman Hamza • Founder & CEO of TikTop
+</div>
+
+<p>
+Abdulrahman Hamza is the founder and CEO of TikTop, a platform dedicated to providing fast, secure, and easy-to-use video downloading tools. He specializes in web development, SEO, digital products, and online content creation. Through the TikTop blog, Abdulrahman shares practical guides, platform updates, and expert tips to help millions of users get the most from TikTok and other social media platforms while promoting responsible and legal use of online content.
+</p>
+
+</div>
+
       </div>
     </article>
   </div>
