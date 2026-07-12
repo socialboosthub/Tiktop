@@ -658,8 +658,7 @@ function renderPayPal() {
 
     const emailInput = document.getElementById("donor-email");
 const email = emailInput.value.trim();
-     const receiveUpdates =
-    document.getElementById("feature-updates").checked;
+   
   
     paypal.Buttons({
 
@@ -753,16 +752,25 @@ const email = emailInput.value.trim();
                     "Content-Type": "application/json"
                 },
 
-                body: JSON.stringify({
-    email,
-    amount,
-    mode: donationMode,
-    receiveUpdates,
-    orderId:
-        donationMode === "monthly"
-            ? data.subscriptionID
-            : data.orderID
-})
+                const receiveUpdates =
+    document.getElementById("feature-updates").checked;
+
+await fetch("/api/donation-success", {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+        email,
+        amount,
+        mode: donationMode,
+        receiveUpdates,
+        orderId:
+            donationMode === "monthly"
+                ? data.subscriptionID
+                : data.orderID
+    })
+});
             });
 
             triggerStyledModal(
