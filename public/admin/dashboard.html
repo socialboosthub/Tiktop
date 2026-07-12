@@ -156,6 +156,8 @@ placeholder="Search supporter email...">
 
 <th>Type</th>
 
+<th>Updates</th>
+
 <th>Status</th>
 
 <th>Date</th>
@@ -217,6 +219,8 @@ rows+=`
 
 <td>${d.mode}</td>
 
+<td>${d.receiveUpdates ? "✅ Yes" : "❌ No"}</td>
+
 <td>${d.paypalStatus}</td>
 
 <td>${new Date(d.createdAt).toLocaleDateString()}</td>
@@ -224,7 +228,6 @@ rows+=`
 </tr>
 
 `;
-
 });
 
 document.getElementById("tableBody").innerHTML=rows;
