@@ -302,6 +302,12 @@
 
         <input type="email" id="donor-email" class="input-box" placeholder="Your Email Address (For the receipt)" oninput="debouncedRender()">
         <label style="display:flex;align-items:flex-start;gap:10px;margin:-5px 0 20px;color:#fff;font-size:14px;text-align:left;">
+    <input type="checkbox" id="feature-updates">
+    <span>
+        I'd like to receive TikTop feature updates and product announcements by email.
+    </span>
+        </label>
+        <label style="display:flex;align-items:flex-start;gap:10px;margin:-5px 0 20px;color:#fff;font-size:14px;text-align:left;">
     <input type="checkbox" id="agree-terms" style="margin-top:3px;">
     <span>
         I agree to the
@@ -652,7 +658,9 @@ function renderPayPal() {
 
     const emailInput = document.getElementById("donor-email");
 const email = emailInput.value.trim();
-
+     const receiveUpdates =
+    document.getElementById("feature-updates").checked;
+  
     paypal.Buttons({
 
         style: {
@@ -746,18 +754,15 @@ const email = emailInput.value.trim();
                 },
 
                 body: JSON.stringify({
-
-                    email: email,
-
-                    amount: amount,
-
-                    mode: donationMode,
-
-                    orderId:
-                        donationMode === "monthly"
-                            ? data.subscriptionID
-                            : data.orderID
-                })
+    email,
+    amount,
+    mode: donationMode,
+    receiveUpdates,
+    orderId:
+        donationMode === "monthly"
+            ? data.subscriptionID
+            : data.orderID
+})
             });
 
             triggerStyledModal(
