@@ -139,6 +139,57 @@
     .faq p { padding: 0 20px 20px; color: var(--text-dim); line-height: 1.8; }
     #google_translate_element { display: none; }
     .goog-te-banner-frame { display: none !important; }
+    /* AUTHOR BOX */
+.author-box{
+  margin:50px 0 20px;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:25px;
+  display:flex;
+  align-items:center;
+  gap:20px;
+  transition:.3s;
+}
+
+.author-box:hover{
+  transform:translateY(-3px);
+  box-shadow:0 10px 30px rgba(0,0,0,.2);
+}
+
+.author-avatar{
+  width:85px;
+  height:85px;
+  border-radius:50%;
+  object-fit:cover;
+  border:3px solid var(--pink);
+  flex-shrink:0;
+}
+
+.author-info h3{
+  color:var(--text-main);
+  font-size:24px;
+  margin-bottom:5px;
+}
+
+.author-role{
+  color:var(--cyan);
+  font-weight:600;
+  margin-bottom:12px;
+}
+
+.author-info p{
+  color:var(--text-dim);
+  line-height:1.8;
+  margin:0;
+}
+
+@media(max-width:700px){
+  .author-box{
+    flex-direction:column;
+    text-align:center;
+  }
+}
   </style>
 </head>
 
@@ -260,6 +311,27 @@
           <p>Download high-performing public videos seamlessly without watermarks using our advanced tool suite to break down their pacing and audio tracks step by step.</p>
           <a href="./index.html" class="cta-button">Open TikTop Downloader</a>
         </div>
+
+      </div>
+      <div class="author-box">
+
+<img src="https://tiktop.online/assets/Ceo.jpg"
+alt="Abdulrahman Hamza, CEO of TikTop"
+class="author-avatar">
+
+<div class="author-info">
+
+<h3>About the Author</h3>
+
+<div class="author-role">
+Abdulrahman Hamza • Founder & CEO of TikTop
+</div>
+
+<p>
+Abdulrahman Hamza is the founder and CEO of TikTop, a platform dedicated to providing fast, secure, and easy-to-use video downloading tools. He specializes in web development, SEO, digital products, and online content creation. Through the TikTop blog, Abdulrahman shares practical guides, platform updates, and expert tips to help millions of users get the most from TikTok and other social media platforms while promoting responsible and legal use of online content.
+</p>
+
+</div>
 
       </div>
     </article>
