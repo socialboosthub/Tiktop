@@ -11,12 +11,13 @@ export default async function handler(req, res) {
   }
 
   try {
-    const {
-      email,
-      amount,
-      mode,
-      orderId
-    } = req.body;
+const {
+  email,
+  amount,
+  mode,
+  orderId,
+  receiveUpdates
+} = req.body;
 
     if (!email || !orderId) {
       return res.status(400).json({
