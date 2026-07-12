@@ -56,6 +56,7 @@ export default async function handler(req, res) {
       email,
       amount: Number(amount),
       mode,
+      receiveUpdates,
       paypalStatus: order.status,
       payer:
         order.payer?.email_address || email,
