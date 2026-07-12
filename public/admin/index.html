@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>TikTop Admin Login</title>
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:#000;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+}
+
+.card{
+width:380px;
+background:#111;
+border-radius:18px;
+padding:40px;
+box-shadow:0 0 40px rgba(37,244,238,.15);
+text-align:center;
+}
+
+.logo{
+width:90px;
+margin-bottom:20px;
+}
+
+h1{
+color:white;
+margin-bottom:10px;
+}
+
+p{
+color:#aaa;
+margin-bottom:30px;
+}
+
+input{
+width:100%;
+padding:14px;
+margin-bottom:18px;
+border:none;
+border-radius:10px;
+background:#222;
+color:white;
+font-size:15px;
+outline:none;
+}
+
+input:focus{
+border:2px solid #25F4EE;
+}
+
+button{
+width:100%;
+padding:15px;
+background:linear-gradient(90deg,#EE1D52,#25F4EE);
+border:none;
+border-radius:10px;
+font-size:16px;
+font-weight:bold;
+color:white;
+cursor:pointer;
+}
+
+button:hover{
+opacity:.9;
+}
+
+#error{
+margin-top:18px;
+color:#ff5c5c;
+font-size:14px;
+}
+</style>
+
+</head>
+<body>
+
+<div class="card">
+
+<img src="https://tiktop.online/assets/logo.png" class="logo">
+
+<h1>TikTop Admin</h1>
+
+<p>Authorized access only</p>
+
+<input
+id="username"
+placeholder="Username">
+
+<input
+id="password"
+type="password"
+placeholder="Password">
+
+<button onclick="login()">
+Login
+</button>
+
+<div id="error"></div>
+
+</div>
+
+<script>
+async function login(){
+
+const username=document.getElementById("username").value;
+const password=document.getElementById("password").value;
+
+const res=await fetch("/api/login",{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({
+username,
+password
+})
+
+});
+
+const data=await res.json();
+
+if(data.success){
+
+location.href="/admin/dashboard.html";
+
+}else{
+
+document.getElementById("error").innerText=data.message;
+
+}
+
+}
+</script>
+
+</body>
+</html>
