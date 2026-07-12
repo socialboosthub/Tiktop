@@ -301,6 +301,15 @@
         </div>
 
         <input type="email" id="donor-email" class="input-box" placeholder="Your Email Address (For the receipt)" oninput="debouncedRender()">
+        <label style="display:flex;align-items:flex-start;gap:10px;margin:-5px 0 20px;color:#fff;font-size:14px;text-align:left;">
+    <input type="checkbox" id="agree-terms" style="margin-top:3px;">
+    <span>
+        I agree to the
+        <a href="./terms.html" target="_blank" style="color:#25F4EE;">Terms of Service</a>
+        and
+        <a href="./privacy.html" target="_blank" style="color:#25F4EE;">Privacy Policy</a>.
+    </span>
+        </label>
 
         <div class="amount-grid">
           <button class="amount-btn" onclick="setAmount(5, this)">$5</button>
@@ -641,7 +650,8 @@ function renderPayPal() {
 
     if (!amount || amount <= 0) amount = 5;
 
-    const email = document.getElementById("donor-email").value || "";
+    const emailInput = document.getElementById("donor-email");
+const email = emailInput.value.trim();
 
     paypal.Buttons({
 
@@ -652,6 +662,46 @@ function renderPayPal() {
             label: donationMode === "monthly" ? "subscribe" : "pay"
         },
 
+      onClick: function () {
+
+    if (!email) {
+        emailInput.focus();
+
+        triggerStyledModal(
+            "error",
+            "Email Required",
+            "Please enter your email address before continuing."
+        );
+
+        return false;
+    }
+
+    if (!emailInput.checkValidity()) {
+        emailInput.focus();
+
+        triggerStyledModal(
+            "error",
+            "Invalid Email",
+            "Please enter a valid email address."
+        );
+
+        return false;
+    }
+
+    const agree = document.getElementById("agree-terms");
+
+    if (!agree.checked) {
+        triggerStyledModal(
+            "error",
+            "Agreement Required",
+            "Please agree to the Terms and Privacy Policy before making a payment."
+        );
+
+        return false;
+    }
+
+    return true;
+},
         createOrder: donationMode === "one-time"
             ? (data, actions) => {
                 return actions.order.create({
