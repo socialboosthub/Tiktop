@@ -742,45 +742,46 @@ const email = emailInput.value.trim();
             }
             : undefined,
 
-        onApprove: async function(data, actions) {
+        onApprove: async function (data, actions) {
 
-            await fetch("/api/donation-success", {
+    const receiveUpdates =
+        document.getElementById("feature-updates").checked;
 
-                method: "POST",
-
-                headers: {
-                    "Content-Type": "application/json"
-                },
-
-                const receiveUpdates =
-    document.getElementById("feature-updates").checked;
-
-await fetch("/api/donation-success", {
-    method: "POST",
-    headers: {
-        "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-        email,
-        amount,
-        mode: donationMode,
-        receiveUpdates,
-        orderId:
-            donationMode === "monthly"
-                ? data.subscriptionID
-                : data.orderID
-    })
-});
-            });
-
-            triggerStyledModal(
-                "success",
-                "Thank You ❤️",
-                "Your support helps keep TikTop free."
-            );
-
+    const response = await fetch("/api/donation-success", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
         },
+        body: JSON.stringify({
+            email,
+            amount,
+            mode: donationMode,
+            receiveUpdates,
+            orderId:
+                donationMode === "monthly"
+                    ? data.subscriptionID
+                    : data.orderID
+        })
+    });
 
+    const result = await response.json();
+
+    if (!result.success) {
+        triggerStyledModal(
+            "error",
+            "Payment Error",
+            result.message || "Unable to process your donation."
+        );
+        return;
+    }
+
+    triggerStyledModal(
+        "success",
+        "Thank You ❤️",
+        "Your support helps keep TikTop free."
+    );
+},
+      
         onError(err) {
 
             triggerStyledModal(
