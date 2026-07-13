@@ -1,0 +1,335 @@
+<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+  <meta charset="UTF-8">  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+  <title>TikTok Download Tips & Tricks | TikTop</title>     
+  <meta name="description" content="Discover advanced tips and tricks for downloading TikTok content, including batch extraction delays, audio tracking isolation, and region bypass methods.">
+  <meta name="keywords" content="tiktok conversion tricks, extract audio tracks, batch downloader tips, high quality video save, bypass region restrictions">  
+  <meta name="robots" content="index, follow, max-image-preview:large">  
+  <meta name="theme-color" content="#EE1D52">  
+  <link rel="canonical" href="https://tiktop.online/blog-tiktok-download-tips-and-tricks.html">    
+  <meta property="og:type" content="article">  
+  <meta property="og:title" content="TikTok Download Tips & Tricks: Advanced Power User Guide">
+  <meta property="og:description" content="Unlock pro workflows for social media downloading, batch file management, and audio track extraction secrets.">  
+  <meta property="og:url" content="https://tiktop.online/blog-tiktok-download-tips-and-tricks.html">  
+  <meta property="og:site_name" content="TikTop">  
+  <meta property="og:image" content="https://tiktop.online/assets/Tiktop_tips.png">    
+  <link rel="preconnect" href="https://fonts.googleapis.com">  
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>  
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">  
+  <link rel="icon" href="https://tiktop.online/assets/Logo.ico" type="image/x-icon">    
+
+  <style>  
+    iframe.goog-te-banner-frame { display: none !important; visibility: hidden !important; height: 0 !important; }  
+    body > .skiptranslate { display: none !important; }  
+    body { top: 0px !important; position: static !important; margin-top: 0px !important; }  
+    html { margin-top: 0px !important; height: 100% !important; }  
+    .goog-tooltip, .goog-tooltip:hover, .goog-text-highlight { display: none !important; box-shadow: none !important; background: none !important; }  
+    .fcc-nav { top: 0 !important; }  
+  
+    :root {  
+      --bg: #000000; --card: #111111; --text: #ffffff; --text-main: #ffffff;  
+      --text-dim: #b0b0b0; --muted: #aaaaaa; --border: rgba(255, 255, 255, 0.08);  
+      --box-bg: #111111; --pink: #EE1D52; --cyan: #25F4EE; --nav-bg: #0a0a23;  
+    }  
+    body.light-mode {  
+      --bg: #f5f5f7; --card: #ffffff; --text: #111111; --text-main: #000000;  
+      --text-dim: #222222; --muted: #666666; --border: rgba(0,0,0,0.08);  
+      --box-bg: #ffffff; --nav-bg: #0a0a23;  
+    }  
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: Inter, sans-serif; }  
+    body { background: var(--bg); color: var(--text-main); transition: background 0.3s, color 0.3s; overflow-x: hidden; }  
+      
+    #page-preloader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); z-index: 999999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.5s ease, visibility 0.5s ease; }  
+    #page-preloader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }  
+    .neon-loader { position: relative; width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; }  
+    .neon-ring { position: absolute; border: 4px solid transparent; border-radius: 50%; animation: ring-pulse 2s cubic-bezier(0.455, 0.03, 0.515, 0.955) infinite; }  
+    .ring-1 { width: 100%; height: 100%; border-top-color: var(--cyan); border-bottom-color: var(--cyan); animation-delay: 0s; }  
+    .ring-2 { width: 70%; height: 70%; border-left-color: var(--pink); border-right-color: var(--pink); animation-delay: 0.5s; }  
+    .ring-3 { width: 40%; height: 40%; border-top-color: var(--text-main); border-bottom-color: var(--text-main); animation-delay: 1s; }   
+    @keyframes ring-pulse { 0% { transform: rotate(0deg) scale(1); opacity: 1; } 50% { transform: rotate(180deg) scale(1.2); opacity: 0.5; } 100% { transform: rotate(360deg) scale(1); opacity: 1; } }  
+    .loader-text-neon { margin-top: 25px; font-size: 11px; letter-spacing: 4px; color: var(--text-main); font-weight: bold; text-transform: uppercase; animation: fade-blink 1s infinite; }  
+    @keyframes fade-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }  
+  
+    .fcc-nav { position: fixed; width: 100%; height: 70px; background: var(--nav-bg); display: flex; align-items: center; justify-content: space-between; padding: 0 20px; z-index: 10000; }  
+    .fcc-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; }  
+    .fcc-logo img { height: 32px; width: auto; display: block; }  
+    .fcc-logo span { background: linear-gradient(to bottom right, var(--pink), var(--cyan)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; font-weight: bold; font-size: 20px; }  
+    .nav-right { display: flex; align-items: center; gap: 15px; }  
+    .theme-icon { cursor: pointer; font-size: 20px; transition: 0.3s; }  
+    .menu-toggle { background: #3b3b4f; border: 1px solid #fff; color: #fff; padding: 5px 10px; cursor: pointer; border-radius: 4px; }  
+    .side-menu { position: fixed; top: 50px; right: -100%; width: 250px; height: calc(100vh - 50px); background: var(--nav-bg); transition: 0.4s; z-index: 9999; padding: 20px; display: flex; flex-direction: column; gap: 20px; border-left: 1px solid #3b3b4f; }  
+    .side-menu.open { right: 0; }  
+    .side-menu a { color: #fff; text-decoration: none; font-size: 18px; border-bottom: 1px solid #3b3b4f; padding-bottom: 10px; }  
+    .lang-icon { cursor: pointer; font-size: 20px; }  
+    .lang-menu { position: fixed; top: 55px; right: 80px; background: #0a0a23; border: 1px solid #3b3b4f; border-radius: 10px; display: none; z-index: 10002; overflow: hidden; }  
+    .lang-menu div { padding: 10px 16px; color: #fff; cursor: pointer; font-size: 14px; }  
+    .lang-menu div:hover { background: #EE1D52; }  
+  
+    #article-content { padding-top: 100px; min-height: 100vh; display: flex; flex-direction: column; align-items: center; }  
+    .article-wrap { max-width: 800px; width: 100%; padding: 0 20px; margin-bottom: 60px; }  
+      
+    .article-header { text-align: center; margin-bottom: 40px; }  
+    .article-category { display: inline-block; background: rgba(37, 244, 238, 0.1); color: var(--cyan); padding: 6px 15px; border-radius: 20px; font-weight: bold; font-size: 14px; margin-bottom: 15px; border: 1px solid var(--cyan); }  
+    .article-title { font-size: 42px; color: var(--text-main); margin-bottom: 15px; line-height: 1.2; }  
+    .article-meta { color: var(--muted); font-size: 15px; }  
+      
+    .hero-img { width: 100%; height: auto; border-radius: 16px; margin-bottom: 40px; border: 1px solid var(--border); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }  
+      
+    .article-body { font-size: 18px; line-height: 1.8; color: var(--text-dim); }  
+    .article-body h2 { font-size: 28px; color: var(--text-main); margin: 40px 0 20px; border-left: 4px solid var(--cyan); padding-left: 15px; }  
+    .article-body h3 { font-size: 22px; color: var(--text-main); margin: 30px 0 15px; }  
+    .article-body p { margin-bottom: 20px; }  
+    .article-body strong { color: var(--text-main); }  
+    .article-body ul, .article-body ol { margin-left: 20px; margin-bottom: 25px; }  
+    .article-body li { margin-bottom: 10px; }  
+  
+    .cta-box { background: linear-gradient(to right, rgba(238, 29, 82, 0.1), rgba(37, 244, 238, 0.1)); border: 2px dashed var(--pink); border-radius: 12px; padding: 30px; text-align: center; margin: 40px 0; }  
+    .cta-box h3 { margin-top: 0; color: var(--text-main); }  
+    .cta-button { display: inline-block; background: var(--pink); color: #fff; padding: 15px 30px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 18px; margin-top: 15px; transition: 0.3s; }  
+    .cta-button:hover { background: var(--cyan); color: #000; transform: translateY(-3px); }  
+  
+    .footer { padding: 60px 6% 40px; background: var(--pink); border-radius: 12px; margin-top: 50px; text-align: left; color: #000; }  
+    .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }  
+    .footer h3, .footer h4 { margin-bottom: 12px; }  
+    .footer p, .footer a { color: black; font-size: 14px; text-decoration: none; display: block; margin-bottom: 8px; }  
+    .footer a:hover { color: var(--text); }  
+    .footer-bottom { margin-top: 40px; text-align: center; font-size: 13px; opacity: 0.7; border-top: 1px solid rgba(0,0,0,0.1); padding-top: 20px; padding-bottom: 40px; }  
+  
+    @media (max-width: 768px) { .article-title { font-size: 32px; } .article-body { font-size: 16px; } }  
+
+#scrollTop { position: fixed; bottom: 30px; right: 30px; width: 55px; height: 55px; background: linear-gradient(45deg, #EE1D52, #25F4EE); border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 25px; cursor: pointer; z-index: 5000; color: white; box-shadow: 0 8px 20px rgba(0,0,0,0.3); transition: 0.3s ease; }  
+#scrollTop:hover { transform: translateY(-5px) scale(1.05); }  
+
+.faq{ margin-top:30px; }
+.faq details{ background:var(--card); border:1px solid var(--border); border-radius:12px; margin-bottom:15px; overflow:hidden; transition:.3s; }
+.faq details[open]{ border-color:var(--cyan); box-shadow:0 0 15px rgba(37,244,238,.15); }
+.faq summary{ list-style:none; cursor:pointer; padding:18px 20px; font-size:18px; font-weight:600; color:var(--text-main); position:relative; }
+.faq summary::-webkit-details-marker{ display:none; }
+.faq summary::after{ content:"+"; position:absolute; right:20px; font-size:24px; color:var(--cyan); transition:.3s; }
+.faq details[open] summary::after{ content:"−"; }
+.faq p{ padding:0 20px 20px; color:var(--text-dim); line-height:1.8; }
+
+.toc{ background:var(--card); border:1px solid var(--border); border-radius:14px; margin:35px 0; overflow:hidden; }
+.toc-header{ padding:18px 20px; display:flex; justify-content:space-between; align-items:center; cursor:pointer; user-select:none; }
+.toc-header h2{ margin:0 !important; padding:0 !important; border:none !important; font-size:24px !important; color:var(--text-main); }
+.toc-icon{ font-size:28px; color:var(--cyan); font-weight:bold; transition:.3s; }
+.toc-content{ max-height:1000px; overflow:hidden; transition:max-height .35s ease; }
+.toc.collapsed .toc-content{ max-height:0; }
+.toc ul{ list-style:none; margin:0; padding:0 20px 20px; }
+.toc li{ margin:12px 0; }
+.toc a{ color:var(--text-dim); text-decoration:none; transition:.25s; }
+.toc a:hover{ color:var(--cyan); }
+#google_translate_element { display: none; }
+.goog-te-banner-frame { display: none !important; }
+
+.author-box{ margin:50px 0 20px; background:var(--card); border:1px solid var(--border); border-radius:16px; padding:25px; display:flex; align-items:center; gap:20px; transition:.3s; }
+.author-box:hover{ transform:translateY(-3px); box-shadow:0 10px 30px rgba(0,0,0,.2); }
+.author-avatar{ width:85px; height:85px; border-radius:50%; object-fit:cover; border:3px solid var(--pink); flex-shrink:0; }
+.author-info h3{ color:var(--text-main); font-size:24px; margin-bottom:5px; }
+.author-role{ color:var(--cyan); font-weight:600; margin-bottom:12px; }
+.author-info p{ color:var(--text-dim); line-height:1.8; margin:0; }
+@media(max-width:700px){ .author-box{ flex-direction:column; text-align:center; } }
+  </style>  
+</head>  
+<body>  
+
+  <div id="page-preloader">  
+    <div class="neon-loader"><div class="neon-ring ring-1"></div><div class="neon-ring ring-2"></div><div class="neon-ring ring-3"></div></div>  
+    <p class="loader-text-neon">TikTop</p>  
+  </div>    
+
+  <nav class="fcc-nav">  
+    <a href="./index.html" class="fcc-logo">  
+      <img src="https://i.ibb.co/wZjXcKz9/file-00000000e22871fd9cb25a4586788b91.png" alt="TikTop Logo">  
+      <span>TikTop</span>  
+    </a>  
+    <div class="nav-right">  
+      <span class="lang-icon" onclick="toggleLangMenu()">🌐</span>  
+      <span class="theme-icon" onclick="toggleTheme()" id="theme-icon">🌙</span>  
+      <button class="menu-toggle" onclick="toggleMenu()">Menu ☰</button>  
+    </div>  
+    <div class="lang-menu" id="lang-menu">  
+      <div onclick="changeLang('en')">English</div>  
+      <div onclick="changeLang('fr')">Français</div>  
+      <div onclick="changeLang('es')">Español</div>  
+      <div onclick="changeLang('de')">Deutsch</div>  
+      <div onclick="changeLang('it')">Italiano</div>  
+      <div onclick="changeLang('pt')">Português</div>  
+      <div onclick="changeLang('ar')">العربية</div>  
+      <div onclick="changeLang('hi')">हिन्दी</div>  
+      <div onclick="changeLang('sw')">Swahili</div>  
+      <div onclick="changeLang('tr')">Türkçe</div>  
+      <div onclick="changeLang('ru')">Русский</div>  
+    </div>
+  </nav>    
+
+  <div class="side-menu" id="side-menu">  
+    <a href="./index.html">Home</a>  
+    <a href="./blogs.html">Blog</a>  
+    <a href="./history.html">History</a>  
+    <a href="./support.html">Support Us</a>  
+    <a href="./contact.html">Contact Us</a>  
+  </div>    
+
+  <div id="article-content">  
+    <article class="article-wrap">  
+      <div class="article-header">  
+        <span class="article-category">Tips & Strategies</span>  
+        <h1 class="article-title">TikTok Download Tips & Tricks</h1>
+        <div class="article-meta">Published on July 13, 2026 • 7 min read</div>  
+      </div>  
+
+      <img src="https://tiktop.online/assets/Tiktop_tips.png" alt="TikTok Download Tips & Tricks Header Image" class="hero-img"> 
+
+      <div class="article-body">
+        <p>Whether you are a professional content creator collecting assets for video editing or casual archivist curating a personalized collection of trends, mastering the small nuances of media conversion saves considerable time and ensures clean, high-quality results.</p>
+
+        <p>This guide highlights advanced tips and strategies designed to help you speed up your asset extraction workflow while maintaining pixel-perfect clarity.</p>
+
+        <div class="toc collapsed" id="toc">
+          <div class="toc-header" onclick="toggleTOC()">
+            <h2>Contents</h2>
+            <span class="toc-icon" id="tocIcon">+</span>
+          </div>
+          <div class="toc-content">
+            <ul>
+              <li><a href="#batch-downloading">Batch Downloading Optimization</a></li>
+              <li><a href="#audio-isolation">Audio Separation and MP3 Extraction</a></li>
+              <li><a href="#workflow-integration">Content Creation Workflow Integration</a></li>
+              <li><a href="#quality-retention">Quality Retention Strategies</a></li>
+              <li><a href="#region-locked">Bypassing Region-Locked Media</a></li>
+              <li><a href="#storage-practices">Advanced Content Storage Best Practices</a></li>
+            </ul>
+          </div>
+        </div>
+        
+        <h2 id="batch-downloading">Batch Downloading Optimization</h2>
+        <p>When downloading multiple image files from a single photo carousel, modern web browsers will often trigger security pop-ups to block rapid, simultaneous downloads. This built-in mechanism protects devices from spam or unintended file downloads.</p>
+        <p>To safely handle this, TikTop adds a short 2-second delay between consecutive image downloads. When your browser asks for permission to save multiple files from the domain, simply click **"Allow"** to ensure all images down correctly without interrupting the sequence.</p>
+
+        <h2 id="audio-isolation">Audio Separation and MP3 Extraction</h2>
+        <p>Often, the audio track of a trending video is more valuable for your creative projects than the video itself. If you want to isolate a specific background track, sound effect, or voiceover for an offline editing mix, you don't need to capture and convert the entire video stream manually.</p>
+        <p>By using the specific tracking identifier on our primary interface, the parsing core reads the separate audio multiplex layer directly. This lets you save the raw track directly as a clean, standalone MP3 file, cutting out unnecessary conversion steps.</p>
+
+        <h2 id="workflow-integration">Content Creation Workflow Integration</h2>
+        <p>For video editors compiling mood boards or reference reels, keeping files highly organized is key to keeping projects moving forward smoothly. Raw files downloaded from the web often have confusing, randomized alphanumeric strings as titles.</p>
+        <p>We recommend creating clear, project-specific folders (like <code>/Ref_Transitions</code> or <code>/Audio_Accents</code>) right inside your main downloads directory. Renaming assets to match their contents immediately after extraction makes importing them into editing tools like Premiere Pro, DaVinci Resolve, or CapCut much simpler.</p>
+
+        <h2 id="quality-retention">Quality Retention Strategies</h2>
+        <p>To make sure you are always saving the sharpest version of a video, avoid pulling assets from low-resolution preview screens or web embeds. Standard sharing links point straight to the original, high-definition source files on the platform's media storage servers.</p>
+        <p>Using an API-driven parsing engine like TikTop ensures you skip any extra compression passes. Your browser fetches the raw, uncompressed source files directly from the master server, keeping the resolution, color balance, and framing intact.</p>
+
+        <h2 id="region-locked">Bypassing Region-Locked Media</h2>
+        <p>Social media content can occasionally face geoblocking or regional restrictions due to localized audio licensing rules, localized distribution agreements, or variations in regional privacy laws.</p>
+        <p>If a link fails to resolve due to region boundaries, running your browser through a Virtual Private Network (VPN) node positioned in a major distribution market—such as the United States or Western Europe—allows our parsing engines to seamlessly route around the restriction and fetch the asset successfully.</p>
+
+        <h2 id="storage-practices">Advanced Content Storage Best Practices</h2>
+        <p>High-definition MP4 files can fill up internal device storage surprisingly quickly. To avoid running out of space, it is smart to set up a regular storage maintenance routine.</p>
+        <p>Moving completed reference projects over to external hard drives or secure cloud spaces frees up valuable room on your phone or computer. This simple step keeps your devices running fast and responsive, ensuring you are always ready for your next creative project.</p>
+
+        <h2 id="faq">Frequently Asked Questions</h2>
+        <div class="faq">
+          <details>
+            <summary>Can I convert videos straight to MP3 on mobile devices?</summary>
+            <p>Yes. TikTop parses audio options natively across mobile web browser platforms, letting you download tracks directly without using secondary conversion apps.</p>
+          </details>
+          <details>
+            <summary>Why do certain video links take longer to parse?</summary>
+            <p>High network traffic on host CDN servers or complex, nested tracking structures can occasionally slow down redirection checks. This normal delay ensures you get a safe, verified connection path.</p>
+          </details>
+        </div>
+
+        <p>Put these advanced tips into practice today. Head back to our main extraction page to process your media links with pro efficiency!</p>
+      </div>
+      
+      <div class="cta-box">  
+          <h3>Launch High-Speed Downloader</h3>  
+          <p>Paste your link inside our primary extraction console to apply optimized download strategies instantly.</p>  
+          <a href="./index.html" class="cta-button">Go to Downloader</a>  
+      </div> 
+
+      <div class="author-box">
+        <img src="https://tiktop.online/assets/Ceo.jpg" alt="Abdulrahman Hamza, CEO of TikTop" class="author-avatar">
+        <div class="author-info">
+          <h3>About the Author</h3>
+          <div class="author-role">Abdulrahman Hamza • Founder & CEO of TikTop</div>
+          <p>Abdulrahman Hamza is the founder and CEO of TikTop, a platform dedicated to providing fast, secure, and easy-to-use video downloading tools. He specializes in web development, SEO, digital products, and online content creation. Through the TikTop blog, Abdulrahman shares practical guides, platform updates, and expert tips to help millions of users get the most from TikTok and other social media platforms while promoting responsible and legal use of online content.</p>
+        </div>
+      </div>
+    </article>
+  </div>    
+
+  <footer class="footer">  
+    <div class="footer-grid">  
+      <div>  
+        <h3>TikTop</h3>  
+        <p>Fast and simple TikTok downloader</p>  
+        <p>with no watermark.</p>  
+      </div>  
+      <div>  
+        <h4>Tools</h4>  
+        <a href="./index.html">Tiktok Downloader</a>  
+        <a href="./instagram.html">Instagram Downloader</a>  
+        <a href="./youtube.html">Youtube Downloader</a>  
+        <a href="./facebook.html">Facebook Downloader</a>  
+        <a href="./twitter.html">Twitter Downloader</a>  
+      </div>  
+      <div>  
+        <h4>Legal & Info</h4>  
+        <a href="./about.html">About Us</a>  
+        <a href="./privacy.html">Privacy Policy</a>  
+        <a href="./terms.html">Terms of Service</a>  
+        <a href="./dmca.html">DMCA / Copyright</a>  
+      </div>  
+    </div>  
+    <div class="footer-bottom"> © 2026 TikTop. All rights reserved. </div>  
+  </footer>    
+
+  <div id="google_translate_element"></div>
+  
+  <script>
+    function googleTranslateElementInit() {
+        new google.translate.TranslateElement({
+            pageLanguage: 'en',
+            layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+            autoDisplay: false
+        }, 'google_translate_element');
+    }
+  </script>
+  <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+  <script>  
+    function toggleTheme() { document.body.classList.toggle('light-mode'); const isLight = document.body.classList.contains('light-mode'); localStorage.setItem('theme', isLight ? 'light' : 'dark'); document.getElementById('theme-icon').textContent = isLight ? "☀️" : "🌙"; }  
+    (function() { if (localStorage.getItem('theme') === 'light') { document.body.classList.add('light-mode'); document.getElementById('theme-icon').textContent = "☀️"; } })();  
+    window.addEventListener('load', function() { const preloader = document.getElementById('page-preloader'); setTimeout(() => { preloader.classList.add('hidden'); setTimeout(() => { preloader.style.display = 'none'; }, 500); }, 500); });  
+    function toggleMenu() { document.getElementById('side-menu').classList.toggle('open'); }  
+    function toggleLangMenu() { const menu = document.getElementById('lang-menu'); menu.style.display = menu.style.display === 'block' ? 'none' : 'block'; }  
+    function setLanguage(lang) { const current = getCurrentLang(); if (current === lang) return; document.cookie = "googtrans=/en/" + lang + ";path=/"; document.cookie = "googtrans=/en/" + lang + ";domain=" + window.location.hostname + ";path=/"; location.reload(); }  
+    function changeLang(lang) { localStorage.setItem('site_lang', lang); setLanguage(lang); document.getElementById('lang-menu').style.display = 'none'; }  
+    function getCurrentLang() { const match = document.cookie.match(/googtrans=\/en\/([^;]+)/); return match ? match[1] : 'en'; }  
+    window.addEventListener('load', () => { const savedLang = localStorage.getItem('site_lang'); const currentLang = getCurrentLang(); if (savedLang && savedLang !== currentLang) { setLanguage(savedLang); } });  
+  </script>  
+  
+  <div id="scrollTop" onclick="scrollToTop()">🚀</div>  
+  
+  <script>  
+    window.addEventListener("scroll", () => {
+      const btn = document.getElementById("scrollTop");
+      if (window.pageYOffset > 400) { btn.style.display = "flex"; } else { btn.style.display = "none"; }
+    });
+    function scrollToTop() { window.scrollTo({ top: 0, behavior: "smooth" }); }
+  </script>  
+  
+  <script>
+    function toggleTOC(){
+      const toc = document.getElementById("toc");
+      const icon = document.getElementById("tocIcon");
+      toc.classList.toggle("collapsed");
+      icon.textContent = toc.classList.contains("collapsed") ? "+" : "−";
+    }
+  </script>
+</body>  
+</html>
+
