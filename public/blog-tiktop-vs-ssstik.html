@@ -134,6 +134,74 @@
     .author-role{ color:var(--cyan); font-weight:600; margin-bottom:12px; }
     .author-info p{ color:var(--text-dim); line-height:1.8; margin:0; }
     @media(max-width:700px){ .author-box{ flex-direction:column; text-align:center; } }
+    /* FAQ Accordion */
+.faq {
+  margin: 18px 0;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: .3s ease;
+}
+
+.faq:hover {
+  border-color: var(--cyan);
+}
+
+.faq summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 18px 20px;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-main);
+  position: relative;
+  transition: .3s;
+}
+
+.faq summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq summary::after {
+  content: "+";
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 28px;
+  font-weight: bold;
+  color: var(--cyan);
+  transition: .3s;
+}
+
+.faq[open] summary::after {
+  content: "−";
+  color: var(--pink);
+}
+
+.faq[open] summary {
+  background: rgba(37, 244, 238, 0.08);
+}
+
+.faq p {
+  padding: 0 20px 20px;
+  margin: 0;
+  color: var(--text-dim);
+  line-height: 1.8;
+  animation: faqFade .25s ease;
+}
+
+@keyframes faqFade {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
   </style>
 </head>
 
@@ -441,52 +509,52 @@
 
 <h2 id="faq">Frequently Asked Questions</h2>
 
-<details class="toc">
+<details class="faq">
 <summary>Is TikTop free to use?</summary>
 <p>Yes. TikTop is currently free to use for downloading eligible public TikTok videos without requiring registration.</p>
 </details>
 
-<details class="toc">
+<details class="faq">
 <summary>Does TikTop have advertisements?</summary>
 <p>At the time this article was written, TikTop provides an ad-free experience. The project is supported through voluntary donations from users.</p>
 </details>
 
-<details class="toc">
+<details class="fa1">
 <summary>Can I download several TikTok videos at once?</summary>
 <p>Yes. TikTop supports multiple video processing, making it easier to work with several TikTok links during one session.</p>
 </details>
 
-<details class="toc">
+<details class="faq">
 <summary>Does TikTop save my download history?</summary>
 <p>Yes. TikTop includes a download history feature so users can quickly review recently downloaded videos.</p>
 </details>
 
-<details class="toc">
+<details class="faq">
 <summary>Can I download TikTok audio as MP3?</summary>
 <p>Yes. TikTop supports MP3 downloads whenever audio extraction is available.</p>
 </details>
 
-<details class="toc">
+<details class="faq">
 <summary>Do I need to install an application?</summary>
 <p>No. TikTop works directly in your web browser without requiring software installation.</p>
 </details>
 
-<details class="toc">
+<details class="faq">
 <summary>Does TikTop work on mobile phones?</summary>
 <p>Yes. TikTop is fully responsive and works on Android phones, iPhones, tablets, laptops, and desktop computers.</p>
 </details>
 
-<details class="toc">
+<details class="faq">
 <summary>Can I use TikTop without creating an account?</summary>
 <p>Yes. Users can download eligible public TikTok videos without signing up.</p>
 </details>
 
-<details class="toc">
+<details class="faq">
 <summary>Is TikTop faster than SSSTik?</summary>
 <p>Performance depends on internet connection, server availability, and the TikTok link being processed. TikTop is designed to provide fast processing together with a streamlined downloading experience.</p>
 </details>
 
-<details class="toc">
+<details class="faq">
 <summary>Which downloader should I choose?</summary>
 <p>If you want watermark-free downloads together with features like download history, multiple video processing, MP3 support, dark mode, responsive design, and a clean interface, TikTop offers a modern solution that goes beyond basic downloading.</p>
 </details>
