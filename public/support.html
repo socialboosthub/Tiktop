@@ -496,8 +496,23 @@
     </footer>
   </div>
 
-  <div id="google_translate_element" style="display:none;"></div>
-  <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+<!-- 1. The Container -->
+<div id="google_translate_element"></div>
+  
+<!-- 2. The Function Definition (Must come BEFORE the script) -->
+<script>
+    function googleTranslateElementInit() {
+        new google.translate.TranslateElement({
+            pageLanguage: 'en',
+            layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+            autoDisplay: false
+        }, 'google_translate_element');
+    }
+</script>
+
+<!-- 3. The Google Script (Must come AFTER the function) -->
+<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
 
   <script>
 // === UI & STATE VARIABLES ===
@@ -574,9 +589,6 @@ function changeLang(lang) {
   document.cookie = "googtrans=/en/" + lang + ";path=/";
   document.cookie = "googtrans=/en/" + lang + ";domain=" + window.location.hostname + ";path=/";
   location.reload();
-}
-function googleTranslateElementInit() { new google.translate.TranslateElement({ pageLanguage: 'en', autoDisplay: false }, 'google_translate_element'); }
-
 // === DONATION LOGIC ===
 function setDonationMode(mode) {
   if (donationMode === mode) return; 
@@ -806,9 +818,6 @@ const email = emailInput.value.trim();
     if (banner) banner.style.display = "none";
   }
   fixGoogleTranslateLayout();
-  const observer = new MutationObserver(fixGoogleTranslateLayout);
-  observer.observe(document.documentElement, { attributes: true, childList: true, subtree: true, attributeFilter: ['style'] });
-})();
   </script>
   <script>
   // Accordion Logic
