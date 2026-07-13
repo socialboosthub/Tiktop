@@ -235,6 +235,19 @@
 #scrollTop:hover {
   transform: translateY(-5px) scale(1.05);
 }
+    /* Hide the container until it's loaded */
+#google_translate_element {
+    display: none; 
+}
+
+/* 
+   If you really want to hide the banner, add this. 
+   Do NOT use !important on the iframe itself.
+*/
+.goog-te-banner-frame {
+    display: none !important;
+}
+
   </style>
 </head>
 <body>
@@ -589,6 +602,7 @@ function changeLang(lang) {
   document.cookie = "googtrans=/en/" + lang + ";path=/";
   document.cookie = "googtrans=/en/" + lang + ";domain=" + window.location.hostname + ";path=/";
   location.reload();
+}
 // === DONATION LOGIC ===
 function setDonationMode(mode) {
   if (donationMode === mode) return; 
@@ -818,6 +832,7 @@ const email = emailInput.value.trim();
     if (banner) banner.style.display = "none";
   }
   fixGoogleTranslateLayout();
+})();
   </script>
   <script>
   // Accordion Logic
