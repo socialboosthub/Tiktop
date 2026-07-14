@@ -366,33 +366,40 @@
       fetchProfile();
     }
 
-        async function fetchProfile() {
-      try {
-        const res = await fetch(`/api/profile?username=${encodeURIComponent(username)}`);
-        const data = await res.json();
+async function fetchProfile() {
+  try {
+    const res = await fetch(`/api/profile?username=${encodeURIComponent(username)}`);
+    const data = await res.json();
 
-        // Safety check: if there are no videos returned on page 1, stop right here
-        if (page === 0 && (!data.videos || data.videos.length === 0)) {
-          loaderStage.innerHTML = "<p style='color:yellow;'>This profile is private or has no public videos.</p>";
-          return;
-        }
-
-        if (page === 0) {
-            loaderStage.style.display = "none";
-            renderProfile(data.user);
-        }
-
-        const startIndex = queue.length;
-        queue.push(...data.videos);
-        renderPlaceholders(data.videos.length, startIndex);
-        
-        loadVideo(startIndex);
-      } catch (err) {
-        // Ensure the loader element stays visible if displaying a red error message
-        loaderStage.style.display = "flex";
-        loaderStage.innerHTML = "<p style='color:red;'>Failed to load profile. Please try again later.</p>";
-      }
+    // Check if the backend threw a specific error (e.g., API blocked us)
+    if (!res.ok || data.error) {
+      loaderStage.style.display = "flex";
+      loaderStage.innerHTML = `<p style='color:red;'>Server Error: ${data.error || 'Could not fetch profile'}</p>`;
+      return;
     }
+
+    // Now we can safely assume an empty array means a private/empty profile
+    if (page === 0 && (!data.videos || data.videos.length === 0)) {
+      loaderStage.innerHTML = "<p style='color:yellow;'>This profile is private or has no public videos.</p>";
+      return;
+    }
+
+    if (page === 0) {
+        loaderStage.style.display = "none";
+        renderProfile(data.user);
+    }
+
+    const startIndex = queue.length;
+    queue.push(...data.videos);
+    renderPlaceholders(data.videos.length, startIndex);
+    
+    loadVideo(startIndex);
+  } catch (err) {
+    loaderStage.style.display = "flex";
+    loaderStage.innerHTML = "<p style='color:red;'>Failed to communicate with the server. Please try again later.</p>";
+  }
+}
+
 
     async function loadVideo(i, attempt = 1) {
       // Stop execution if we reach the end of a completely empty list
