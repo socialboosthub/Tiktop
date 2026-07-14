@@ -981,7 +981,7 @@ html {
       </div>
 
     <div class="tab-container" id="tabs">
-      <button class="filter-button selected" onclick="switchTab(0)">Video</button>
+      <button class="filter-button selected" onclick="switchTab(0)">Profile</button>
       <button class="filter-button" onclick="switchTab(1)">Mp3</button>
       <button class="filter-button" onclick="switchTab(2)">Story</button>
       <button class="filter-button" onclick="switchTab(3)">Slider</button>
@@ -1006,7 +1006,7 @@ html {
 
         
         <div class="glow-wrapper">
-          <button id="pbtn-0" class="process-btn active" onclick="go('profile-download.html')">Process Video Link</button>
+          <button id="pbtn-0" class="process-btn active" onclick="go('profile-download.html')">Process username</button>
           <button id="pbtn-1" class="process-btn" onclick="go('mp3-download.html')">Process Link</button>
           <button id="pbtn-2" class="process-btn" onclick="go('story-download.html')">Process Story Link</button>
           <button id="pbtn-3" class="process-btn" onclick="go('slider-download.html')">Process Slider Link</button>
@@ -1323,8 +1323,8 @@ html {
 
   <script>
     const tabConfigs = [{
-        title: "Download TikTok Videos",
-        desc: "Paste a TikTok link to start downloading."
+        title: "Fetch user videos",
+        desc: "Paste a username to fetch videos of a profile.."
       },
       {
         title: "TikTok MP3 Downloader",
@@ -1340,7 +1340,7 @@ html {
       },
       {
         title: "TikTok Multi Downloader",
-        desc: "Paste multiple links (one per line) to process at once."
+        desc: "Paste one link or multiple links (one per line) to process at once."
       }
     ];
     let activeTab = 0;
