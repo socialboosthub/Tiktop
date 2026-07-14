@@ -1377,8 +1377,17 @@ Paste one or multiple links (one per line) to process at once.
       document.getElementById('page-title').textContent = tabConfigs[idx].title;
       document.getElementById('page-desc').textContent = tabConfigs[idx].desc;
       const isMulti = idx === 0;
-      document.getElementById('main-input').style.display = isMulti ? 'none' : 'block';
-      document.getElementById('multi-input').style.display = isMulti ? 'block' : 'none';
+      const mainInput = document.getElementById('main-input');
+const multiInput = document.getElementById('multi-input');
+
+mainInput.style.display = isMulti ? 'none' : 'block';
+multiInput.style.display = isMulti ? 'block' : 'none';
+
+if (idx === 4) {
+    mainInput.placeholder = "👤 Paste a TikTok username";
+} else {
+    mainInput.placeholder = "🔗 Paste a TikTok link";
+}
       handleClear();
     }
 
