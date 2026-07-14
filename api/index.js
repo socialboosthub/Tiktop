@@ -354,10 +354,32 @@ app.get("/api/profile", async (req, res) => {
       }
     );
 
-    const data = await response.json();
+    const items = await response.json();
 
-    res.json(data);
+if (!items.length) {
+  return res.status(404).json({
+    error: "Profile not found"
+  });
+}
 
+const profile = items[0];
+
+res.json({
+  user: {
+    username: profile.authorMeta?.name || username,
+    avatar: profile.authorMeta?.avatar || "",
+    followers: profile.authorMeta?.fans || 0,
+    following: profile.authorMeta?.following || 0,
+    likes: profile.authorMeta?.heart || 0
+  },
+
+  videos: items.map(v => ({
+    id: v.id,
+    caption: v.text,
+    cover: v.videoMeta.coverUrl,
+    play: v.webVideoUrl
+  }))
+});
   } catch (err) {
     console.error(err);
     res.status(500).json({
