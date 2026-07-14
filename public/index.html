@@ -1372,7 +1372,7 @@ html {
       document.querySelectorAll('.process-btn').forEach((p, i) => p.classList.toggle('active', i === idx));
       document.getElementById('page-title').textContent = tabConfigs[idx].title;
       document.getElementById('page-desc').textContent = tabConfigs[idx].desc;
-      const isMulti = idx === 4;
+      const isMulti = idx === 0;
       document.getElementById('main-input').style.display = isMulti ? 'none' : 'block';
       document.getElementById('multi-input').style.display = isMulti ? 'block' : 'none';
       handleClear();
@@ -1397,7 +1397,7 @@ html {
              return;
           }
         }
-        const input = activeTab === 4 ? document.getElementById('multi-input') : document.getElementById('main-input');
+        const input = activeTab === 0 ? document.getElementById('multi-input') : document.getElementById('main-input');
         input.value = text;
         validateInput();
       } catch (err) {
@@ -1406,7 +1406,7 @@ html {
     }
 
     function validateInput() {
-      const input = activeTab === 4 ? document.getElementById('multi-input') : document.getElementById('main-input');
+      const input = activeTab === 0 ? document.getElementById('multi-input') : document.getElementById('main-input');
       const val = input.value.trim();
       document.getElementById('paste-btn').style.display = val ? 'none' : 'block';
       document.getElementById('clear-btn').style.display = val ? 'block' : 'none';
@@ -1420,7 +1420,7 @@ html {
 
     function go(targetFile) {
       // 1. Determine which input to read
-      const isMulti = activeTab === 4;
+      const isMulti = activeTab === 0;
       const input = isMulti ? document.getElementById('multi-input') : document.getElementById('main-input');
       const val = input.value.trim();
 
