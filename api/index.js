@@ -348,34 +348,36 @@ app.get("/api/profile", async (req, res) => {
   }
 
   try {
-    // Added count=30 and cursor=0 to ensure the API knows exactly what we want
-    const apiUrl = `https://tikwm.com/api/user/posts?unique_id=${encodeURIComponent(username)}&count=30&cursor=0`;
+    // 1. The original TikWM URL we want to hit
+    const targetUrl = `https://tikwm.com/api/user/posts?unique_id=${encodeURIComponent(username)}&count=30&cursor=0`;
     
-const response = await fetch(apiUrl, {
-  headers: {
-    // Cloudflare is often softer on mobile app traffic
-    "User-Agent": "com.zhiliaoapp.musically/2022405010 (Linux; U; Android 10; en_US; SM-G981B; Build/QP1A.190711.020; Cronet/58.0.2991.0)",
-    "Accept": "application/json",
-    "Accept-Language": "en-US,en;q=0.9",
-    "Referer": "https://www.tiktok.com/"
-  },
-});
+    // 2. Fetch your ScraperAPI key from environment variables
+    const SCRAPER_API_KEY = process.env.SCRAPER_API_KEY; 
 
-
+    if (!SCRAPER_API_KEY) {
+      console.error("Missing SCRAPER_API_KEY in .env");
+      return res.status(500).json({ error: "Proxy configuration missing" });
+    }
+    
+    // 3. Construct the proxy URL
+    // We send the target URL through ScraperAPI. 
+    const apiUrl = `http://api.scraperapi.com?api_key=${SCRAPER_API_KEY}&url=${encodeURIComponent(targetUrl)}`;
+    
+    const response = await fetch(apiUrl);
     const textResponse = await response.text();
     let json;
 
     try {
       json = JSON.parse(textResponse);
     } catch (parseErr) {
-      console.error("TikWM did not return JSON. Likely blocked by Cloudflare.");
-      console.error("Raw response:", textResponse.substring(0, 200)); // Logs first 200 chars
-      return res.status(500).json({ error: "API blocked request" });
+      // If we still get blocked (unlikely with ScraperAPI), log it
+      console.error("Proxy did not return JSON. Raw response:", textResponse.substring(0, 200));
+      return res.status(500).json({ error: "Upstream proxy blocked request" });
     }
 
-    // LOG THE ACTUAL API RESPONSE TO YOUR CONSOLE
-    console.log(`TikWM Response for ${username}:`, JSON.stringify({ code: json.code, msg: json.msg }));
+    console.log(`ScraperAPI Response for ${username}:`, JSON.stringify({ code: json.code, msg: json.msg }));
 
+    // 4. Map the data if successful
     if (json.code === 0 && json.data) {
       const remoteVideos = json.data.videos || json.data.list || [];
       
@@ -400,19 +402,17 @@ const response = await fetch(apiUrl, {
         return res.json(defaultResponse);
       }
     } else {
-      // If code is not 0, TikWM intentionally rejected it (e.g., rate limit)
-      return res.status(502).json({ error: json.msg || "Upstream API rejected request" });
+      return res.status(502).json({ error: json.msg || "TikWM rejected request via proxy" });
     }
 
+    // Return the safe default (empty profile) if no videos exist
     return res.json(defaultResponse);
 
   } catch (err) {
-    console.error("Profile scraper error: ", err.message);
+    console.error("Proxy scraper error: ", err.message);
     return res.status(500).json({ error: "Internal server error" });
   }
 });
-
-
 
 // ==========================================
 // 6. EXPORT APP FOR VERCEL
