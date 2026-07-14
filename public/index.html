@@ -1458,10 +1458,11 @@ html {
         });
       } else {
         // Single Link Logic (Existing)
-        if (!isTikTokLink(val)) {
-          triggerError();
-          return;
-        }
+        // Allow username for profile downloader
+if (targetFile !== "profile-download.html" && !isTikTokLink(val)) {
+  triggerError();
+  return;
+}
         
         let userHandle = "TikTok User";
         if (val.includes('@')) {
@@ -1482,7 +1483,13 @@ html {
       localStorage.setItem("tiktopHistory", JSON.stringify(history.slice(0, 50)));
 
       // 5. Redirect
-      window.location.href = targetFile + "?links=" + encodeURIComponent(val);
+      if (targetFile === "profile-download.html") {
+  window.location.href =
+    targetFile + "?username=" + encodeURIComponent(val.replace("@", ""));
+} else {
+  window.location.href =
+    targetFile + "?links=" + encodeURIComponent(val);
+      }
 
     }
 
