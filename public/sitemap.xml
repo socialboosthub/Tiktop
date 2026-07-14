@@ -3,44 +3,86 @@
 
   <url>
     <loc>https://tiktop.online/</loc>
-    <lastmod>2026-01-31</lastmod>
+    <lastmod>2026-07-14</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
-  
-  <url>
-    <loc>https://tiktop.online/guide-viral.html</loc>
-    <lastmod>2026-01-31</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-  </url>
-    <url>
-    <loc>https://tiktop.online/guide-troubleshoot.html.html</loc>
-    <lastmod>2026-01-31</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://tiktop.online/guide-audio.html</loc>
-    <lastmod>2026-01-31</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://tiktop.online/about.html</loc>
-    <lastmod>2026-01-31</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
 
-  <url><loc>https://tiktop.online/facebook.html</loc><lastmod>2026-01-31</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://tiktop.online/instagram.html</loc><lastmod>2026-01-31</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://tiktop.online/twitter.html</loc><lastmod>2026-01-31</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://tiktop.online/youtube.html</loc><lastmod>2026-01-31</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <!-- Main Pages -->
+  <url><loc>https://tiktop.online/about.html</loc><lastmod>2026-07-14</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://tiktop.online/contact.html</loc><lastmod>2026-07-14</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://tiktop.online/support.html</loc><lastmod>2026-07-14</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://tiktop.online/blogs.html</loc><lastmod>2026-07-14</lastmod><changefreq>daily</changefreq><priority>0.9</priority></url>
+  <url><loc>https://tiktop.online/history.html</loc><lastmod>2026-07-14</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
 
-  <url><loc>https://tiktop.online/contact.html</loc><lastmod>2026-01-31</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://tiktop.online/privacy.html</loc><lastmod>2026-01-31</lastmod><changefreq>monthly</changefreq><priority>0.3</priority></url>
-  <url><loc>https://tiktop.online/terms.html</loc><lastmod>2026-01-31</lastmod><changefreq>monthly</changefreq><priority>0.3</priority></url>
-  <url><loc>https://tiktop.online/dmca.html</loc><lastmod>2026-01-31</lastmod><changefreq>monthly</changefreq><priority>0.3</priority></url>
+  <!-- Downloader Pages -->
+  <url><loc>https://tiktop.online/download.html</loc><lastmod>2026-07-14</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://tiktop.online/video-download.html</loc><lastmod>2026-07-14</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://tiktop.online/mp3-download.html</loc><lastmod>2026-07-14</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://tiktop.online/story-download.html</loc><lastmod>2026-07-14</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://tiktop.online/slider-download.html</loc><lastmod>2026-07-14</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://tiktop.online/profile-download.html</loc><lastmod>2026-07-14</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+
+  <!-- Social -->
+  <url><loc>https://tiktop.online/facebook.html</loc><lastmod>2026-07-14</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://tiktop.online/instagram.html</loc><lastmod>2026-07-14</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://tiktop.online/twitter.html</loc><lastmod>2026-07-14</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://tiktop.online/youtube.html</loc><lastmod>2026-07-14</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+
+  <!-- Legal -->
+  <url><loc>https://tiktop.online/privacy.html</loc><lastmod>2026-07-14</lastmod><changefreq>yearly</changefreq><priority>0.4</priority></url>
+  <url><loc>https://tiktop.online/terms.html</loc><lastmod>2026-07-14</lastmod><changefreq>yearly</changefreq><priority>0.4</priority></url>
+  <url><loc>https://tiktop.online/dmca.html</loc><lastmod>2026-07-14</lastmod><changefreq>yearly</changefreq><priority>0.4</priority></url>
+
+  <!-- Blog Articles -->
+  <url><loc>https://tiktop.online/blog-api-guide.html</loc><lastmod>2026-07-14</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://tiktop.online/blog-best-tiktok-caption-ideas.html</loc><lastmod>2026-07-14</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://tiktop.online/blog-content-ideas.html</loc><lastmod>2026-07-14</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://tiktop.online/blog-download-tiktok-ads.html</loc><lastmod>2026-07-14</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://tiktop.online/blog-download-tiktok-hd.html</loc><lastmod>2026-07-14</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://tiktop.online/blog-download-tiktok-slideshow.html</loc><lastmod>2026-07-14</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://tiktop.online/blog-download-tiktok-stories.html</loc><lastmod>2026-07-14</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://tiktop.online/blog-downloader-vs-screen-recorder.html</loc><lastmod>2026-07-14</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://tiktop.online/blog-engagement.html</loc><lastmod>2026-07-14</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://tiktop.online/blog-everything-about-downloading-tiktok-videos.html</loc><lastmod>2026-07-14</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://tiktop.online/blog-expired-tiktok-stories.html</loc><lastmod>2026-07-14</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://tiktop.online/blog-future-downloaders.html</loc><lastmod>2026-07-14</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://tiktop.online/blog-how-to-download-private-tiktok-videos.html</loc><lastmod>2026-07-14</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://tiktop.online/blog-how-to-make-a-tiktok-video-go-viral.html</loc><lastmod>2026-07-14</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://tiktop.online/blog-increase-tiktok-followers.html</loc><lastmod>2026-07-14</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://tiktop.online/blog-is-tiktok-legal.html</loc><lastmod>2026-07-14</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://tiktop.online/blog-mp4-vs-mp3.html</loc><lastmod>2026-07-14</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://tiktop.online/blog-multiple-downloads.html</loc><lastmod>2026-07-14</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://tiktop.online/blog-organize-videos.html</loc><lastmod>2026-07-14</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://tiktop.online/blog-preserve-digital-memories.html</loc><lastmod>2026-07-14</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://tiktop.online/blog-privacy-guide.html</loc><lastmod>2026-07-14</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://tiktop.online/blog-recover-hacked-tiktok.html</loc><lastmod>2026-07-14</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://tiktop.online/blog-save-tiktok-drafts.html</loc><lastmod>2026-07-14</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://tiktop.online/blog-security.html</loc><lastmod>2026-07-14</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://tiktop.online/blog-spot-scam-downloaders.html</loc><lastmod>2026-07-14</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://tiktop.online/blog-tiktok-algorithm-secrets.html</loc><lastmod>2026-07-14</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://tiktop.online/blog-tiktok-analytics-guide.html</loc><lastmod>2026-07-14</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://tiktop.online/blog-tiktok-download-tips-and-tricks.html</loc><lastmod>2026-07-14</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://tiktop.online/blog-tiktok-downloader-faq.html</loc><lastmod>2026-07-14</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://tiktop.online/blog-tiktok-downloader-resource-center.html</loc><lastmod>2026-07-14</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://tiktop.online/blog-tiktok-formats.html</loc><lastmod>2026-07-14</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://tiktop.online/blog-tiktok-mistakes-growth.html</loc><lastmod>2026-07-14</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://tiktop.online/blog-tiktok-no-watermark.html</loc><lastmod>2026-07-14</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://tiktop.online/blog-tiktok-post-often.html</loc><lastmod>2026-07-14</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://tiktop.online/blog-tiktok-presentations.html</loc><lastmod>2026-07-14</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://tiktop.online/blog-tiktok-privacy-settings.html</loc><lastmod>2026-07-14</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://tiktop.online/blog-tiktok-shares.html</loc><lastmod>2026-07-14</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://tiktop.online/blog-tiktok-to-mp3.html</loc><lastmod>2026-07-14</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://tiktop.online/blog-tiktok-video-size.html</loc><lastmod>2026-07-14</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://tiktop.online/blog-tiktok-views.html</loc><lastmod>2026-07-14</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://tiktop.online/blog-tiktok-watch-time.html</loc><lastmod>2026-07-14</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://tiktop.online/blog-tiktok-travel-plan.html</loc><lastmod>2026-07-14</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://tiktop.online/blog-tiktok-vs-others.html</loc><lastmod>2026-07-14</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://tiktop.online/blog-tiktok-vs-snaptik.html</loc><lastmod>2026-07-14</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://tiktop.online/blog-tiktok-vs-ssstik.html</loc><lastmod>2026-07-14</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://tiktop.online/blog-troubleshoot-tiktok-downloads.html</loc><lastmod>2026-07-14</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://tiktop.online/blog-welcome-to-tiktop.html</loc><lastmod>2026-07-14</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://tiktop.online/blog-why-tiktok-doesnt-let-you-save-some-videos.html</loc><lastmod>2026-07-14</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://tiktop.online/blog-why-tiktok-is-best.html</loc><lastmod>2026-07-14</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
 
 </urlset>
