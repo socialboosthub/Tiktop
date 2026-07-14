@@ -366,10 +366,16 @@
       fetchProfile();
     }
 
-    async function fetchProfile() {
+        async function fetchProfile() {
       try {
         const res = await fetch(`/api/profile?username=${encodeURIComponent(username)}`);
         const data = await res.json();
+
+        // Safety check: if there are no videos returned on page 1, stop right here
+        if (page === 0 && (!data.videos || data.videos.length === 0)) {
+          loaderStage.innerHTML = "<p style='color:yellow;'>This profile is private or has no public videos.</p>";
+          return;
+        }
 
         if (page === 0) {
             loaderStage.style.display = "none";
@@ -380,52 +386,21 @@
         queue.push(...data.videos);
         renderPlaceholders(data.videos.length, startIndex);
         
-        // Start sequential lazy load for this batch
         loadVideo(startIndex);
       } catch (err) {
-        if (page === 0) {
-            loaderStage.innerHTML = "<p style='color:red;'>Failed to load profile. Please try again later.</p>";
-        }
+        // Ensure the loader element stays visible if displaying a red error message
+        loaderStage.style.display = "flex";
+        loaderStage.innerHTML = "<p style='color:red;'>Failed to load profile. Please try again later.</p>";
       }
     }
 
-    function renderProfile(user) {
-      profileHeader.innerHTML = `
-        <div class="profile-container">
-          <img src="${user.avatar}" class="profile-avatar" alt="${user.username}">
-          <div class="profile-info">
-            <h2>@${user.username}</h2>
-            <div class="profile-stats">
-              <div class="stat-item"><span>${user.following}</span> Following</div>
-              <div class="stat-item"><span>${user.followers}</span> Followers</div>
-              <div class="stat-item"><span>${user.likes}</span> Likes</div>
-            </div>
-          </div>
-        </div>
-      `;
-      profileHeader.style.opacity = "1";
-    }
-
-    function renderPlaceholders(count, startIndex) {
-      for (let i = 0; i < count; i++) {
-        const cardId = `card-${startIndex + i}`;
-        videosGrid.innerHTML += `
-          <div id="${cardId}" class="skeleton-card">
-            <div class="shimmer sk-thumb"></div>
-            <div class="shimmer sk-text" style="width: 100%; height: 20px; margin-top: 15px;"></div>
-            <div class="shimmer sk-text" style="width: 70%; height: 20px; margin-top: 5px; margin-bottom: 20px;"></div>
-            <div class="shimmer sk-btn"></div>
-            <div class="shimmer sk-btn"></div>
-            <div class="status">Loading...</div>
-          </div>
-        `;
-      }
-    }
     async function loadVideo(i, attempt = 1) {
+      // Stop execution if we reach the end of a completely empty list
+      if (queue.length === 0) return; 
+
       if (i >= queue.length) {
-        page++;
-        fetchProfile(); // Attempt to load next page if pagination exists
-        return;
+        // Only fetch more pages if TikWM sent data originally; otherwise, exit
+        return; 
       }
 
       const video = queue[i];
@@ -437,7 +412,6 @@
       }
 
       try {
-        // Preload Image to avoid layout shifts
         const img = new Image();
         img.src = video.cover;
         
@@ -472,6 +446,41 @@
         }
       }
     }
+
+
+    function renderProfile(user) {
+      profileHeader.innerHTML = `
+        <div class="profile-container">
+          <img src="${user.avatar}" class="profile-avatar" alt="${user.username}">
+          <div class="profile-info">
+            <h2>@${user.username}</h2>
+            <div class="profile-stats">
+              <div class="stat-item"><span>${user.following}</span> Following</div>
+              <div class="stat-item"><span>${user.followers}</span> Followers</div>
+              <div class="stat-item"><span>${user.likes}</span> Likes</div>
+            </div>
+          </div>
+        </div>
+      `;
+      profileHeader.style.opacity = "1";
+    }
+
+    function renderPlaceholders(count, startIndex) {
+      for (let i = 0; i < count; i++) {
+        const cardId = `card-${startIndex + i}`;
+        videosGrid.innerHTML += `
+          <div id="${cardId}" class="skeleton-card">
+            <div class="shimmer sk-thumb"></div>
+            <div class="shimmer sk-text" style="width: 100%; height: 20px; margin-top: 15px;"></div>
+            <div class="shimmer sk-text" style="width: 70%; height: 20px; margin-top: 5px; margin-bottom: 20px;"></div>
+            <div class="shimmer sk-btn"></div>
+            <div class="shimmer sk-btn"></div>
+            <div class="status">Loading...</div>
+          </div>
+        `;
+      }
+    }
+    
 
     // FIXED: Matches the exact structure of your story-download.html backend route
     async function downloadVideo(tiktokUrl, id, isHd) {
