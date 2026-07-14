@@ -990,10 +990,13 @@ html {
 
     <div class="gradient-box">
       <div id="main-ui">
-        <h1 id="page-title" style="font-size: 20px;">Download TikTok Videos</h1>
-        <br>
-        <p id="page-desc" style="font-size: 13px;">Paste a TikTok link to start downloading.</p>
-        <br>
+       <h1 id="page-title" style="font-size:20px;">
+TikTok Multi Downloader
+</h1>
+
+<p id="page-desc" style="font-size:13px;">
+Paste one or multiple links (one per line) to process at once.
+</p> 
         <div class="input-box" id="input-container">
           <div id="error-toast">⚠️ INVALID TIKTOK LINK!</div>
           <input type="text" id="main-input" placeholder="🔗 Paste a tiktok link" oninput="validateInput()">
@@ -1690,7 +1693,9 @@ window.addEventListener('load', () => {
     }, 4000);
   }, 1200);
 }
-
+document.addEventListener("DOMContentLoaded", () => {
+    switchTab(0);
+});
   </script>
 </body>
 </html>
