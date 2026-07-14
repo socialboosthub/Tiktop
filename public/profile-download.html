@@ -368,32 +368,13 @@
 
 async function fetchProfile() {
   try {
-    // Hit TikWM directly from the browser using the user's residential IP
-    const apiUrl = `https://tikwm.com/api/user/posts?unique_id=${encodeURIComponent(username)}&count=30&cursor=0`;
+    // 1. Call your own backend, which is now safely routed through ScraperAPI
+    const apiUrl = `/api/profile?username=${encodeURIComponent(username)}`;
     const res = await fetch(apiUrl);
-    const json = await res.json();
+    const data = await res.json();
 
-    // Re-map the data exactly like your backend used to
-    if (json.code === 0 && json.data) {
-      const remoteVideos = json.data.videos || json.data.list || [];
-      const authorInfo = remoteVideos[0]?.author || {};
-      
-      const data = {
-        user: {
-          username: authorInfo.unique_id || username,
-          avatar: authorInfo.avatar || "https://www.tiktok.com/favicon.ico",
-          followers: authorInfo.follower_count || "0",
-          following: authorInfo.following_count || "0",
-          likes: authorInfo.heart_count || authorInfo.total_favorited || "0"
-        },
-        videos: remoteVideos.map(v => ({
-          id: v.video_id || v.id,
-          caption: v.title || v.desc || "TikTok Video",
-          cover: v.cover || v.origin_cover,
-          play: `https://www.tiktok.com/@${authorInfo.unique_id || username}/video/${v.video_id || v.id}`
-        }))
-      };
-
+    // 2. Check if we got videos back (your backend already formatted this perfectly!)
+    if (data && data.videos && data.videos.length > 0) {
       if (page === 0) {
           loaderStage.style.display = "none";
           renderProfile(data.user);
@@ -410,7 +391,7 @@ async function fetchProfile() {
   } catch (err) {
     console.error(err);
     loaderStage.style.display = "flex";
-    loaderStage.innerHTML = "<p style='color:red;'>Failed to load profile. TikWM may be blocking requests.</p>";
+    loaderStage.innerHTML = "<p style='color:red;'>Failed to load profile. Check your server logs.</p>";
   }
 }
 
