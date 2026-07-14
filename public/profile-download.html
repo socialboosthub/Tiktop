@@ -421,7 +421,6 @@
         `;
       }
     }
-
     async function loadVideo(i, attempt = 1) {
       if (i >= queue.length) {
         page++;
@@ -448,10 +447,10 @@
             <div class="thumb-container"><img src="${video.cover}" class="video-thumb"></div>
             <div class="video-caption">${video.caption || "TikTok Video"}</div>
             <div class="btn-group">
-              <button class="btn-main" onclick="downloadVideo('${video.play}','tiktok_${video.id}')">
+              <button class="btn-main" onclick="downloadVideo('${video.play}', '${video.id}', false)">
                 Download Video
               </button>
-              <button class="btn-hd" onclick="downloadVideo('${video.play}','tiktok_${video.id}_4k')">
+              <button class="btn-hd" onclick="downloadVideo('${video.play}', '${video.id}', true)">
                 Download 4K
               </button>
             </div>
@@ -474,9 +473,15 @@
       }
     }
 
-    function downloadVideo(url, name) {
-      location.href = `/download?url=${encodeURIComponent(url)}&name=${name}`;
+    // FIXED: Matches the exact structure of your story-download.html backend route
+    function downloadVideo(url, id, isHd) {
+        let downloadUrl = `/download?url=${encodeURIComponent(url)}&id=${id}`;
+        if (isHd) {
+            downloadUrl += `&hd=1`;
+        }
+        window.location.href = downloadUrl;
     }
+
   </script>
 
 </body>
