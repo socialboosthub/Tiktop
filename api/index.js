@@ -329,7 +329,7 @@ app.get("/image", async (req, res) => {
 
 app.get("/api/profile", async (req, res) => {
   try {
-    const username = (req.query.username || "").replace("@", "");
+    const username = (req.query.username || "").replace("@", "").trim();
 
     if (!username) {
       return res.status(400).json({
@@ -337,56 +337,56 @@ app.get("/api/profile", async (req, res) => {
       });
     }
 
-    const actorId = "clockworks/tiktok-profile-scraper";
+    // 1. Fetch user data and recent posts from TikWM's free endpoint
+    const apiUrl = `https://tikwm.com/api/user/posts?unique_id=${encodeURIComponent(username)}`;
+    const response = await fetch(apiUrl, {
+      headers: {
+        "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 17_5 like Mac OS X)",
+      },
+    });
 
-    const response = await fetch(
-      `https://api.apify.com/v2/acts/${encodeURIComponent(actorId)}/run-sync-get-dataset-items?token=${process.env.APIFY_TOKEN}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          profiles: [username],
-          profileSections: ["videos"],
-          maxPostsPerProfile: 30
-        })
-      }
-    );
+    const json = await response.json();
 
-    const items = await response.json();
+    // Check if the API returned valid video data
+    if (json.code !== 0 || !json.data || !json.data.videos || json.data.videos.length === 0) {
+      return res.status(404).json({
+        error: "Profile not found or has no public videos"
+      });
+    }
 
-if (!items.length) {
-  return res.status(404).json({
-    error: "Profile not found"
-  });
-}
+    const videos = json.data.videos;
+    
+    // Fallback info extractor from the first video item's author object
+    const authorInfo = videos[0].author || {};
 
-const profile = items[0];
+    // 2. Format response to exactly match what your frontend expects
+    res.json({
+      user: {
+        username: authorInfo.unique_id || username,
+        avatar: authorInfo.avatar || "",
+        followers: authorInfo.follower_count || "0",
+        following: authorInfo.following_count || "0",
+        likes: authorInfo.heart_count || authorInfo.total_favorited || "0"
+      },
 
-res.json({
-  user: {
-    username: profile.authorMeta?.name || username,
-    avatar: profile.authorMeta?.avatar || "",
-    followers: profile.authorMeta?.fans || 0,
-    following: profile.authorMeta?.following || 0,
-    likes: profile.authorMeta?.heart || 0
-  },
+      // Map over the items to structure them for your frontend's lazy-loader
+      videos: videos.map(v => ({
+        id: v.video_id,
+        caption: v.title || "TikTok Video",
+        cover: v.cover,
+        // SMART FIX: Rebuild standard URL so your frontend downloadVideo() functions perfectly
+        play: `https://www.tiktok.com/@${authorInfo.unique_id || username}/video/${v.video_id}`
+      }))
+    });
 
-  videos: items.map(v => ({
-    id: v.id,
-    caption: v.text,
-    cover: v.videoMeta.coverUrl,
-    play: v.webVideoUrl
-  }))
-});
   } catch (err) {
-    console.error(err);
+    console.error("Free profile scraper error: ", err);
     res.status(500).json({
       error: "Profile scraping failed"
     });
   }
 });
+
 
 // ==========================================
 // 6. EXPORT APP FOR VERCEL
