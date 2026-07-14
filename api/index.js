@@ -327,6 +327,45 @@ app.get("/image", async (req, res) => {
   }
 });
 
+app.get("/api/profile", async (req, res) => {
+  try {
+    const username = (req.query.username || "").replace("@", "");
+
+    if (!username) {
+      return res.status(400).json({
+        error: "Username is required"
+      });
+    }
+
+    const actorId = "clockworks/tiktok-profile-scraper";
+
+    const response = await fetch(
+      `https://api.apify.com/v2/acts/${encodeURIComponent(actorId)}/run-sync-get-dataset-items?token=${process.env.APIFY_TOKEN}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          profiles: [username],
+          profileSections: ["videos"],
+          maxPostsPerProfile: 30
+        })
+      }
+    );
+
+    const data = await response.json();
+
+    res.json(data);
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      error: "Profile scraping failed"
+    });
+  }
+});
+
 // ==========================================
 // 6. EXPORT APP FOR VERCEL
 // ==========================================
