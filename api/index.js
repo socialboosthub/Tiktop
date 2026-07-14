@@ -351,12 +351,16 @@ app.get("/api/profile", async (req, res) => {
     // Added count=30 and cursor=0 to ensure the API knows exactly what we want
     const apiUrl = `https://tikwm.com/api/user/posts?unique_id=${encodeURIComponent(username)}&count=30&cursor=0`;
     
-    const response = await fetch(apiUrl, {
-      headers: {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
-        "Accept": "application/json"
-      },
-    });
+const response = await fetch(apiUrl, {
+  headers: {
+    // Cloudflare is often softer on mobile app traffic
+    "User-Agent": "com.zhiliaoapp.musically/2022405010 (Linux; U; Android 10; en_US; SM-G981B; Build/QP1A.190711.020; Cronet/58.0.2991.0)",
+    "Accept": "application/json",
+    "Accept-Language": "en-US,en;q=0.9",
+    "Referer": "https://www.tiktok.com/"
+  },
+});
+
 
     const textResponse = await response.text();
     let json;
