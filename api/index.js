@@ -329,10 +329,12 @@ app.get("/image", async (req, res) => {
 
 
 app.get("/api/profile", async (req, res) => {
-  // Always prepare a safe default fallback structure to prevent frontend crashes
+  const username = (req.query.username || "").replace("@", "").trim();
+
+  // Safety fallback
   const defaultResponse = {
     user: {
-      username: req.query.username || "User",
+      username: username || "User",
       avatar: "https://www.tiktok.com/favicon.ico", 
       followers: "0",
       following: "0",
@@ -341,27 +343,36 @@ app.get("/api/profile", async (req, res) => {
     videos: []
   };
 
+  if (!username) {
+    return res.status(400).json({ error: "Username is required" });
+  }
+
   try {
-    const username = (req.query.username || "").replace("@", "").trim();
-
-    if (!username) {
-      return res.status(400).json({ error: "Username is required" });
-    }
-
-    const apiUrl = `https://tikwm.com/api/user/posts?unique_id=${encodeURIComponent(username)}`;
+    // Added count=30 and cursor=0 to ensure the API knows exactly what we want
+    const apiUrl = `https://tikwm.com/api/user/posts?unique_id=${encodeURIComponent(username)}&count=30&cursor=0`;
     
     const response = await fetch(apiUrl, {
       headers: {
-        // Using a clean desktop user-agent prevents TikWM from blocking serverless IPs
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+        "Accept": "application/json"
       },
     });
 
-    const json = await response.json();
+    const textResponse = await response.text();
+    let json;
 
-    // TikWM uses code 0 for a successful request
+    try {
+      json = JSON.parse(textResponse);
+    } catch (parseErr) {
+      console.error("TikWM did not return JSON. Likely blocked by Cloudflare.");
+      console.error("Raw response:", textResponse.substring(0, 200)); // Logs first 200 chars
+      return res.status(500).json({ error: "API blocked request" });
+    }
+
+    // LOG THE ACTUAL API RESPONSE TO YOUR CONSOLE
+    console.log(`TikWM Response for ${username}:`, JSON.stringify({ code: json.code, msg: json.msg }));
+
     if (json.code === 0 && json.data) {
-      // Fallback fallback check: TikWM arrays alternate between .videos and .list
       const remoteVideos = json.data.videos || json.data.list || [];
       
       if (remoteVideos.length > 0) {
@@ -384,16 +395,19 @@ app.get("/api/profile", async (req, res) => {
 
         return res.json(defaultResponse);
       }
+    } else {
+      // If code is not 0, TikWM intentionally rejected it (e.g., rate limit)
+      return res.status(502).json({ error: json.msg || "Upstream API rejected request" });
     }
 
-    // If profile is empty/private, return the safe fallback structure instead of a 404 error code
     return res.json(defaultResponse);
 
   } catch (err) {
-    console.error("Free profile scraper error: ", err);
-    return res.json(defaultResponse);
+    console.error("Profile scraper error: ", err.message);
+    return res.status(500).json({ error: "Internal server error" });
   }
 });
+
 
 
 // ==========================================
