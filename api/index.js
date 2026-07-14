@@ -402,7 +402,8 @@ app.get("/api/profile", async (req, res) => {
         id: v.video_id || v.id,
         caption: v.title || v.desc || "TikTok Video",
         cover: v.cover || v.origin_cover,
-        play: v.play || `https://www.tiktok.com/@${username}/video/${v.video_id || v.id}`
+        // FIX: Always use the official TikTok URL format so your /api endpoint can parse it correctly
+        play: `https://www.tiktok.com/@${username}/video/${v.video_id || v.id}`
       }));
     }
 
@@ -431,3 +432,4 @@ app.get("/api/profile", async (req, res) => {
 // 6. EXPORT APP FOR VERCEL
 // ==========================================
 module.exports = app;
+
