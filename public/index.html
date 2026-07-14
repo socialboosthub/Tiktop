@@ -981,11 +981,11 @@ html {
       </div>
 
     <div class="tab-container" id="tabs">
-      <button class="filter-button selected" onclick="switchTab(0)">Video</button>
+      <button class="filter-button selected" onclick="switchTab(0)">Multi</button>
       <button class="filter-button" onclick="switchTab(1)">Mp3</button>
       <button class="filter-button" onclick="switchTab(2)">Story</button>
       <button class="filter-button" onclick="switchTab(3)">Slider</button>
-      <button class="filter-button" onclick="switchTab(4)">Multi</button>
+      <button class="filter-button" onclick="switchTab(4)">Profile</button>
     </div>
 
     <div class="gradient-box">
@@ -1006,11 +1006,11 @@ html {
 
         
         <div class="glow-wrapper">
-          <button id="pbtn-0" class="process-btn active" onclick="go('profile-download.html')">Process video link</button>
+          <button id="pbtn-0" class="process-btn active" onclick="go('download.html')">Process Multi Links</button>
           <button id="pbtn-1" class="process-btn" onclick="go('mp3-download.html')">Process Link</button>
           <button id="pbtn-2" class="process-btn" onclick="go('story-download.html')">Process Story Link</button>
           <button id="pbtn-3" class="process-btn" onclick="go('slider-download.html')">Process Slider Link</button>
-          <button id="pbtn-4" class="process-btn" onclick="go('download.html')">Process Multi Links</button>
+          <button id="pbtn-4" class="process-btn" onclick="go('profile-download.html')">Process profile username</button>
         </div>
 <br>
 
@@ -1323,9 +1323,9 @@ html {
 
   <script>
     const tabConfigs = [{
-        title: "Tiktop Video Downloader",
-        desc: "Paste a video link to process and download."
-      },
+        title: "TikTok Multi Downloader",
+        desc: "Paste one or multiple links (one per line) to process at once."
+    },
       {
         title: "TikTok MP3 Downloader",
         desc: "Download audio for your tiktok video."
@@ -1339,8 +1339,8 @@ html {
         desc: "Download all images in a tiktok slideshow."
       },
       {
-        title: "TikTok Multi Downloader",
-        desc: "Paste multiple links (one per line) to process at once."
+        title: "Tiktop Profile Fetcher",
+        desc: "Paste a username to process his videos."
       }
     ];
     let activeTab = 0;
