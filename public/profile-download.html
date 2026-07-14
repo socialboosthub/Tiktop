@@ -192,6 +192,49 @@
         .profile-container { flex-direction: column; text-align: center; }
         .profile-stats { justify-content: center; }
     }
+        /* ================= PAGINATION STYLES ================= */
+    .pagination-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      margin: 40px 0;
+      flex-wrap: wrap;
+    }
+    .page-btn {
+      background: #111;
+      color: #fff;
+      border: 1px solid #333;
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.2s ease;
+      width: auto !important; /* Overrides default full-width buttons */
+    }
+    .page-btn:hover:not(:disabled) {
+      border-color: var(--cyan);
+      color: var(--cyan);
+    }
+    .page-btn.active {
+      background: linear-gradient(45deg, var(--pink), var(--cyan));
+      color: #000;
+      border: none;
+    }
+    .page-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+    body.light-mode .page-btn {
+      background: #fff;
+      color: #000;
+      border-color: #ddd;
+    }
+    body.light-mode .page-btn.active {
+      color: #fff;
+      background: linear-gradient(45deg, var(--pink), #000);
+    }
+
   </style>
 </head>
 <body>
@@ -350,11 +393,16 @@
   </script>
 
   <script>
-    const params = new URLSearchParams(location.search);
+    
+            const params = new URLSearchParams(location.search);
     const username = params.get("username");
 
-    let page = 0;
+    // Pagination State Configuration
+    let currentPage = 1;
+    let cursors = ["0"]; // cursors[0] is always "0" for Page 1
+    let hasMore = false;
     let queue = [];
+    let userCache = null; // Cache stats so switching pages doesn't clear the header
     
     const loaderStage = document.getElementById("loader-stage");
     const profileHeader = document.getElementById("profile-header");
@@ -366,44 +414,75 @@
       fetchProfile();
     }
 
-async function fetchProfile() {
-  try {
-    // 1. Call your own backend, which is now safely routed through ScraperAPI
-    const apiUrl = `/api/profile?username=${encodeURIComponent(username)}`;
-    const res = await fetch(apiUrl);
-    const data = await res.json();
+    async function fetchProfile() {
+      // Clear grid to load next page smoothly
+      videosGrid.innerHTML = "";
+      const currentCursor = cursors[currentPage - 1] || "0";
 
-    // 2. Check if we got videos back (your backend already formatted this perfectly!)
-    if (data && data.videos && data.videos.length > 0) {
-      if (page === 0) {
-          loaderStage.style.display = "none";
-          renderProfile(data.user);
+      // On first load, show the big neon loader
+      if (currentPage === 1 && !userCache) {
+        loaderStage.style.display = "flex";
+        profileHeader.style.opacity = "0";
+      } else {
+        loaderStage.style.display = "none";
       }
 
-      const startIndex = queue.length;
-      queue.push(...data.videos);
-      renderPlaceholders(data.videos.length, startIndex);
-      loadVideo(startIndex);
-      
-    } else {
-       loaderStage.innerHTML = "<p style='color:yellow;'>This profile is private or empty.</p>";
-    }
-  } catch (err) {
-    console.error(err);
-    loaderStage.style.display = "flex";
-    loaderStage.innerHTML = "<p style='color:red;'>Failed to load profile. Check your server logs.</p>";
-  }
-}
+      // Render 7 skeletons to indicate loading states
+      renderPlaceholders(7, 0);
 
+      try {
+        const apiUrl = `/api/profile?username=${encodeURIComponent(username)}&cursor=${currentCursor}`;
+        const res = await fetch(apiUrl);
+        const data = await res.json();
+
+        if (data && data.videos && data.videos.length > 0) {
+          loaderStage.style.display = "none";
+          
+          // Render stats only if available (your API only sends user details on first cursor)
+          if (data.user) {
+            userCache = data.user;
+            renderProfile(userCache);
+          } else if (userCache) {
+            renderProfile(userCache);
+          }
+
+          // Read page states
+          hasMore = data.pagination?.hasMore || false;
+          const nextCursor = data.pagination?.nextCursor || "0";
+
+          // If there is more content, and we haven't logged the next cursor yet, save it
+          if (hasMore && nextCursor !== "0" && cursors.length === currentPage) {
+            cursors.push(nextCursor);
+          }
+
+          // Clear skeleton cards and re-render the precise amount
+          videosGrid.innerHTML = "";
+          renderPlaceholders(data.videos.length, 0);
+
+          // Reset current page video loading process
+          queue = data.videos;
+          loadVideo(0);
+
+          // Render updated page numbers below the grid
+          renderPagination();
+          
+        } else {
+          videosGrid.innerHTML = "";
+          loaderStage.style.display = "flex";
+          loaderStage.innerHTML = "<p style='color:yellow;'>This page is empty or private.</p>";
+          renderPagination();
+        }
+      } catch (err) {
+        console.error(err);
+        videosGrid.innerHTML = "";
+        loaderStage.style.display = "flex";
+        loaderStage.innerHTML = "<p style='color:red;'>Failed to load profile. Check your server logs.</p>";
+      }
+    }
 
     async function loadVideo(i, attempt = 1) {
-      // Stop execution if we reach the end of a completely empty list
       if (queue.length === 0) return; 
-
-      if (i >= queue.length) {
-        // Only fetch more pages if TikWM sent data originally; otherwise, exit
-        return; 
-      }
+      if (i >= queue.length) return;
 
       const video = queue[i];
       const card = document.getElementById(`card-${i}`);
@@ -420,7 +499,7 @@ async function fetchProfile() {
         img.onload = () => {
           card.className = "card";
           card.innerHTML = `
-            <div class="thumb-container"><img src="${video.cover}" class="video-thumb"></div>
+            <div class="thumb-container"><img src="${video.cover}" class="video-thumb" alt="Thumbnail"></div>
             <div class="video-caption">${video.caption || "TikTok Video"}</div>
             <div class="btn-group">
               <button class="btn-main" onclick="downloadVideo('${video.play}', '${video.id}', false)">
@@ -432,7 +511,7 @@ async function fetchProfile() {
             </div>
             <div class="status">Ready</div>
           `;
-          setTimeout(() => loadVideo(i + 1), 800);
+          setTimeout(() => loadVideo(i + 1), 500); // Sequence offset speeded to 500ms
         };
 
         img.onerror = () => { throw new Error("Image failed to load"); }
@@ -440,15 +519,14 @@ async function fetchProfile() {
       } catch (e) {
         const statusEl = card.querySelector(".status");
         if (attempt < 3) {
-          if(statusEl) statusEl.textContent = "Retrying…";
+          if (statusEl) statusEl.textContent = "Retrying…";
           setTimeout(() => loadVideo(i, attempt + 1), 1500);
         } else {
-          if(statusEl) statusEl.textContent = "Could not reach server";
+          if (statusEl) statusEl.textContent = "Could not reach server";
           setTimeout(() => loadVideo(i + 1), 800);
         }
       }
     }
-
 
     function renderProfile(user) {
       profileHeader.innerHTML = `
@@ -457,9 +535,9 @@ async function fetchProfile() {
           <div class="profile-info">
             <h2>@${user.username}</h2>
             <div class="profile-stats">
-              <div class="stat-item"><span>${user.following}</span> Following</div>
-              <div class="stat-item"><span>${user.followers}</span> Followers</div>
-              <div class="stat-item"><span>${user.likes}</span> Likes</div>
+              <div class="stat-item"><span>${Number(user.following).toLocaleString()}</span> Following</div>
+              <div class="stat-item"><span>${Number(user.followers).toLocaleString()}</span> Followers</div>
+              <div class="stat-item"><span>${Number(user.likes).toLocaleString()}</span> Likes</div>
             </div>
           </div>
         </div>
@@ -482,37 +560,80 @@ async function fetchProfile() {
         `;
       }
     }
-    
 
-    // FIXED: Matches the exact structure of your story-download.html backend route
+    function renderPagination() {
+      let html = `<div class="pagination-container">`;
+      
+      // Prev Button
+      html += `
+        <button class="page-btn" onclick="changePage(${currentPage - 1})" ${currentPage === 1 ? "disabled" : ""}>
+          &laquo; Prev
+        </button>
+      `;
+
+      // Page numbers (Renders all unlocked pages)
+      for (let i = 1; i <= cursors.length; i++) {
+        html += `
+          <button class="page-btn ${i === currentPage ? "active" : ""}" onclick="changePage(${i})">
+            ${i}
+          </button>
+        `;
+      }
+
+      // Next Button
+      html += `
+        <button class="page-btn" onclick="changePage(${currentPage + 1})" ${!hasMore ? "disabled" : ""}>
+          Next &raquo;
+        </button>
+      `;
+
+      html += `</div>`;
+      
+      // Inject navigation below the video grid
+      let pagContainer = document.getElementById("pagination-wrapper");
+      if (!pagContainer) {
+        pagContainer = document.createElement("div");
+        pagContainer.id = "pagination-wrapper";
+        videosGrid.parentNode.insertBefore(pagContainer, videosGrid.nextSibling);
+      }
+      pagContainer.innerHTML = html;
+    }
+
+    function changePage(newPage) {
+      if (newPage < 1 || newPage > cursors.length + (hasMore ? 1 : 0)) return;
+      if (newPage > cursors.length && !hasMore) return;
+
+      currentPage = newPage;
+      fetchProfile();
+      
+      // Auto-scroll screen back up to the profile stats
+      profileHeader.scrollIntoView({ behavior: "smooth" });
+    }
+
     async function downloadVideo(tiktokUrl, id, isHd) {
-  try {
-    const res = await fetch(`/api?url=${encodeURIComponent(tiktokUrl)}`);
-    const json = await res.json();
+      try {
+        const res = await fetch(`/api?url=${encodeURIComponent(tiktokUrl)}`);
+        const json = await res.json();
 
-    if (!json.data) {
-      alert("Failed to fetch download link.");
-      return;
+        if (!json.data) {
+          alert("Failed to fetch download link.");
+          return;
+        }
+
+        const downloadLink = isHd ? (json.data.hdplay || json.data.play) : json.data.play;
+
+        if (!downloadLink) {
+          alert("Download link unavailable.");
+          return;
+        }
+
+        window.location.href = `/download?url=${encodeURIComponent(downloadLink)}&id=${id}${isHd ? "&hd=1" : ""}`;
+      } catch (err) {
+        console.error(err);
+        alert("Download failed.");
+      }
     }
 
-    // HD if available, otherwise normal
-    const downloadLink = isHd
-      ? (json.data.hdplay || json.data.play)
-      : json.data.play;
-
-    if (!downloadLink) {
-      alert("Download link unavailable.");
-      return;
-    }
-
-    window.location.href =
-      `/download?url=${encodeURIComponent(downloadLink)}&id=${id}${isHd ? "&hd=1" : ""}`;
-
-  } catch (err) {
-    console.error(err);
-    alert("Download failed.");
-  }
-    }
 
   </script>
 
