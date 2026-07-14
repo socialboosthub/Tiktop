@@ -474,12 +474,33 @@
     }
 
     // FIXED: Matches the exact structure of your story-download.html backend route
-    function downloadVideo(url, id, isHd) {
-        let downloadUrl = `/download?url=${encodeURIComponent(url)}&id=${id}`;
-        if (isHd) {
-            downloadUrl += `&hd=1`;
-        }
-        window.location.href = downloadUrl;
+    async function downloadVideo(tiktokUrl, id, isHd) {
+  try {
+    const res = await fetch(`/api?url=${encodeURIComponent(tiktokUrl)}`);
+    const json = await res.json();
+
+    if (!json.data) {
+      alert("Failed to fetch download link.");
+      return;
+    }
+
+    // HD if available, otherwise normal
+    const downloadLink = isHd
+      ? (json.data.hdplay || json.data.play)
+      : json.data.play;
+
+    if (!downloadLink) {
+      alert("Download link unavailable.");
+      return;
+    }
+
+    window.location.href =
+      `/download?url=${encodeURIComponent(downloadLink)}&id=${id}${isHd ? "&hd=1" : ""}`;
+
+  } catch (err) {
+    console.error(err);
+    alert("Download failed.");
+  }
     }
 
   </script>
