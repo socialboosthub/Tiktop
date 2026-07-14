@@ -328,89 +328,71 @@ app.get("/image", async (req, res) => {
 });
 
 
-app.get("/api/profile", async (req, res) => {
-  const username = (req.query.username || "").replace("@", "").trim();
-
-  // Safety fallback
-  const defaultResponse = {
-    user: {
-      username: username || "User",
-      avatar: "https://www.tiktok.com/favicon.ico", 
-      followers: "0",
-      following: "0",
-      likes: "0"
-    },
-    videos: []
-  };
-
+app.get('/api/profile', async (req, res) => {
+  const { username } = req.query;
   if (!username) {
-    return res.status(400).json({ error: "Username is required" });
+    return res.status(400).json({ error: 'Username is required' });
   }
 
+  // Ensure the username has the '@' prefix for TikWM API consistency
+  const formattedUsername = username.startsWith('@') ? username : `@${username}`;
+
   try {
-    // 1. The original TikWM URL we want to hit
-    const targetUrl = `https://tikwm.com/api/user/posts?unique_id=${encodeURIComponent(username)}&count=30&cursor=0`;
-    
-    // 2. Fetch your ScraperAPI key from environment variables
-    const SCRAPER_API_KEY = process.env.SCRAPER_API_KEY; 
+    // Fetch both posts and user stats in parallel to minimize load times
+    const [postsRes, infoRes] = await Promise.allSettled([
+      axios.get(`https://www.tikwm.com/api/user/posts?unique_id=${formattedUsername}`),
+      axios.get(`https://www.tikwm.com/api/user/info?unique_id=${formattedUsername}`)
+    ]);
 
-    if (!SCRAPER_API_KEY) {
-      console.error("Missing SCRAPER_API_KEY in .env");
-      return res.status(500).json({ error: "Proxy configuration missing" });
-    }
-    
-    // 3. Construct the proxy URL
-    // We send the target URL through ScraperAPI. 
-    const apiUrl = `http://api.scraperapi.com?api_key=${SCRAPER_API_KEY}&url=${encodeURIComponent(targetUrl)}`;
-    
-    const response = await fetch(apiUrl);
-    const textResponse = await response.text();
-    let json;
+    let videos = [];
+    let authorInfo = {};
+    let stats = { followerCount: 0, followingCount: 0, heartCount: 0 };
 
-    try {
-      json = JSON.parse(textResponse);
-    } catch (parseErr) {
-      // If we still get blocked (unlikely with ScraperAPI), log it
-      console.error("Proxy did not return JSON. Raw response:", textResponse.substring(0, 200));
-      return res.status(500).json({ error: "Upstream proxy blocked request" });
+    // 1. Process Video Posts Response
+    if (postsRes.status === 'fulfilled' && postsRes.value.data && postsRes.value.data.code === 0) {
+      videos = postsRes.value.data.data.videos || [];
+      authorInfo = videos[0]?.author || {};
     }
 
-    console.log(`ScraperAPI Response for ${username}:`, JSON.stringify({ code: json.code, msg: json.msg }));
-
-    // 4. Map the data if successful
-    if (json.code === 0 && json.data) {
-      const remoteVideos = json.data.videos || json.data.list || [];
-      
-      if (remoteVideos.length > 0) {
-        const authorInfo = remoteVideos[0].author || {};
-        
-        defaultResponse.user = {
-          username: authorInfo.unique_id || username,
-          avatar: authorInfo.avatar || "",
-          followers: authorInfo.follower_count || "0",
-          following: authorInfo.following_count || "0",
-          likes: authorInfo.heart_count || authorInfo.total_favorited || "0"
-        };
-
-        defaultResponse.videos = remoteVideos.map(v => ({
-          id: v.video_id || v.id,
-          caption: v.title || v.desc || "TikTok Video",
-          cover: v.cover || v.origin_cover,
-          play: `https://www.tiktok.com/@${authorInfo.unique_id || username}/video/${v.video_id || v.id}`
-        }));
-
-        return res.json(defaultResponse);
+    // 2. Process User Stats & Profile Info Response
+    if (infoRes.status === 'fulfilled' && infoRes.value.data && infoRes.value.data.code === 0) {
+      const infoData = infoRes.value.data.data;
+      if (infoData) {
+        stats = infoData.stats || stats;
+        // Use higher resolution profile data if available
+        if (infoData.user) {
+          authorInfo.unique_id = infoData.user.uniqueId || authorInfo.unique_id;
+          authorInfo.avatar = infoData.user.avatarMedium || infoData.user.avatarThumb || authorInfo.avatar;
+        }
       }
-    } else {
-      return res.status(502).json({ error: json.msg || "TikWM rejected request via proxy" });
     }
 
-    // Return the safe default (empty profile) if no videos exist
-    return res.json(defaultResponse);
+    // Fallback error if we couldn't retrieve anything at all
+    if (videos.length === 0 && !authorInfo.unique_id) {
+      return res.status(404).json({ error: 'User not found or account is private.' });
+    }
 
-  } catch (err) {
-    console.error("Proxy scraper error: ", err.message);
-    return res.status(500).json({ error: "Internal server error" });
+    // 3. Send combined payload back to your frontend
+    res.json({
+      user: {
+        username: authorInfo.unique_id || username.replace('@', ''),
+        avatar: authorInfo.avatar || "",
+        followers: stats.followerCount || 0,
+        following: stats.followingCount || 0,
+        likes: stats.heartCount || 0
+      },
+      videos: videos.map(video => ({
+        id: video.video_id,
+        title: video.title,
+        cover: video.cover,
+        play: video.play,
+        wmplay: video.wmplay
+      }))
+    });
+
+  } catch (error) {
+    console.error('Error fetching TikTok profile data:', error.message);
+    res.status(500).json({ error: 'Failed to fetch TikTok profile details.' });
   }
 });
 
