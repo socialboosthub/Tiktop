@@ -130,22 +130,22 @@ body {
 
 <script>
 const params = new URLSearchParams(location.search);
-const profileUrl = params.get("links");
+const username = params.get("username");
 
 let page = 0;
 let queue = [];
 let index = 0;
 
-if (!profileUrl) {
-  alert("No profile URL");
+if (!username) {
+  alert("No username");
 } else {
-  fetchProfile();
+ fetchProfile();
 }
 
 async function fetchProfile() {
   const res = await fetch(
-    `/profile?url=${encodeURIComponent(profileUrl)}&page=${page}`
-  );
+  `/api/profile?username=${encodeURIComponent(username)}`
+);
   const data = await res.json();
 
   if (page === 0) renderProfile(data.user);
