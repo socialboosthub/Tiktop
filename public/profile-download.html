@@ -368,35 +368,49 @@
 
 async function fetchProfile() {
   try {
-    const res = await fetch(`/api/profile?username=${encodeURIComponent(username)}`);
-    const data = await res.json();
+    // Hit TikWM directly from the browser using the user's residential IP
+    const apiUrl = `https://tikwm.com/api/user/posts?unique_id=${encodeURIComponent(username)}&count=30&cursor=0`;
+    const res = await fetch(apiUrl);
+    const json = await res.json();
 
-    // Check if the backend threw a specific error (e.g., API blocked us)
-    if (!res.ok || data.error) {
-      loaderStage.style.display = "flex";
-      loaderStage.innerHTML = `<p style='color:red;'>Server Error: ${data.error || 'Could not fetch profile'}</p>`;
-      return;
+    // Re-map the data exactly like your backend used to
+    if (json.code === 0 && json.data) {
+      const remoteVideos = json.data.videos || json.data.list || [];
+      const authorInfo = remoteVideos[0]?.author || {};
+      
+      const data = {
+        user: {
+          username: authorInfo.unique_id || username,
+          avatar: authorInfo.avatar || "https://www.tiktok.com/favicon.ico",
+          followers: authorInfo.follower_count || "0",
+          following: authorInfo.following_count || "0",
+          likes: authorInfo.heart_count || authorInfo.total_favorited || "0"
+        },
+        videos: remoteVideos.map(v => ({
+          id: v.video_id || v.id,
+          caption: v.title || v.desc || "TikTok Video",
+          cover: v.cover || v.origin_cover,
+          play: `https://www.tiktok.com/@${authorInfo.unique_id || username}/video/${v.video_id || v.id}`
+        }))
+      };
+
+      if (page === 0) {
+          loaderStage.style.display = "none";
+          renderProfile(data.user);
+      }
+
+      const startIndex = queue.length;
+      queue.push(...data.videos);
+      renderPlaceholders(data.videos.length, startIndex);
+      loadVideo(startIndex);
+      
+    } else {
+       loaderStage.innerHTML = "<p style='color:yellow;'>This profile is private or empty.</p>";
     }
-
-    // Now we can safely assume an empty array means a private/empty profile
-    if (page === 0 && (!data.videos || data.videos.length === 0)) {
-      loaderStage.innerHTML = "<p style='color:yellow;'>This profile is private or has no public videos.</p>";
-      return;
-    }
-
-    if (page === 0) {
-        loaderStage.style.display = "none";
-        renderProfile(data.user);
-    }
-
-    const startIndex = queue.length;
-    queue.push(...data.videos);
-    renderPlaceholders(data.videos.length, startIndex);
-    
-    loadVideo(startIndex);
   } catch (err) {
+    console.error(err);
     loaderStage.style.display = "flex";
-    loaderStage.innerHTML = "<p style='color:red;'>Failed to communicate with the server. Please try again later.</p>";
+    loaderStage.innerHTML = "<p style='color:red;'>Failed to load profile. TikWM may be blocking requests.</p>";
   }
 }
 
