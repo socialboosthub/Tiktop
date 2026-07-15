@@ -327,12 +327,14 @@ app.get("/image", async (req, res) => {
   }
 });
 
-// Profile downloader (Enhanced with Smart Proxy Fallback and domain fix)
+// Profile downloader (Enhanced with Proxy Rotation, Anti-Bot Headers, and Timeout Fixes)
 app.get("/api/profile", async (req, res) => {
   let username = (req.query.username || "").trim();
   const cursor = req.query.cursor || "0";
   let secUid = req.query.secUid || ""; 
-  const count = 12;
+  
+  // REDUCED FROM 12 TO 10: This speeds up the request and helps prevent your proxy from hitting a 500 timeout error
+  const count = 10; 
 
   if (!username) {
     return res.status(400).json({ error: "Username is required" });
@@ -340,47 +342,63 @@ app.get("/api/profile", async (req, res) => {
 
   username = username.replace("@", "");
 
-  const MY_SCRAPER_URL = process.env.FREE_SCRAPER_API_URL || "https://api-i7hfcyh1v-socialboosthubs-projects.vercel.app";
+  // ==========================================
+  // PROXY ROTATION ARRAY
+  // Add all 10 of your proxy base URLs here
+  // ==========================================
+  const PROXY_LIST = [
+    process.env.FREE_SCRAPER_API_URL || "https://api-i7hfcyh1v-socialboosthubs-projects.vercel.app",
+    // "https://your-second-proxy.vercel.app",
+    // "https://your-third-proxy.vercel.app",
+  ];
 
-  // NEW SMART FETCH: Tries proxy, falls back to direct fetch if proxy 500s.
+  const proxyApiKey = process.env.SCRAPER_API_KEY || "";
+  const apiKeyParam = proxyApiKey ? `&api_key=${proxyApiKey}` : "";
+
   const fetchData = async (endpoint) => {
     const cacheBuster = endpoint.includes('?') ? `&_t=${Date.now()}` : `?_t=${Date.now()}`;
-    
-    // FIX 1: Removed 'www.' - tikwm base domain is much more stable without it
     const targetUrl = `https://tikwm.com${endpoint}${cacheBuster}`;
     
-    const cleanBaseUrl = MY_SCRAPER_URL.replace(/\/$/, "");
-    const proxyApiKey = process.env.SCRAPER_API_KEY || "";
-    const apiKeyParam = proxyApiKey ? `&api_key=${proxyApiKey}` : "";
-    const proxyUrl = `${cleanBaseUrl}/api/scrape?url=${encodeURIComponent(targetUrl)}${apiKeyParam}`;
-
-    try {
-      // Attempt 1: Proxy
-      const proxyRes = await fetch(proxyUrl);
-      if (proxyRes.ok) {
-        const rawText = await proxyRes.text();
-        let parsed;
-        try { parsed = JSON.parse(rawText); } catch(e) {}
+    // 1. Loop through available proxies
+    for (let i = 0; i < PROXY_LIST.length; i++) {
+      const cleanBaseUrl = PROXY_LIST[i].replace(/\/$/, "");
+      const proxyUrl = `${cleanBaseUrl}/api/scrape?url=${encodeURIComponent(targetUrl)}${apiKeyParam}`;
+      
+      try {
+        console.log(`[Attempt ${i+1}] Trying Proxy: ${cleanBaseUrl}`);
+        const proxyRes = await fetch(proxyUrl);
         
-        if (parsed) {
-          if (parsed.html) {
-             return typeof parsed.html === "string" ? JSON.parse(parsed.html) : parsed.html;
+        if (proxyRes.ok) {
+          const rawText = await proxyRes.text();
+          let parsed;
+          try { parsed = JSON.parse(rawText); } catch(e) {}
+          
+          if (parsed) {
+            if (parsed.html) {
+               return typeof parsed.html === "string" ? JSON.parse(parsed.html) : parsed.html;
+            }
+            return parsed; // Success! Return data and exit the loop.
           }
-          return parsed;
+        } else {
+          console.log(`[Attempt ${i+1}] Proxy failed with ${proxyRes.status}, trying next...`);
         }
-      } else {
-         console.log(`Proxy returned ${proxyRes.status}, switching to direct fetch...`);
+      } catch (err) {
+        console.error(`[Attempt ${i+1}] Proxy fetch error:`, err.message);
       }
-    } catch (err) {
-      console.error("Proxy fetch error:", err.message);
     }
 
-    // Attempt 2: Direct Fallback (Bypass failing proxy)
-    console.log(`Fetching directly from: ${targetUrl}`);
+    // 2. Direct Fallback (If ALL proxies fail)
+    console.log(`[Fallback] All proxies failed. Fetching directly from: ${targetUrl}`);
     try {
       const directRes = await fetch(targetUrl, {
         headers: {
-          "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+          // Beefed up headers to bypass the 403 Forbidden Cloudflare block
+          "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+          "Accept": "application/json, text/plain, */*",
+          "Accept-Language": "en-US,en;q=0.9",
+          "Referer": "https://www.tikwm.com/",
+          "Origin": "https://www.tikwm.com",
+          "Connection": "keep-alive"
         }
       });
       if (!directRes.ok) return { error: `Direct HTTP ${directRes.status}` };
@@ -458,6 +476,7 @@ app.get("/api/profile", async (req, res) => {
     res.status(500).json({ error: "Internal Server Exception loading TikTok details." });
   }
 });
+
 
 
 
