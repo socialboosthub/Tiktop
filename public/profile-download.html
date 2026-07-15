@@ -428,9 +428,12 @@ async function fetchProfile() {
   renderPlaceholders(7, 0);
 
   try {
-    // Append secUid to the URL if we have it cached
-const apiUrl = `/api/profile?username=${encodeURIComponent(username)}&cursor=${currentCursor}${secUidCache ? '&secUid=' + encodeURIComponent(secUidCache) : ''}`;
+        // Append secUid to the URL if we have it cached
+    const apiUrl = `/api/profile?username=${encodeURIComponent(username)}&cursor=${currentCursor}${secUidCache ? '&secUid=' + encodeURIComponent(secUidCache) : ''}`;
 
+    // YOU WERE MISSING THIS LINE:
+    const res = await fetch(apiUrl); 
+    
     const data = await res.json();
 
     if (data && !data.error) {
