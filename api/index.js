@@ -327,11 +327,11 @@ app.get("/image", async (req, res) => {
   }
 });
 
-// Profile downloader (Enhanced with rate-limit bypass and caching fix)
+// Profile downloader (Enhanced with Smart Proxy Fallback and domain fix)
 app.get("/api/profile", async (req, res) => {
   let username = (req.query.username || "").trim();
   const cursor = req.query.cursor || "0";
-  let secUid = req.query.secUid || ""; // Accept secUid from frontend cache
+  let secUid = req.query.secUid || ""; 
   const count = 12;
 
   if (!username) {
@@ -342,42 +342,53 @@ app.get("/api/profile", async (req, res) => {
 
   const MY_SCRAPER_URL = process.env.FREE_SCRAPER_API_URL || "https://api-i7hfcyh1v-socialboosthubs-projects.vercel.app";
 
-  const fetchThroughProxy = async (endpoint) => {
-    // FIX 1: Add a cache-buster to prevent Next.js from caching empty responses
+  // NEW SMART FETCH: Tries proxy, falls back to direct fetch if proxy 500s.
+  const fetchData = async (endpoint) => {
     const cacheBuster = endpoint.includes('?') ? `&_t=${Date.now()}` : `?_t=${Date.now()}`;
-    const targetUrl = `https://www.tikwm.com${endpoint}${cacheBuster}`;
-    const cleanBaseUrl = MY_SCRAPER_URL.replace(/\/$/, "");
     
+    // FIX 1: Removed 'www.' - tikwm base domain is much more stable without it
+    const targetUrl = `https://tikwm.com${endpoint}${cacheBuster}`;
+    
+    const cleanBaseUrl = MY_SCRAPER_URL.replace(/\/$/, "");
     const proxyApiKey = process.env.SCRAPER_API_KEY || "";
     const apiKeyParam = proxyApiKey ? `&api_key=${proxyApiKey}` : "";
-    const apiUrl = `${cleanBaseUrl}/api/scrape?url=${encodeURIComponent(targetUrl)}${apiKeyParam}`;
+    const proxyUrl = `${cleanBaseUrl}/api/scrape?url=${encodeURIComponent(targetUrl)}${apiKeyParam}`;
 
     try {
-      const response = await fetch(apiUrl);
-      if (!response.ok) return { error: `Proxy HTTP ${response.status}` };
-
-      const rawText = await response.text();
-      let scraperRes;
-      
-      try { 
-        scraperRes = JSON.parse(rawText); 
-      } catch (e) { 
-        return { error: "Proxy did not return JSON.", raw: rawText.substring(0, 200) }; 
-      }
-      
-      if (scraperRes && scraperRes.code !== undefined) {
-        return scraperRes; 
-      }
-      if (scraperRes && scraperRes.html) {
-        try {
-          return typeof scraperRes.html === "string" ? JSON.parse(scraperRes.html) : scraperRes.html;
-        } catch (e) { 
-          return { error: "Nested proxy response parsing failed." }; 
+      // Attempt 1: Proxy
+      const proxyRes = await fetch(proxyUrl);
+      if (proxyRes.ok) {
+        const rawText = await proxyRes.text();
+        let parsed;
+        try { parsed = JSON.parse(rawText); } catch(e) {}
+        
+        if (parsed) {
+          if (parsed.html) {
+             return typeof parsed.html === "string" ? JSON.parse(parsed.html) : parsed.html;
+          }
+          return parsed;
         }
+      } else {
+         console.log(`Proxy returned ${proxyRes.status}, switching to direct fetch...`);
       }
-      return scraperRes; 
     } catch (err) {
-      return { error: err.message };
+      console.error("Proxy fetch error:", err.message);
+    }
+
+    // Attempt 2: Direct Fallback (Bypass failing proxy)
+    console.log(`Fetching directly from: ${targetUrl}`);
+    try {
+      const directRes = await fetch(targetUrl, {
+        headers: {
+          "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+        }
+      });
+      if (!directRes.ok) return { error: `Direct HTTP ${directRes.status}` };
+      
+      const rawText = await directRes.text();
+      return JSON.parse(rawText);
+    } catch (err) {
+      return { error: `Direct fetch failed: ${err.message}` };
     }
   };
 
@@ -387,11 +398,11 @@ app.get("/api/profile", async (req, res) => {
 
     // STEP 1: Fetch user stats and extract secUid
     if (cursor === "0" || !secUid) {
-      infoData = await fetchThroughProxy(`/api/user/info?unique_id=@${username}`);
+      infoData = await fetchData(`/api/user/info?unique_id=@${username}`);
       
       if (infoData && infoData.code === 0 && infoData.data) {
         const profile = infoData.data;
-        secUid = profile.user?.secUid || secUid; // Save the golden secUid
+        secUid = profile.user?.secUid || secUid; 
         
         userStats = {
           username: profile.user?.uniqueId || username,
@@ -404,18 +415,16 @@ app.get("/api/profile", async (req, res) => {
         return res.status(502).json({ error: "Could not locate user profile. " + (infoData?.msg || "") });
       }
 
-      // FIX 2: The 1 Request/Second Limit Bypass
-      // We MUST pause for 1.2 seconds before the next API call to avoid being blocked by TikWM
+      // Pause to respect TikWM rate limits
       await new Promise(resolve => setTimeout(resolve, 1200));
     }
 
     // STEP 2: Fetch posts
-    // FIX 3: Prioritize sec_uid. TikTok's backend relies heavily on it to return video feeds reliably.
     const postsQuery = secUid
       ? `sec_uid=${encodeURIComponent(secUid)}&count=${count}&cursor=${cursor}`
       : `unique_id=@${username}&count=${count}&cursor=${cursor}`;
       
-    const postsData = await fetchThroughProxy(`/api/user/posts?${postsQuery}`);
+    const postsData = await fetchData(`/api/user/posts?${postsQuery}`);
 
     let videos = [];
     let nextCursor = "0";
@@ -433,7 +442,6 @@ app.get("/api/profile", async (req, res) => {
         play: `https://www.tiktok.com/@${username}/video/${v.video_id || v.id}`
       }));
     } else {
-      // Log TikWM rejections to Vercel so you can trace future failures easily
       console.error("TikWM Posts Output Error:", postsData); 
     }
 
@@ -442,7 +450,7 @@ app.get("/api/profile", async (req, res) => {
       user: userStats,
       videos: videos,
       pagination: { nextCursor, hasMore },
-      secUid: secUid // Ensure this goes back to frontend for pagination logic
+      secUid: secUid
     });
 
   } catch (error) {
@@ -450,6 +458,7 @@ app.get("/api/profile", async (req, res) => {
     res.status(500).json({ error: "Internal Server Exception loading TikTok details." });
   }
 });
+
 
 
 
