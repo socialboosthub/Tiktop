@@ -328,49 +328,51 @@ app.get("/image", async (req, res) => {
 });
 
 
+// Profile downloader (Now using your own custom free-scraper-api!)
 app.get("/api/profile", async (req, res) => {
   let username = (req.query.username || "").trim();
-  // Grab the cursor from the frontend, default to 0 for the first page
   const cursor = req.query.cursor || "0"; 
-  const count = 7; // You requested 7 videos per page
+  const count = 7; 
 
   if (!username) {
     return res.status(400).json({ error: "Username is required" });
   }
 
-  // Normalize username
   username = username.replace("@", "");
 
-  const SCRAPER_API_KEY = process.env.SCRAPER_API_KEY;
-  if (!SCRAPER_API_KEY) {
-    console.error("Missing SCRAPER_API_KEY in .env");
-    return res.status(500).json({ error: "Proxy configuration missing" });
+  // 1. Grab your custom Vercel scraper API URL from your environment variables
+  const MY_SCRAPER_URL = process.env.FREE_SCRAPER_API_URL;
+  if (!MY_SCRAPER_URL) {
+    console.error("Missing FREE_SCRAPER_API_URL in .env");
+    return res.status(500).json({ error: "Custom scraper proxy configuration missing" });
   }
 
+  // 2. Route the target TikWM URLs through your own API
   const fetchThroughProxy = async (endpoint) => {
     const targetUrl = `https://tikwm.com${endpoint}`;
-    const apiUrl = `http://api.scraperapi.com?api_key=${SCRAPER_API_KEY}&url=${encodeURIComponent(targetUrl)}`;
+    
+    // We assume your scraper API takes a "?url=" parameter, just like ScraperAPI did.
+    // (e.g., https://your-api.vercel.app/?url=https://tikwm.com/...)
+    const cleanBaseUrl = MY_SCRAPER_URL.replace(/\/$/, ""); // Removes trailing slash if present
+    const apiUrl = `${cleanBaseUrl}/?url=${encodeURIComponent(targetUrl)}`;
     
     try {
       const response = await fetch(apiUrl);
       const text = await response.text();
       return JSON.parse(text);
     } catch (err) {
-      console.error(`Proxy failed for ${endpoint}:`, err.message);
+      console.error(`Your custom scraper failed for ${endpoint}:`, err.message);
       return null;
     }
   };
 
   try {
-    // OPTIMIZATION: Only fetch user stats if we are on the first page (cursor 0).
-    // If they are clicking "Next Page", we only need the videos.
     const fetchInfoPromise = cursor === "0" 
       ? fetchThroughProxy(`/api/user/info?unique_id=@${username}`)
       : Promise.resolve(null);
 
     const fetchPostsPromise = fetchThroughProxy(`/api/user/posts?unique_id=@${username}&count=${count}&cursor=${cursor}`);
 
-    // Fetch in parallel
     const [infoData, postsData] = await Promise.all([fetchInfoPromise, fetchPostsPromise]);
 
     let userStats = null;
@@ -378,7 +380,6 @@ app.get("/api/profile", async (req, res) => {
     let nextCursor = "0";
     let hasMore = false;
 
-    // 1. Process User Info (Only happens on first load)
     if (infoData && infoData.code === 0 && infoData.data) {
       const profile = infoData.data;
       userStats = {
@@ -390,11 +391,9 @@ app.get("/api/profile", async (req, res) => {
       };
     }
 
-    // 2. Process Videos & Pagination Info
     if (postsData && postsData.code === 0 && postsData.data) {
       const remoteVideos = postsData.data.videos || postsData.data.list || [];
       
-      // Grab the pagination tokens TikWM gives us
       nextCursor = postsData.data.cursor || "0";
       hasMore = postsData.data.hasMore === 1 || postsData.data.hasMore === true;
 
@@ -402,19 +401,16 @@ app.get("/api/profile", async (req, res) => {
         id: v.video_id || v.id,
         caption: v.title || v.desc || "TikTok Video",
         cover: v.cover || v.origin_cover,
-        // FIX: Always use the official TikTok URL format so your /api endpoint can parse it correctly
         play: `https://www.tiktok.com/@${username}/video/${v.video_id || v.id}`
       }));
     }
 
-    // 3. Fallback Error Handling
     if (cursor === "0" && (!infoData || infoData.code !== 0) && (!postsData || postsData.code !== 0)) {
-      return res.status(404).json({ error: "User not found, account is private, or proxy blocked request." });
+      return res.status(404).json({ error: "User not found, account is private, or custom proxy failed." });
     }
 
-    // Return the payload with pagination included
     res.json({
-      user: userStats, // Will be null on pages 2, 3, etc. Frontend should keep the old stats in state.
+      user: userStats, 
       videos: videos,
       pagination: {
         nextCursor: nextCursor,
@@ -427,6 +423,7 @@ app.get("/api/profile", async (req, res) => {
     res.status(500).json({ error: "Failed to fetch TikTok profile details." });
   }
 });
+
 
 // ==========================================
 // 6. EXPORT APP FOR VERCEL
