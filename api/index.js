@@ -326,7 +326,8 @@ app.get("/image", async (req, res) => {
     res.status(500).send("Image download failed");
   }
 });
-// Profile downloader (Updated to parse your custom scraper's "html" field!)
+
+// Profile downloader
 app.get("/api/profile", async (req, res) => {
   let username = (req.query.username || "").trim();
   const cursor = req.query.cursor || "0"; 
@@ -338,11 +339,8 @@ app.get("/api/profile", async (req, res) => {
 
   username = username.replace("@", "");
 
-  const MY_SCRAPER_URL = process.env.FREE_SCRAPER_API_URL;
-  if (!MY_SCRAPER_URL) {
-    console.error("Missing FREE_SCRAPER_API_URL in .env");
-    return res.status(500).json({ error: "Custom scraper proxy configuration missing" });
-  }
+  // Added your custom proxy URL as a fallback so it doesn't fail if the .env is missing
+  const MY_SCRAPER_URL = process.env.FREE_SCRAPER_API_URL || "https://api-i7hfcyh1v-socialboosthubs-projects.vercel.app";
 
   const fetchThroughProxy = async (endpoint) => {
     const targetUrl = `https://tikwm.com${endpoint}`;
@@ -351,11 +349,18 @@ app.get("/api/profile", async (req, res) => {
     
     try {
       const response = await fetch(apiUrl);
-      const scraperRes = await response.json(); // { url: "...", html: "..." }
+      const scraperRes = await response.json(); 
       
-      // Since your API returns the JSON inside a stringified "html" field, we parse it here:
       if (scraperRes && scraperRes.html) {
-        return JSON.parse(scraperRes.html);
+        // Safely try to parse the payload. Handles both stringified JSON and pre-parsed objects.
+        try {
+          return typeof scraperRes.html === "string" 
+            ? JSON.parse(scraperRes.html) 
+            : scraperRes.html;
+        } catch (parseError) {
+          console.error(`Failed to parse proxy HTML for ${endpoint}:`, parseError.message);
+          return null; // Return null gracefully instead of crashing the app
+        }
       }
       
       console.error(`Empty or invalid response from custom scraper for ${endpoint}`);
@@ -423,7 +428,6 @@ app.get("/api/profile", async (req, res) => {
     res.status(500).json({ error: "Failed to fetch TikTok profile details." });
   }
 });
-
 
 // ==========================================
 // 6. EXPORT APP FOR VERCEL
