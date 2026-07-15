@@ -327,8 +327,7 @@ app.get("/image", async (req, res) => {
   }
 });
 
-
-// Profile downloader (Now using your own custom free-scraper-api!)
+// Profile downloader (Now perfectly configured for your /api/scrape endpoint!)
 app.get("/api/profile", async (req, res) => {
   let username = (req.query.username || "").trim();
   const cursor = req.query.cursor || "0"; 
@@ -340,21 +339,20 @@ app.get("/api/profile", async (req, res) => {
 
   username = username.replace("@", "");
 
-  // 1. Grab your custom Vercel scraper API URL from your environment variables
   const MY_SCRAPER_URL = process.env.FREE_SCRAPER_API_URL;
   if (!MY_SCRAPER_URL) {
     console.error("Missing FREE_SCRAPER_API_URL in .env");
     return res.status(500).json({ error: "Custom scraper proxy configuration missing" });
   }
 
-  // 2. Route the target TikWM URLs through your own API
   const fetchThroughProxy = async (endpoint) => {
     const targetUrl = `https://tikwm.com${endpoint}`;
     
-    // We assume your scraper API takes a "?url=" parameter, just like ScraperAPI did.
-    // (e.g., https://your-api.vercel.app/?url=https://tikwm.com/...)
-    const cleanBaseUrl = MY_SCRAPER_URL.replace(/\/$/, ""); // Removes trailing slash if present
-    const apiUrl = `${cleanBaseUrl}/?url=${encodeURIComponent(targetUrl)}`;
+    // Cleans up any trailing slashes from your base URL
+    const cleanBaseUrl = MY_SCRAPER_URL.replace(/\/$/, ""); 
+    
+    // Correctly routes through your custom Next.js '/api/scrape' route
+    const apiUrl = `${cleanBaseUrl}/api/scrape?url=${encodeURIComponent(targetUrl)}`;
     
     try {
       const response = await fetch(apiUrl);
@@ -423,6 +421,7 @@ app.get("/api/profile", async (req, res) => {
     res.status(500).json({ error: "Failed to fetch TikTok profile details." });
   }
 });
+
 
 
 // ==========================================
