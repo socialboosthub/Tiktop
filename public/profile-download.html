@@ -393,92 +393,102 @@
   </script>
 
   <script>
-    
-            const params = new URLSearchParams(location.search);
+      const params = new URLSearchParams(location.search);
     const username = params.get("username");
 
-// Pagination State Configuration
-let currentPage = 1;
-let cursors = ["0"]; 
-let hasMore = false;
-let queue = [];
-let userCache = null; 
-let secUidCache = ""; // <--- Add this new variable
+    // Pagination State Configuration
+    let currentPage = 1;
+    let cursors = ["0"]; // cursors[0] is always "0" for Page 1
+    let hasMore = false;
+    let queue = [];
+    let userCache = null; // Cache stats so switching pages doesn't clear the header
+    let secUid = ""; // Global state cache for the user's TikTok Secure UID
+    
+    const loaderStage = document.getElementById("loader-stage");
+    const profileHeader = document.getElementById("profile-header");
+    const videosGrid = document.getElementById("videos-grid");
 
-const loaderStage = document.getElementById("loader-stage");
-const profileHeader = document.getElementById("profile-header");
-const videosGrid = document.getElementById("videos-grid");
+    if (!username) {
+      loaderStage.innerHTML = "<p style='color:red;'>Error: No username provided.</p>";
+    } else {
+      fetchProfile();
+    }
 
-if (!username) {
-  loaderStage.innerHTML = "<p style='color:red;'>Error: No username provided.</p>";
-} else {
-  fetchProfile();
-}
+    async function fetchProfile() {
+      // Clear grid to load next page smoothly
+      videosGrid.innerHTML = "";
+      const currentCursor = cursors[currentPage - 1] || "0";
 
-async function fetchProfile() {
-  videosGrid.innerHTML = "";
-  const currentCursor = cursors[currentPage - 1] || "0";
-
-  if (currentPage === 1 && !userCache) {
-    loaderStage.style.display = "flex";
-    profileHeader.style.opacity = "0";
-  } else {
-    loaderStage.style.display = "none";
-  }
-
-  renderPlaceholders(7, 0);
-
-  try {
-    // Append secUid to the URL if we have it cached
-    const apiUrl = `/api/profile?username=${encodeURIComponent(username)}&cursor=${currentCursor}${secUidCache ? '&secUid=' + secUidCache : ''}`;
-    const res = await fetch(apiUrl);
-    const data = await res.json();
-
-    if (data && !data.error) {
-      loaderStage.style.display = "none";
-      
-      // Cache the secUid for pagination
-      if (data.secUid) secUidCache = data.secUid; 
-
-      if (data.user) {
-        userCache = data.user;
-        renderProfile(userCache);
-      } else if (userCache) {
-        renderProfile(userCache);
+      // On first load, show the big neon loader
+      if (currentPage === 1 && !userCache) {
+        loaderStage.style.display = "flex";
+        profileHeader.style.opacity = "0";
+      } else {
+        loaderStage.style.display = "none";
       }
 
-      if (data.videos && data.videos.length > 0) {
-        hasMore = data.pagination?.hasMore || false;
-        const nextCursor = data.pagination?.nextCursor || "0";
+      // Render 7 skeletons to indicate loading states
+      renderPlaceholders(7, 0);
 
-        if (hasMore && nextCursor !== "0" && cursors.length === currentPage) {
-          cursors.push(nextCursor);
+      try {
+        // Build URL dynamically keeping track of the user's secUid
+        let apiUrl = `/api/profile?username=${encodeURIComponent(username)}&cursor=${currentCursor}`;
+        if (secUid) {
+          apiUrl += `&secUid=${encodeURIComponent(secUid)}`;
         }
 
+        const res = await fetch(apiUrl);
+        const data = await res.json();
+
+        if (data && !data.error) {
+          loaderStage.style.display = "none";
+          
+          // Cache the golden key returned from backend so pages 2+ load instantly
+          if (data.secUid) {
+            secUid = data.secUid;
+          }
+
+          // ALWAYS render the profile stats if available
+          if (data.user) {
+            userCache = data.user;
+            renderProfile(userCache);
+          } else if (userCache) {
+            renderProfile(userCache);
+          }
+
+          // Handle Videos
+          if (data.videos && data.videos.length > 0) {
+            hasMore = data.pagination?.hasMore || false;
+            const nextCursor = data.pagination?.nextCursor || "0";
+
+            if (hasMore && nextCursor !== "0" && cursors.length === currentPage) {
+              cursors.push(nextCursor);
+            }
+
+            videosGrid.innerHTML = "";
+            renderPlaceholders(data.videos.length, 0);
+
+            queue = data.videos;
+            loadVideo(0);
+            renderPagination();
+            
+          } else {
+            // User exists but has no videos uploaded
+            videosGrid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: #aaa; padding: 40px; font-size: 18px;">No public videos found on this profile.</div>`;
+            renderPagination();
+          }
+          
+        } else {
+          throw new Error(data.error || "Profile is empty, private, or temporarily blocked.");
+        }
+      } catch (err) {
+        console.error(err);
         videosGrid.innerHTML = "";
-        renderPlaceholders(data.videos.length, 0);
-
-        queue = data.videos;
-        loadVideo(0);
-        renderPagination();
-        
-      } else {
-        videosGrid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: #aaa; padding: 40px; font-size: 18px;">No videos found on this profile.</div>`;
-        renderPagination();
+        loaderStage.style.display = "flex";
+        loaderStage.innerHTML = `<p style='color:red; font-weight:bold;'>${err.message || "Failed to load profile."}</p>`;
       }
-      
-    } else {
-      throw new Error(data.error || "Profile is empty or private.");
     }
-  } catch (err) {
-    console.error(err);
-    videosGrid.innerHTML = "";
-    loaderStage.style.display = "flex";
-    loaderStage.innerHTML = `<p style='color:red;'>${err.message || "Failed to load profile. Check your server logs."}</p>`;
-  }
-}
-
-
+  
 
     async function loadVideo(i, attempt = 1) {
       if (queue.length === 0) return; 
