@@ -327,10 +327,11 @@ app.get("/image", async (req, res) => {
   }
 });
 
-// Profile downloader (Enhanced with robust error detection and proxy routing)
+// Profile downloader (Enhanced with rate-limit bypass and caching fix)
 app.get("/api/profile", async (req, res) => {
   let username = (req.query.username || "").trim();
   const cursor = req.query.cursor || "0";
+  let secUid = req.query.secUid || ""; // Accept secUid from frontend cache
   const count = 12;
 
   if (!username) {
@@ -342,10 +343,11 @@ app.get("/api/profile", async (req, res) => {
   const MY_SCRAPER_URL = process.env.FREE_SCRAPER_API_URL || "https://api-i7hfcyh1v-socialboosthubs-projects.vercel.app";
 
   const fetchThroughProxy = async (endpoint) => {
-    const targetUrl = `https://tikwm.com${endpoint}`;
+    // FIX 1: Add a cache-buster to prevent Next.js from caching empty responses
+    const cacheBuster = endpoint.includes('?') ? `&_t=${Date.now()}` : `?_t=${Date.now()}`;
+    const targetUrl = `https://www.tikwm.com${endpoint}${cacheBuster}`;
     const cleanBaseUrl = MY_SCRAPER_URL.replace(/\/$/, "");
     
-    // FIX 1: Send the SCRAPER_API_KEY to your Next.js route.ts proxy
     const proxyApiKey = process.env.SCRAPER_API_KEY || "";
     const apiKeyParam = proxyApiKey ? `&api_key=${proxyApiKey}` : "";
     const apiUrl = `${cleanBaseUrl}/api/scrape?url=${encodeURIComponent(targetUrl)}${apiKeyParam}`;
@@ -360,10 +362,9 @@ app.get("/api/profile", async (req, res) => {
       try { 
         scraperRes = JSON.parse(rawText); 
       } catch (e) { 
-        return { error: "Proxy did not return JSON." }; 
+        return { error: "Proxy did not return JSON.", raw: rawText.substring(0, 200) }; 
       }
       
-      // FIX 2: Handle both direct JSON (from route.ts) and legacy { html: ... } wrappers
       if (scraperRes && scraperRes.code !== undefined) {
         return scraperRes; 
       }
@@ -384,12 +385,14 @@ app.get("/api/profile", async (req, res) => {
     let infoData = null;
     let userStats = null;
 
-    // STEP 1: Fetch user stats
-    if (cursor === "0") {
+    // STEP 1: Fetch user stats and extract secUid
+    if (cursor === "0" || !secUid) {
       infoData = await fetchThroughProxy(`/api/user/info?unique_id=@${username}`);
       
       if (infoData && infoData.code === 0 && infoData.data) {
         const profile = infoData.data;
+        secUid = profile.user?.secUid || secUid; // Save the golden secUid
+        
         userStats = {
           username: profile.user?.uniqueId || username,
           avatar: profile.user?.avatarMedium || profile.user?.avatarThumb || "https://www.tiktok.com/favicon.ico",
@@ -400,11 +403,18 @@ app.get("/api/profile", async (req, res) => {
       } else if (cursor === "0") {
         return res.status(502).json({ error: "Could not locate user profile. " + (infoData?.msg || "") });
       }
+
+      // FIX 2: The 1 Request/Second Limit Bypass
+      // We MUST pause for 1.2 seconds before the next API call to avoid being blocked by TikWM
+      await new Promise(resolve => setTimeout(resolve, 1200));
     }
 
     // STEP 2: Fetch posts
-    // FIX 3: TikWM requires unique_id for fetching posts reliably, not sec_uid
-    const postsQuery = `unique_id=@${username}&count=${count}&cursor=${cursor}`;
+    // FIX 3: Prioritize sec_uid. TikTok's backend relies heavily on it to return video feeds reliably.
+    const postsQuery = secUid
+      ? `sec_uid=${encodeURIComponent(secUid)}&count=${count}&cursor=${cursor}`
+      : `unique_id=@${username}&count=${count}&cursor=${cursor}`;
+      
     const postsData = await fetchThroughProxy(`/api/user/posts?${postsQuery}`);
 
     let videos = [];
@@ -422,12 +432,17 @@ app.get("/api/profile", async (req, res) => {
         cover: v.cover || v.origin_cover || "https://tiktop.online/assets/Logo.png",
         play: `https://www.tiktok.com/@${username}/video/${v.video_id || v.id}`
       }));
+    } else {
+      // Log TikWM rejections to Vercel so you can trace future failures easily
+      console.error("TikWM Posts Output Error:", postsData); 
     }
 
+    // STEP 3: Return payload
     res.json({
       user: userStats,
       videos: videos,
-      pagination: { nextCursor, hasMore }
+      pagination: { nextCursor, hasMore },
+      secUid: secUid // Ensure this goes back to frontend for pagination logic
     });
 
   } catch (error) {
