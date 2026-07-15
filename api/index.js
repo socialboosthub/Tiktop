@@ -332,7 +332,7 @@ app.get("/api/profile", async (req, res) => {
   let username = (req.query.username || "").trim();
   const cursor = req.query.cursor || "0"; 
   let secUid = req.query.secUid || ""; // Accept secUid from frontend if available
-  const count = 12;
+  const count = 12; // Changed to 12 for better UI grid filling
 
   if (!username) {
     return res.status(400).json({ error: "Username is required" });
@@ -347,35 +347,20 @@ app.get("/api/profile", async (req, res) => {
     const cleanBaseUrl = MY_SCRAPER_URL.replace(/\/$/, ""); 
     const apiUrl = `${cleanBaseUrl}/api/scrape?url=${encodeURIComponent(targetUrl)}`;
     
-    console.log(`[Proxy Request] Fetching: ${apiUrl}`);
-    
     try {
       const response = await fetch(apiUrl);
-      if (!response.ok) return { error: `Proxy HTTP Error status ${response.status}` };
+      if (!response.ok) return { error: `Proxy HTTP ${response.status}` };
 
       const rawText = await response.text();
       let scraperRes;
-      try { 
-        scraperRes = JSON.parse(rawText); 
-      } catch (e) { 
-        return { error: `Proxy returned invalid JSON. Raw text preview: ${rawText.substring(0, 200)}` }; 
-      }
+      try { scraperRes = JSON.parse(rawText); } catch (e) { return { error: "Proxy did not return JSON." }; }
       
-      // Fallback 1: If the proxy wrapped the response inside an "html" property
       if (scraperRes && scraperRes.html) {
         try {
           return typeof scraperRes.html === "string" ? JSON.parse(scraperRes.html) : scraperRes.html;
-        } catch (e) { 
-          return { error: "Nested proxy response parsing failed." }; 
-        }
+        } catch (e) { return { error: "Nested proxy response parsing failed." }; }
       }
-      
-      // Fallback 2: If the proxy directly returned the target JSON payload
-      if (scraperRes && (scraperRes.code !== undefined || scraperRes.data !== undefined || scraperRes.msg !== undefined)) {
-        return scraperRes;
-      }
-
-      return { error: "Proxy payload is missing both 'html' and standard API response keys." };
+      return { error: "Proxy payload is missing key 'html' data." };
     } catch (err) {
       return { error: err.message };
     }
@@ -385,77 +370,64 @@ app.get("/api/profile", async (req, res) => {
     let infoData = null;
     let userStats = null;
 
-    // STEP 1: Fetch info first if we don't have secUid
+    // STEP 1: Fetch info first if we don't have secUid (TikWM requires sec_uid for stable video fetching)
     if (cursor === "0" || !secUid) {
       infoData = await fetchThroughProxy(`/api/user/info?unique_id=@${username}`);
       
       if (infoData && infoData.code === 0 && infoData.data) {
         const profile = infoData.data;
-        // Secure both snake_case and camelCase variations of sec_uid
-        secUid = profile.user?.secUid || profile.user?.sec_uid || secUid; 
+        secUid = profile.user?.secUid || secUid; // Extract the golden secUid!
         
         userStats = {
-          username: profile.user?.uniqueId || profile.user?.unique_id || username,
+          username: profile.user?.uniqueId || username,
           avatar: profile.user?.avatarMedium || profile.user?.avatarThumb || "https://www.tiktok.com/favicon.ico",
-          followers: profile.stats?.followerCount || profile.stats?.follower_count || 0,
-          following: profile.stats?.followingCount || profile.stats?.following_count || 0,
-          likes: profile.stats?.heartCount || profile.stats?.heart_count || 0
+          followers: profile.stats?.followerCount || 0,
+          following: profile.stats?.followingCount || 0,
+          likes: profile.stats?.heartCount || 0
         };
       } else if (cursor === "0") {
-        const errMsg = infoData?.error || infoData?.msg || "Could not fetch user info.";
-        return res.status(502).json({ error: `Could not locate user profile: ${errMsg}` });
+        return res.status(502).json({ error: "Could not locate user profile. " + (infoData?.msg || "") });
       }
     }
 
-    // STEP 2: Fetch posts using secUid (guarantees videos will be found)
+    // STEP 2: Fetch posts using secUid (This guarantees videos will be found)
     const postsQuery = secUid 
       ? `sec_uid=${secUid}&count=${count}&cursor=${cursor}`
       : `unique_id=@${username}&count=${count}&cursor=${cursor}`;
 
     const postsData = await fetchThroughProxy(`/api/user/posts?${postsQuery}`);
 
-    // If the proxy or TikWM returned an active error, report it directly!
-    if (!postsData || postsData.error) {
-      return res.status(502).json({ error: `Proxy Posts Error: ${postsData?.error || "Empty Response"}` });
-    }
-    if (postsData.code !== 0) {
-      return res.status(502).json({ error: `TikWM Video Error: ${postsData.msg || "Invalid response code"}` });
-    }
-
     let videos = [];
     let nextCursor = "0";
     let hasMore = false;
 
-    if (postsData.data) {
+    if (postsData && postsData.code === 0 && postsData.data) {
+      // Fallbacks added for different proxy response structures
       const remoteVideos = postsData.data.videos || postsData.data.list || postsData.data.itemList || [];
-      const rawHasMore = postsData.data.hasMore !== undefined ? postsData.data.hasMore : postsData.data.has_more;
-      
       nextCursor = postsData.data.cursor || "0";
-      hasMore = rawHasMore === 1 || rawHasMore === true;
+      hasMore = postsData.data.hasMore === 1 || postsData.data.hasMore === true;
 
-      // Filter out any elements missing IDs to prevent render breakages
-      videos = remoteVideos
-        .filter(v => v.video_id || v.id)
-        .map(v => ({
-          id: v.video_id || v.id,
-          caption: v.title || v.desc || "TikTok Video",
-          cover: v.cover || v.origin_cover || "https://tiktop.online/assets/Logo.png", 
-          play: `https://www.tiktok.com/@${username}/video/${v.video_id || v.id}`
-        }));
+      videos = remoteVideos.map(v => ({
+        id: v.video_id || v.id,
+        caption: v.title || v.desc || "TikTok Video",
+        cover: v.cover || v.origin_cover || "https://tiktop.online/assets/Logo.png", // safe fallback
+        play: `https://www.tiktok.com/@${username}/video/${v.video_id || v.id}`
+      }));
     }
 
     res.json({
       user: userStats, 
       videos: videos,
       pagination: { nextCursor, hasMore },
-      secUid: secUid // Send back to frontend so we don't lose it on next page load
+      secUid: secUid // Send back to frontend so we don't lose it on page 2
     });
 
   } catch (error) {
     console.error("TikTok Fetch Exception:", error.message);
-    res.status(500).json({ error: `Internal Server Exception: ${error.message}` });
+    res.status(500).json({ error: "Internal Server Exception loading TikTok details." });
   }
 });
+
 
 
 // ==========================================
