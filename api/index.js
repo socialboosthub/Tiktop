@@ -415,7 +415,9 @@ const postsQuery = secUid
         play: `https://www.tiktok.com/@${username}/video/${v.video_id || v.id}`
       }));
     }
-
+    console.log("secUid:", secUid);
+console.log("Posts response:", JSON.stringify(postsData, null, 2));
+    
     res.json({
       user: userStats, 
       videos: videos,
