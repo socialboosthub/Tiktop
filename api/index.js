@@ -327,7 +327,7 @@ app.get("/image", async (req, res) => {
   }
 });
 
-// Profile downloader
+// Profile downloader (Enhanced with robust error detection)
 app.get("/api/profile", async (req, res) => {
   let username = (req.query.username || "").trim();
   const cursor = req.query.cursor || "0"; 
@@ -339,7 +339,6 @@ app.get("/api/profile", async (req, res) => {
 
   username = username.replace("@", "");
 
-  // Added your custom proxy URL as a fallback so it doesn't fail if the .env is missing
   const MY_SCRAPER_URL = process.env.FREE_SCRAPER_API_URL || "https://api-i7hfcyh1v-socialboosthubs-projects.vercel.app";
 
   const fetchThroughProxy = async (endpoint) => {
@@ -349,25 +348,37 @@ app.get("/api/profile", async (req, res) => {
     
     try {
       const response = await fetch(apiUrl);
-      const scraperRes = await response.json(); 
+      if (!response.ok) {
+        console.error(`Proxy HTTP Error: ${response.status} for ${endpoint}`);
+        return { error: `Proxy returned HTTP ${response.status}` };
+      }
+
+      // Read raw text first to avoid crashing if it's HTML (Cloudflare or Vercel login pages)
+      const rawText = await response.text();
+      let scraperRes;
+      try {
+        scraperRes = JSON.parse(rawText);
+      } catch (e) {
+        console.error(`Proxy response for ${endpoint} is not valid JSON. Raw text starts with:`, rawText.substring(0, 200));
+        return { error: "Proxy did not return JSON. Likely blocked or requires login." };
+      }
       
       if (scraperRes && scraperRes.html) {
-        // Safely try to parse the payload. Handles both stringified JSON and pre-parsed objects.
         try {
           return typeof scraperRes.html === "string" 
             ? JSON.parse(scraperRes.html) 
             : scraperRes.html;
         } catch (parseError) {
-          console.error(`Failed to parse proxy HTML for ${endpoint}:`, parseError.message);
-          return null; // Return null gracefully instead of crashing the app
+          console.error(`Failed to parse nested HTML JSON for ${endpoint}:`, parseError.message);
+          console.error("Nested content starts with:", String(scraperRes.html).substring(0, 200));
+          return { error: "Nested proxy response parsing failed." };
         }
       }
       
-      console.error(`Empty or invalid response from custom scraper for ${endpoint}`);
-      return null;
+      return { error: "Proxy payload is missing key 'html' data." };
     } catch (err) {
-      console.error(`Your custom scraper failed for ${endpoint}:`, err.message);
-      return null;
+      console.error(`Proxy communication crash for ${endpoint}:`, err.message);
+      return { error: err.message };
     }
   };
 
@@ -379,6 +390,22 @@ app.get("/api/profile", async (req, res) => {
     const fetchPostsPromise = fetchThroughProxy(`/api/user/posts?unique_id=@${username}&count=${count}&cursor=${cursor}`);
 
     const [infoData, postsData] = await Promise.all([fetchInfoPromise, fetchPostsPromise]);
+
+    // Handle structural proxy failures early
+    if (cursor === "0") {
+      const infoFailed = !infoData || infoData.error || infoData.code !== 0;
+      const postsFailed = !postsData || postsData.error || postsData.code !== 0;
+
+      if (infoFailed && postsFailed) {
+        const primaryReason = (infoData?.error || postsData?.error) 
+          ? `Proxy Error: ${infoData?.error || postsData?.error}`
+          : `TikWM API Error: Info Code (${infoData?.code}), Posts Code (${postsData?.code})`;
+
+        return res.status(502).json({ 
+          error: `Failed to fetch profile. Reason: ${primaryReason}` 
+        });
+      }
+    }
 
     let userStats = null;
     let videos = [];
@@ -398,7 +425,6 @@ app.get("/api/profile", async (req, res) => {
 
     if (postsData && postsData.code === 0 && postsData.data) {
       const remoteVideos = postsData.data.videos || postsData.data.list || [];
-      
       nextCursor = postsData.data.cursor || "0";
       hasMore = postsData.data.hasMore === 1 || postsData.data.hasMore === true;
 
@@ -410,22 +436,41 @@ app.get("/api/profile", async (req, res) => {
       }));
     }
 
-    if (cursor === "0" && (!infoData || infoData.code !== 0) && (!postsData || postsData.code !== 0)) {
-      return res.status(404).json({ error: "User not found, account is private, or custom proxy failed." });
-    }
-
     res.json({
       user: userStats, 
       videos: videos,
-      pagination: {
-        nextCursor: nextCursor,
-        hasMore: hasMore
-      }
+      pagination: { nextCursor, hasMore }
     });
 
   } catch (error) {
-    console.error("Error fetching TikTok profile data:", error.message);
-    res.status(500).json({ error: "Failed to fetch TikTok profile details." });
+    console.error("TikTok Fetch Exception:", error.message);
+    res.status(500).json({ error: "Internal Server Exception loading TikTok details." });
+  }
+});
+
+// Quick Diagnostic Tool for testing the scraper's raw output
+app.get("/api/debug-proxy", async (req, res) => {
+  const username = req.query.username || "tiktok";
+  const MY_SCRAPER_URL = process.env.FREE_SCRAPER_API_URL || "https://api-i7hfcyh1v-socialboosthubs-projects.vercel.app";
+  const targetUrl = `https://tikwm.com/api/user/info?unique_id=@${username}`;
+  const apiUrl = `${MY_SCRAPER_URL.replace(/\/$/, "")}/api/scrape?url=${encodeURIComponent(targetUrl)}`;
+
+  try {
+    const response = await fetch(apiUrl);
+    const rawText = await response.text();
+    
+    let jsonResult = null;
+    try { jsonResult = JSON.parse(rawText); } catch(e) {}
+
+    res.json({
+      proxyUrlCalled: apiUrl,
+      httpStatus: response.status,
+      isJson: jsonResult !== null,
+      rawBodySnippet: rawText.substring(0, 1000), // Peek at the raw response
+      parsedData: jsonResult
+    });
+  } catch (err) {
+    res.json({ error: err.message, stack: err.stack });
   }
 });
 
