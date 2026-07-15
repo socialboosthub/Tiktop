@@ -327,11 +327,12 @@ app.get("/image", async (req, res) => {
   }
 });
 
-// Profile downloader (Enhanced with robust error detection)
+ // Profile downloader (Enhanced with robust error detection and sec_uid routing)
 app.get("/api/profile", async (req, res) => {
   let username = (req.query.username || "").trim();
   const cursor = req.query.cursor || "0"; 
-  const count = 7; 
+  let secUid = req.query.secUid || ""; // Accept secUid from frontend if available
+  const count = 12; // Changed to 12 for better UI grid filling
 
   if (!username) {
     return res.status(400).json({ error: "Username is required" });
@@ -348,90 +349,68 @@ app.get("/api/profile", async (req, res) => {
     
     try {
       const response = await fetch(apiUrl);
-      if (!response.ok) {
-        console.error(`Proxy HTTP Error: ${response.status} for ${endpoint}`);
-        return { error: `Proxy returned HTTP ${response.status}` };
-      }
+      if (!response.ok) return { error: `Proxy HTTP ${response.status}` };
 
-      // Read raw text first to avoid crashing if it's HTML (Cloudflare or Vercel login pages)
       const rawText = await response.text();
       let scraperRes;
-      try {
-        scraperRes = JSON.parse(rawText);
-      } catch (e) {
-        console.error(`Proxy response for ${endpoint} is not valid JSON. Raw text starts with:`, rawText.substring(0, 200));
-        return { error: "Proxy did not return JSON. Likely blocked or requires login." };
-      }
+      try { scraperRes = JSON.parse(rawText); } catch (e) { return { error: "Proxy did not return JSON." }; }
       
       if (scraperRes && scraperRes.html) {
         try {
-          return typeof scraperRes.html === "string" 
-            ? JSON.parse(scraperRes.html) 
-            : scraperRes.html;
-        } catch (parseError) {
-          console.error(`Failed to parse nested HTML JSON for ${endpoint}:`, parseError.message);
-          console.error("Nested content starts with:", String(scraperRes.html).substring(0, 200));
-          return { error: "Nested proxy response parsing failed." };
-        }
+          return typeof scraperRes.html === "string" ? JSON.parse(scraperRes.html) : scraperRes.html;
+        } catch (e) { return { error: "Nested proxy response parsing failed." }; }
       }
-      
       return { error: "Proxy payload is missing key 'html' data." };
     } catch (err) {
-      console.error(`Proxy communication crash for ${endpoint}:`, err.message);
       return { error: err.message };
     }
   };
 
   try {
-    const fetchInfoPromise = cursor === "0" 
-      ? fetchThroughProxy(`/api/user/info?unique_id=@${username}`)
-      : Promise.resolve(null);
+    let infoData = null;
+    let userStats = null;
 
-    const fetchPostsPromise = fetchThroughProxy(`/api/user/posts?unique_id=@${username}&count=${count}&cursor=${cursor}`);
-
-    const [infoData, postsData] = await Promise.all([fetchInfoPromise, fetchPostsPromise]);
-
-    // Handle structural proxy failures early
-    if (cursor === "0") {
-      const infoFailed = !infoData || infoData.error || infoData.code !== 0;
-      const postsFailed = !postsData || postsData.error || postsData.code !== 0;
-
-      if (infoFailed && postsFailed) {
-        const primaryReason = (infoData?.error || postsData?.error) 
-          ? `Proxy Error: ${infoData?.error || postsData?.error}`
-          : `TikWM API Error: Info Code (${infoData?.code}), Posts Code (${postsData?.code})`;
-
-        return res.status(502).json({ 
-          error: `Failed to fetch profile. Reason: ${primaryReason}` 
-        });
+    // STEP 1: Fetch info first if we don't have secUid (TikWM requires sec_uid for stable video fetching)
+    if (cursor === "0" || !secUid) {
+      infoData = await fetchThroughProxy(`/api/user/info?unique_id=@${username}`);
+      
+      if (infoData && infoData.code === 0 && infoData.data) {
+        const profile = infoData.data;
+        secUid = profile.user?.secUid || secUid; // Extract the golden secUid!
+        
+        userStats = {
+          username: profile.user?.uniqueId || username,
+          avatar: profile.user?.avatarMedium || profile.user?.avatarThumb || "https://www.tiktok.com/favicon.ico",
+          followers: profile.stats?.followerCount || 0,
+          following: profile.stats?.followingCount || 0,
+          likes: profile.stats?.heartCount || 0
+        };
+      } else if (cursor === "0") {
+        return res.status(502).json({ error: "Could not locate user profile. " + (infoData?.msg || "") });
       }
     }
 
-    let userStats = null;
+    // STEP 2: Fetch posts using secUid (This guarantees videos will be found)
+    const postsQuery = secUid 
+      ? `sec_uid=${secUid}&count=${count}&cursor=${cursor}`
+      : `unique_id=@${username}&count=${count}&cursor=${cursor}`;
+
+    const postsData = await fetchThroughProxy(`/api/user/posts?${postsQuery}`);
+
     let videos = [];
     let nextCursor = "0";
     let hasMore = false;
 
-    if (infoData && infoData.code === 0 && infoData.data) {
-      const profile = infoData.data;
-      userStats = {
-        username: profile.user?.uniqueId || username,
-        avatar: profile.user?.avatarMedium || profile.user?.avatarThumb || "https://www.tiktok.com/favicon.ico",
-        followers: profile.stats?.followerCount || 0,
-        following: profile.stats?.followingCount || 0,
-        likes: profile.stats?.heartCount || 0
-      };
-    }
-
     if (postsData && postsData.code === 0 && postsData.data) {
-      const remoteVideos = postsData.data.videos || postsData.data.list || [];
+      // Fallbacks added for different proxy response structures
+      const remoteVideos = postsData.data.videos || postsData.data.list || postsData.data.itemList || [];
       nextCursor = postsData.data.cursor || "0";
       hasMore = postsData.data.hasMore === 1 || postsData.data.hasMore === true;
 
       videos = remoteVideos.map(v => ({
         id: v.video_id || v.id,
         caption: v.title || v.desc || "TikTok Video",
-        cover: v.cover || v.origin_cover,
+        cover: v.cover || v.origin_cover || "https://tiktop.online/assets/Logo.png", // safe fallback
         play: `https://www.tiktok.com/@${username}/video/${v.video_id || v.id}`
       }));
     }
@@ -439,38 +418,13 @@ app.get("/api/profile", async (req, res) => {
     res.json({
       user: userStats, 
       videos: videos,
-      pagination: { nextCursor, hasMore }
+      pagination: { nextCursor, hasMore },
+      secUid: secUid // Send back to frontend so we don't lose it on page 2
     });
 
   } catch (error) {
     console.error("TikTok Fetch Exception:", error.message);
     res.status(500).json({ error: "Internal Server Exception loading TikTok details." });
-  }
-});
-
-// Quick Diagnostic Tool for testing the scraper's raw output
-app.get("/api/debug-proxy", async (req, res) => {
-  const username = req.query.username || "tiktok";
-  const MY_SCRAPER_URL = process.env.FREE_SCRAPER_API_URL || "https://api-i7hfcyh1v-socialboosthubs-projects.vercel.app";
-  const targetUrl = `https://tikwm.com/api/user/info?unique_id=@${username}`;
-  const apiUrl = `${MY_SCRAPER_URL.replace(/\/$/, "")}/api/scrape?url=${encodeURIComponent(targetUrl)}`;
-
-  try {
-    const response = await fetch(apiUrl);
-    const rawText = await response.text();
-    
-    let jsonResult = null;
-    try { jsonResult = JSON.parse(rawText); } catch(e) {}
-
-    res.json({
-      proxyUrlCalled: apiUrl,
-      httpStatus: response.status,
-      isJson: jsonResult !== null,
-      rawBodySnippet: rawText.substring(0, 1000), // Peek at the raw response
-      parsedData: jsonResult
-    });
-  } catch (err) {
-    res.json({ error: err.message, stack: err.stack });
   }
 });
 
