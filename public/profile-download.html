@@ -392,229 +392,251 @@
     }
   </script>
 
- <script>
-  const params = new URLSearchParams(location.search);
-  const username = params.get("username");
+  <script>
+    
+            const params = new URLSearchParams(location.search);
+    const username = params.get("username");
 
-  // Pagination State Configuration
-  let currentPage = 1;
-  let cursors = ["0"]; // cursors[0] is always "0" for Page 1
-  let hasMore = false;
-  let userCache = null; // Cache stats so switching pages doesn't clear the header
-  
-  const loaderStage = document.getElementById("loader-stage");
-  const profileHeader = document.getElementById("profile-header");
-  const videosGrid = document.getElementById("videos-grid");
+    // Pagination State Configuration
+    let currentPage = 1;
+    let cursors = ["0"]; // cursors[0] is always "0" for Page 1
+    let hasMore = false;
+    let queue = [];
+    let userCache = null; // Cache stats so switching pages doesn't clear the header
+    
+    const loaderStage = document.getElementById("loader-stage");
+    const profileHeader = document.getElementById("profile-header");
+    const videosGrid = document.getElementById("videos-grid");
 
-  if (!username) {
-    loaderStage.innerHTML = "<p style='color:red;'>Error: No username provided.</p>";
-  } else {
-    fetchProfile();
-  }
-
-  async function fetchProfile() {
-    // Clear grid to load next page smoothly
-    videosGrid.innerHTML = "";
-    const currentCursor = cursors[currentPage - 1] || "0";
-
-    // On first load, show the big neon loader
-    if (currentPage === 1 && !userCache) {
-      loaderStage.style.display = "flex";
-      profileHeader.style.opacity = "0";
+    if (!username) {
+      loaderStage.innerHTML = "<p style='color:red;'>Error: No username provided.</p>";
     } else {
-      loaderStage.style.display = "none";
+      fetchProfile();
     }
 
-    // Render 7 skeletons to indicate loading states
-    renderPlaceholders(7, 0);
-
-    try {
-      const apiUrl = `/api/profile?username=${encodeURIComponent(username)}&cursor=${currentCursor}`;
-      const res = await fetch(apiUrl);
-      const data = await res.json();
-
-      loaderStage.style.display = "none";
-
-      // 1. Render Profile Stats (even if video list is empty)
-      if (data && data.user) {
-        userCache = data.user;
-        renderProfile(userCache);
-      } else if (userCache) {
-        renderProfile(userCache);
-      }
-
-      // 2. Clear skeleton cards
+      async function fetchProfile() {
+      // Clear grid to load next page smoothly
       videosGrid.innerHTML = "";
+      const currentCursor = cursors[currentPage - 1] || "0";
 
-      // 3. Render Videos list if they exist
-      if (data && data.videos && data.videos.length > 0) {
-        // Read page states
-        hasMore = data.pagination?.hasMore || false;
-        const nextCursor = data.pagination?.nextCursor || "0";
-
-        // If there is more content, save the next cursor if we haven't already
-        if (hasMore && nextCursor !== "0" && cursors.length === currentPage) {
-          cursors.push(nextCursor);
-        }
-
-        // Render all cards immediately (No more brittle recursive load queue!)
-        renderVideos(data.videos);
-
-        // Render updated page numbers below the grid
-        renderPagination();
-        
+      // On first load, show the big neon loader
+      if (currentPage === 1 && !userCache) {
+        loaderStage.style.display = "flex";
+        profileHeader.style.opacity = "0";
       } else {
-        videosGrid.innerHTML = "<p style='color:yellow; grid-column: 1 / -1; margin: 40px auto;'>This user has no public videos or the account is private.</p>";
-        renderPagination();
+        loaderStage.style.display = "none";
       }
-    } catch (err) {
-      console.error("Fetch profile failed: ", err);
-      videosGrid.innerHTML = "";
-      loaderStage.style.display = "flex";
-      loaderStage.innerHTML = "<p style='color:red;'>Failed to load profile. Check your server logs.</p>";
+
+      // Render 7 skeletons to indicate loading states
+      renderPlaceholders(7, 0);
+
+      try {
+        const apiUrl = `/api/profile?username=${encodeURIComponent(username)}&cursor=${currentCursor}`;
+        const res = await fetch(apiUrl);
+        const data = await res.json();
+
+        // Check for general data success instead of demanding videos exist
+        if (data && !data.error) {
+          loaderStage.style.display = "none";
+          
+          // ALWAYS render the profile stats if available (even if videos are 0)
+          if (data.user) {
+            userCache = data.user;
+            renderProfile(userCache);
+          } else if (userCache) {
+            renderProfile(userCache);
+          }
+
+          // Handle Videos
+          if (data.videos && data.videos.length > 0) {
+            hasMore = data.pagination?.hasMore || false;
+            const nextCursor = data.pagination?.nextCursor || "0";
+
+            if (hasMore && nextCursor !== "0" && cursors.length === currentPage) {
+              cursors.push(nextCursor);
+            }
+
+            videosGrid.innerHTML = "";
+            renderPlaceholders(data.videos.length, 0);
+
+            queue = data.videos;
+            loadVideo(0);
+            renderPagination();
+            
+          } else {
+            // User exists but has no videos uploaded
+            videosGrid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: #aaa; padding: 40px; font-size: 18px;">No videos found on this profile.</div>`;
+            renderPagination();
+          }
+          
+        } else {
+          throw new Error(data.error || "Profile is empty or private.");
+        }
+      } catch (err) {
+        console.error(err);
+        videosGrid.innerHTML = "";
+        loaderStage.style.display = "flex";
+        loaderStage.innerHTML = `<p style='color:red;'>${err.message || "Failed to load profile. Check your server logs."}</p>`;
+      }
     }
-  }
 
-  // Instantly renders all cards with download buttons and bypasses referrer checks
-  function renderVideos(videos) {
-    videosGrid.innerHTML = "";
-    videos.forEach((video, index) => {
-      const card = document.createElement("div");
-      card.className = "card";
-      card.id = `card-${index}`;
+
+    async function loadVideo(i, attempt = 1) {
+      if (queue.length === 0) return; 
+      if (i >= queue.length) return;
+
+      const video = queue[i];
+      const card = document.getElementById(`card-${i}`);
       
-      // Note the referrerpolicy="no-referrer" which allows TikTok cover images to load!
-      // We also added a fallback onerror handler to show a TikTok logo if the image does fail.
-      card.innerHTML = `
-        <div class="thumb-container">
-          <img 
-            src="${video.cover}" 
-            referrerpolicy="no-referrer" 
-            class="video-thumb" 
-            alt="Thumbnail"
-            onerror="this.onerror=null; this.src='https://www.tiktok.com/favicon.ico';"
-          >
-        </div>
-        <div class="video-caption">${video.caption || "TikTok Video"}</div>
-        <div class="btn-group">
-          <button class="btn-main" onclick="downloadVideo('${video.play}', '${video.id}', false)">
-            Download Video
-          </button>
-          <button class="btn-hd" onclick="downloadVideo('${video.play}', '${video.id}', true)">
-            Download 4K
-          </button>
-        </div>
-        <div class="status">Ready</div>
-      `;
-      videosGrid.appendChild(card);
-    });
-  }
+      if (!card) {
+        setTimeout(() => loadVideo(i + 1), 100);
+        return;
+      }
 
-  function renderProfile(user) {
-    profileHeader.innerHTML = `
-      <div class="profile-container">
-        <img src="${user.avatar}" referrerpolicy="no-referrer" class="profile-avatar" alt="${user.username}">
-        <div class="profile-info">
-          <h2>@${user.username}</h2>
-          <div class="profile-stats">
-            <div class="stat-item"><span>${Number(user.following).toLocaleString()}</span> Following</div>
-            <div class="stat-item"><span>${Number(user.followers).toLocaleString()}</span> Followers</div>
-            <div class="stat-item"><span>${Number(user.likes).toLocaleString()}</span> Likes</div>
+      try {
+        const img = new Image();
+        img.src = video.cover;
+        
+        img.onload = () => {
+          card.className = "card";
+          card.innerHTML = `
+            <div class="thumb-container"><img src="${video.cover}" class="video-thumb" alt="Thumbnail"></div>
+            <div class="video-caption">${video.caption || "TikTok Video"}</div>
+            <div class="btn-group">
+              <button class="btn-main" onclick="downloadVideo('${video.play}', '${video.id}', false)">
+                Download Video
+              </button>
+              <button class="btn-hd" onclick="downloadVideo('${video.play}', '${video.id}', true)">
+                Download 4K
+              </button>
+            </div>
+            <div class="status">Ready</div>
+          `;
+          setTimeout(() => loadVideo(i + 1), 500); // Sequence offset speeded to 500ms
+        };
+
+        img.onerror = () => { throw new Error("Image failed to load"); }
+
+      } catch (e) {
+        const statusEl = card.querySelector(".status");
+        if (attempt < 3) {
+          if (statusEl) statusEl.textContent = "Retrying…";
+          setTimeout(() => loadVideo(i, attempt + 1), 1500);
+        } else {
+          if (statusEl) statusEl.textContent = "Could not reach server";
+          setTimeout(() => loadVideo(i + 1), 800);
+        }
+      }
+    }
+
+    function renderProfile(user) {
+      profileHeader.innerHTML = `
+        <div class="profile-container">
+          <img src="${user.avatar}" class="profile-avatar" alt="${user.username}">
+          <div class="profile-info">
+            <h2>@${user.username}</h2>
+            <div class="profile-stats">
+              <div class="stat-item"><span>${Number(user.following).toLocaleString()}</span> Following</div>
+              <div class="stat-item"><span>${Number(user.followers).toLocaleString()}</span> Followers</div>
+              <div class="stat-item"><span>${Number(user.likes).toLocaleString()}</span> Likes</div>
+            </div>
           </div>
         </div>
-      </div>
-    `;
-    profileHeader.style.opacity = "1";
-  }
-
-  function renderPlaceholders(count, startIndex) {
-    for (let i = 0; i < count; i++) {
-      const cardId = `card-${startIndex + i}`;
-      videosGrid.innerHTML += `
-        <div id="${cardId}" class="skeleton-card">
-          <div class="shimmer sk-thumb"></div>
-          <div class="shimmer sk-text" style="width: 100%; height: 20px; margin-top: 15px;"></div>
-          <div class="shimmer sk-text" style="width: 70%; height: 20px; margin-top: 5px; margin-bottom: 20px;"></div>
-          <div class="shimmer sk-btn"></div>
-          <div class="shimmer sk-btn"></div>
-          <div class="status">Loading...</div>
-        </div>
       `;
+      profileHeader.style.opacity = "1";
     }
-  }
 
-  function renderPagination() {
-    let html = `<div class="pagination-container">`;
-    
-    // Prev Button
-    html += `
-      <button class="page-btn" onclick="changePage(${currentPage - 1})" ${currentPage === 1 ? "disabled" : ""}>
-        &laquo; Prev
-      </button>
-    `;
+    function renderPlaceholders(count, startIndex) {
+      for (let i = 0; i < count; i++) {
+        const cardId = `card-${startIndex + i}`;
+        videosGrid.innerHTML += `
+          <div id="${cardId}" class="skeleton-card">
+            <div class="shimmer sk-thumb"></div>
+            <div class="shimmer sk-text" style="width: 100%; height: 20px; margin-top: 15px;"></div>
+            <div class="shimmer sk-text" style="width: 70%; height: 20px; margin-top: 5px; margin-bottom: 20px;"></div>
+            <div class="shimmer sk-btn"></div>
+            <div class="shimmer sk-btn"></div>
+            <div class="status">Loading...</div>
+          </div>
+        `;
+      }
+    }
 
-    // Page numbers
-    for (let i = 1; i <= cursors.length; i++) {
+    function renderPagination() {
+      let html = `<div class="pagination-container">`;
+      
+      // Prev Button
       html += `
-        <button class="page-btn ${i === currentPage ? "active" : ""}" onclick="changePage(${i})">
-          ${i}
+        <button class="page-btn" onclick="changePage(${currentPage - 1})" ${currentPage === 1 ? "disabled" : ""}>
+          &laquo; Prev
         </button>
       `;
-    }
 
-    // Next Button
-    html += `
-      <button class="page-btn" onclick="changePage(${currentPage + 1})" ${!hasMore ? "disabled" : ""}>
-        Next &raquo;
-      </button>
-    `;
-
-    html += `</div>`;
-    
-    let pagContainer = document.getElementById("pagination-wrapper");
-    if (!pagContainer) {
-      pagContainer = document.createElement("div");
-      pagContainer.id = "pagination-wrapper";
-      videosGrid.parentNode.insertBefore(pagContainer, videosGrid.nextSibling);
-    }
-    pagContainer.innerHTML = html;
-  }
-
-  function changePage(newPage) {
-    if (newPage < 1 || newPage > cursors.length + (hasMore ? 1 : 0)) return;
-    if (newPage > cursors.length && !hasMore) return;
-
-    currentPage = newPage;
-    fetchProfile();
-    profileHeader.scrollIntoView({ behavior: "smooth" });
-  }
-
-  async function downloadVideo(tiktokUrl, id, isHd) {
-    try {
-      const res = await fetch(`/api?url=${encodeURIComponent(tiktokUrl)}`);
-      const json = await res.json();
-
-      if (!json.data) {
-        alert("Failed to fetch download link.");
-        return;
+      // Page numbers (Renders all unlocked pages)
+      for (let i = 1; i <= cursors.length; i++) {
+        html += `
+          <button class="page-btn ${i === currentPage ? "active" : ""}" onclick="changePage(${i})">
+            ${i}
+          </button>
+        `;
       }
 
-      const downloadLink = isHd ? (json.data.hdplay || json.data.play) : json.data.play;
+      // Next Button
+      html += `
+        <button class="page-btn" onclick="changePage(${currentPage + 1})" ${!hasMore ? "disabled" : ""}>
+          Next &raquo;
+        </button>
+      `;
 
-      if (!downloadLink) {
-        alert("Download link unavailable.");
-        return;
+      html += `</div>`;
+      
+      // Inject navigation below the video grid
+      let pagContainer = document.getElementById("pagination-wrapper");
+      if (!pagContainer) {
+        pagContainer = document.createElement("div");
+        pagContainer.id = "pagination-wrapper";
+        videosGrid.parentNode.insertBefore(pagContainer, videosGrid.nextSibling);
       }
-
-      window.location.href = `/download?url=${encodeURIComponent(downloadLink)}&id=${id}${isHd ? "&hd=1" : ""}`;
-    } catch (err) {
-      console.error(err);
-      alert("Download failed.");
+      pagContainer.innerHTML = html;
     }
-  }
-</script>
-             
+
+    function changePage(newPage) {
+      if (newPage < 1 || newPage > cursors.length + (hasMore ? 1 : 0)) return;
+      if (newPage > cursors.length && !hasMore) return;
+
+      currentPage = newPage;
+      fetchProfile();
+      
+      // Auto-scroll screen back up to the profile stats
+      profileHeader.scrollIntoView({ behavior: "smooth" });
+    }
+
+    async function downloadVideo(tiktokUrl, id, isHd) {
+      try {
+        const res = await fetch(`/api?url=${encodeURIComponent(tiktokUrl)}`);
+        const json = await res.json();
+
+        if (!json.data) {
+          alert("Failed to fetch download link.");
+          return;
+        }
+
+        const downloadLink = isHd ? (json.data.hdplay || json.data.play) : json.data.play;
+
+        if (!downloadLink) {
+          alert("Download link unavailable.");
+          return;
+        }
+
+        window.location.href = `/download?url=${encodeURIComponent(downloadLink)}&id=${id}${isHd ? "&hd=1" : ""}`;
+      } catch (err) {
+        console.error(err);
+        alert("Download failed.");
+      }
+    }
+
+
+  </script>
+
 </body>
-
 </html>
-
