@@ -326,8 +326,7 @@ app.get("/image", async (req, res) => {
     res.status(500).send("Image download failed");
   }
 });
-
-// Profile downloader (Now perfectly configured for your /api/scrape endpoint!)
+// Profile downloader (Updated to parse your custom scraper's "html" field!)
 app.get("/api/profile", async (req, res) => {
   let username = (req.query.username || "").trim();
   const cursor = req.query.cursor || "0"; 
@@ -347,17 +346,20 @@ app.get("/api/profile", async (req, res) => {
 
   const fetchThroughProxy = async (endpoint) => {
     const targetUrl = `https://tikwm.com${endpoint}`;
-    
-    // Cleans up any trailing slashes from your base URL
     const cleanBaseUrl = MY_SCRAPER_URL.replace(/\/$/, ""); 
-    
-    // Correctly routes through your custom Next.js '/api/scrape' route
     const apiUrl = `${cleanBaseUrl}/api/scrape?url=${encodeURIComponent(targetUrl)}`;
     
     try {
       const response = await fetch(apiUrl);
-      const text = await response.text();
-      return JSON.parse(text);
+      const scraperRes = await response.json(); // { url: "...", html: "..." }
+      
+      // Since your API returns the JSON inside a stringified "html" field, we parse it here:
+      if (scraperRes && scraperRes.html) {
+        return JSON.parse(scraperRes.html);
+      }
+      
+      console.error(`Empty or invalid response from custom scraper for ${endpoint}`);
+      return null;
     } catch (err) {
       console.error(`Your custom scraper failed for ${endpoint}:`, err.message);
       return null;
@@ -421,7 +423,6 @@ app.get("/api/profile", async (req, res) => {
     res.status(500).json({ error: "Failed to fetch TikTok profile details." });
   }
 });
-
 
 
 // ==========================================
