@@ -327,12 +327,11 @@ app.get("/image", async (req, res) => {
   }
 });
 
-// Profile downloader (Enhanced with robust error detection and sec_uid routing)
+// Profile downloader (Enhanced with robust error detection and proxy routing)
 app.get("/api/profile", async (req, res) => {
   let username = (req.query.username || "").trim();
-  const cursor = req.query.cursor || "0"; 
-  let secUid = req.query.secUid || ""; // Accept secUid from frontend if available
-  const count = 12; // Changed to 12 for better UI grid filling
+  const cursor = req.query.cursor || "0";
+  const count = 12;
 
   if (!username) {
     return res.status(400).json({ error: "Username is required" });
@@ -344,23 +343,38 @@ app.get("/api/profile", async (req, res) => {
 
   const fetchThroughProxy = async (endpoint) => {
     const targetUrl = `https://tikwm.com${endpoint}`;
-    const cleanBaseUrl = MY_SCRAPER_URL.replace(/\/$/, ""); 
-    const apiUrl = `${cleanBaseUrl}/api/scrape?url=${encodeURIComponent(targetUrl)}`;
+    const cleanBaseUrl = MY_SCRAPER_URL.replace(/\/$/, "");
     
+    // FIX 1: Send the SCRAPER_API_KEY to your Next.js route.ts proxy
+    const proxyApiKey = process.env.SCRAPER_API_KEY || "";
+    const apiKeyParam = proxyApiKey ? `&api_key=${proxyApiKey}` : "";
+    const apiUrl = `${cleanBaseUrl}/api/scrape?url=${encodeURIComponent(targetUrl)}${apiKeyParam}`;
+
     try {
       const response = await fetch(apiUrl);
       if (!response.ok) return { error: `Proxy HTTP ${response.status}` };
 
       const rawText = await response.text();
       let scraperRes;
-      try { scraperRes = JSON.parse(rawText); } catch (e) { return { error: "Proxy did not return JSON." }; }
       
+      try { 
+        scraperRes = JSON.parse(rawText); 
+      } catch (e) { 
+        return { error: "Proxy did not return JSON." }; 
+      }
+      
+      // FIX 2: Handle both direct JSON (from route.ts) and legacy { html: ... } wrappers
+      if (scraperRes && scraperRes.code !== undefined) {
+        return scraperRes; 
+      }
       if (scraperRes && scraperRes.html) {
         try {
           return typeof scraperRes.html === "string" ? JSON.parse(scraperRes.html) : scraperRes.html;
-        } catch (e) { return { error: "Nested proxy response parsing failed." }; }
+        } catch (e) { 
+          return { error: "Nested proxy response parsing failed." }; 
+        }
       }
-      return { error: "Proxy payload is missing key 'html' data." };
+      return scraperRes; 
     } catch (err) {
       return { error: err.message };
     }
@@ -370,14 +384,12 @@ app.get("/api/profile", async (req, res) => {
     let infoData = null;
     let userStats = null;
 
-    // STEP 1: Fetch info first if we don't have secUid (TikWM requires sec_uid for stable video fetching)
-    if (cursor === "0" || !secUid) {
+    // STEP 1: Fetch user stats
+    if (cursor === "0") {
       infoData = await fetchThroughProxy(`/api/user/info?unique_id=@${username}`);
       
       if (infoData && infoData.code === 0 && infoData.data) {
         const profile = infoData.data;
-        secUid = profile.user?.secUid || secUid; // Extract the golden secUid!
-        
         userStats = {
           username: profile.user?.uniqueId || username,
           avatar: profile.user?.avatarMedium || profile.user?.avatarThumb || "https://www.tiktok.com/favicon.ico",
@@ -390,12 +402,9 @@ app.get("/api/profile", async (req, res) => {
       }
     }
 
-    // STEP 2: Fetch posts using secUid (This guarantees videos will be found)
-const postsQuery = secUid 
-  ? `sec_uid=${encodeURIComponent(secUid)}&count=${count}&cursor=${cursor}`
-  : `unique_id=@${username}&count=${count}&cursor=${cursor}`;
-
-
+    // STEP 2: Fetch posts
+    // FIX 3: TikWM requires unique_id for fetching posts reliably, not sec_uid
+    const postsQuery = `unique_id=@${username}&count=${count}&cursor=${cursor}`;
     const postsData = await fetchThroughProxy(`/api/user/posts?${postsQuery}`);
 
     let videos = [];
@@ -403,7 +412,6 @@ const postsQuery = secUid
     let hasMore = false;
 
     if (postsData && postsData.code === 0 && postsData.data) {
-      // Fallbacks added for different proxy response structures
       const remoteVideos = postsData.data.videos || postsData.data.list || postsData.data.itemList || [];
       nextCursor = postsData.data.cursor || "0";
       hasMore = postsData.data.hasMore === 1 || postsData.data.hasMore === true;
@@ -411,18 +419,15 @@ const postsQuery = secUid
       videos = remoteVideos.map(v => ({
         id: v.video_id || v.id,
         caption: v.title || v.desc || "TikTok Video",
-        cover: v.cover || v.origin_cover || "https://tiktop.online/assets/Logo.png", // safe fallback
+        cover: v.cover || v.origin_cover || "https://tiktop.online/assets/Logo.png",
         play: `https://www.tiktok.com/@${username}/video/${v.video_id || v.id}`
       }));
     }
-    console.log("secUid:", secUid);
-console.log("Posts response:", JSON.stringify(postsData, null, 2));
-    
+
     res.json({
-      user: userStats, 
+      user: userStats,
       videos: videos,
-      pagination: { nextCursor, hasMore },
-      secUid: secUid // Send back to frontend so we don't lose it on page 2
+      pagination: { nextCursor, hasMore }
     });
 
   } catch (error) {
