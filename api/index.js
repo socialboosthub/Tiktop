@@ -391,9 +391,10 @@ app.get("/api/profile", async (req, res) => {
     }
 
     // STEP 2: Fetch posts using secUid (This guarantees videos will be found)
-    const postsQuery = secUid 
-      ? `sec_uid=${secUid}&count=${count}&cursor=${cursor}`
-      : `unique_id=@${username}&count=${count}&cursor=${cursor}`;
+const postsQuery = secUid 
+  ? `sec_uid=${encodeURIComponent(secUid)}&count=${count}&cursor=${cursor}`
+  : `unique_id=@${username}&count=${count}&cursor=${cursor}`;
+
 
     const postsData = await fetchThroughProxy(`/api/user/posts?${postsQuery}`);
 
