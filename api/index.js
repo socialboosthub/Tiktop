@@ -259,11 +259,11 @@ app.get("/api/profile", async (req, res) => {
         console.log(`[Railway Failed] Proceeding to raw proxies... Error:`, err.message);
       }
     }
-
     // Strategy 2: Raw Proxy Rotation (Using HttpsProxyAgent)
     for (let i = 0; i < PROXY_LIST.length; i++) {
       try {
-        console.log(`[Proxy Attempt ${i+1}] Tunneling via: ${PROXY_LIST[i].split('@')[1]}`);
+        const proxyIpPort = PROXY_LIST[i].split('@')[1];
+        console.log(`[Proxy Attempt ${i+1}] Tunneling via: ${proxyIpPort}`);
         const agent = new HttpsProxyAgent(PROXY_LIST[i]);
         
         const proxyRes = await fetch(targetUrl, {
@@ -275,16 +275,21 @@ app.get("/api/profile", async (req, res) => {
             "Referer": "https://www.tikwm.com/",
             "Origin": "https://www.tikwm.com"
           },
-          timeout: 10000 // Ensure bad proxies don't hang your Vercel instance
+          timeout: 10000 
         });
+        
+        // DIAGNOSTIC LOG: See exactly what the proxy answered
+        console.log(`[Proxy Attempt ${i+1}] Response Status: ${proxyRes.status} ${proxyRes.statusText}`);
         
         if (proxyRes.ok) {
           const rawText = await proxyRes.text();
           const parsed = JSON.parse(rawText);
           if (parsed && parsed.code === 0) return parsed;
+        } else {
+          console.warn(`[Proxy Attempt ${i+1}] Skipped because status is not 2xx.`);
         }
       } catch (err) {
-        // Silently skip failed proxy and try next
+        console.error(`[Proxy Attempt ${i+1}] Connection Error: ${err.message}`);
       }
     }
 
@@ -296,6 +301,14 @@ app.get("/api/profile", async (req, res) => {
           "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
           "Accept": "application/json, text/plain, */*"
         }
+      });
+      console.log(`[Direct Fallback] Status: ${directRes.status}`);
+      if (!directRes.ok) return { error: `Direct HTTP ${directRes.status}` };
+      return JSON.parse(await directRes.text());
+    } catch (err) {
+      return { error: `Direct fetch failed: ${err.message}` };
+    }
+
       });
       if (!directRes.ok) return { error: `Direct HTTP ${directRes.status}` };
       return JSON.parse(await directRes.text());
