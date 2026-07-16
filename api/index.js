@@ -3,7 +3,8 @@ const express = require("express");
 const mongoose = require("mongoose");
 const { Resend } = require("resend");
 const axios = require("axios");
-const fetch = require("node-fetch"); // Ensure you are using node-fetch@2 for require() support
+const fetch = require("node-fetch"); 
+const { HttpsProxyAgent } = require("https-proxy-agent"); // Added Proxy Agent
 
 const app = express();
 const resend = new Resend(process.env.RESEND_API_KEY);
@@ -23,7 +24,6 @@ const connectDB = async () => {
   }
 };
 
-// Database Schema
 const SupportSchema = new mongoose.Schema({
   email: { type: String, required: true },
   amount: { type: Number, required: true },
@@ -38,42 +38,22 @@ const Support = mongoose.model("Support", SupportSchema);
 // ==========================================
 // 2. MAILER & PAYPAL OAUTH SETUP
 // ==========================================
-
-
 async function sendThankYouEmail(userEmail, amount, type) {
   try {
     await resend.emails.send({
       from: "TikTop <support@tiktop.online>",
       to: userEmail,
-      subject:
-        type === "monthly"
-          ? "Welcome to TikTop Membership ❤️"
-          : "Thank you for supporting TikTop ❤️",
-
+      subject: type === "monthly" ? "Welcome to TikTop Membership ❤️" : "Thank you for supporting TikTop ❤️",
       html: `
       <div style="font-family:Arial;padding:30px;background:#050515;color:white">
         <h2 style="color:#25F4EE">Thank You!</h2>
-
-        <p>
-        ${
-          type === "monthly"
-            ? `Thank you for becoming a TikTop monthly member.`
-            : `Thank you for donating <b>$${amount}</b> to TikTop.`
-        }
-        </p>
-
+        <p>${type === "monthly" ? `Thank you for becoming a TikTop monthly member.` : `Thank you for donating <b>$${amount}</b> to TikTop.`}</p>
         <p>Your support keeps TikTop fast, free and ad-light.</p>
-
         <hr>
-
-        <p style="font-size:12px;color:#999">
-        TikTop.online
-        </p>
+        <p style="font-size:12px;color:#999">TikTop.online</p>
       </div>
       `,
     });
-
-    console.log("Email sent.");
   } catch (err) {
     console.error(err);
   }
@@ -94,15 +74,10 @@ async function getPayPalAccessToken() {
 }
 
 // ==========================================
-// 3. MIDDLEWARE (ORDER IS CRITICAL)
+// 3. MIDDLEWARE
 // ==========================================
-// Webhook needs raw body before express.json() intercepts it
 app.use("/api/webhooks/paypal", express.raw({ type: "application/json" }));
-
-// Standard JSON parser for all other routes
 app.use(express.json());
-
-// CORS configuration (Allows frontend to talk to this API)
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
@@ -115,303 +90,215 @@ app.use((req, res, next) => {
 // 4. PAYPAL SUPPORT ROUTES
 // ==========================================
 app.post("/api/create-paypal-subscription-plan", async (req, res) => {
-  await connectDB(); // Ensure DB is connected in serverless
+  await connectDB();
   const { amount } = req.body;
   try {
     const token = await getPayPalAccessToken();
-
     const planPayload = {
       product_id: process.env.PAYPAL_PRODUCT_ID,
       name: `TikTop Custom Membership - Tier $${amount}`,
-      description: `Bespoke configuration member recurring support for TikTop operations`,
+      description: `Bespoke configuration member recurring support`,
       status: "ACTIVE",
-      billing_cycles: [
-        {
-          frequency: { interval_unit: "MONTH", interval_count: 1 },
-          tenure_type: "REGULAR",
-          sequence: 1,
-          total_cycles: 0,
-          pricing_scheme: {
-            fixed_price: { value: amount.toString(), currency_code: "USD" },
-          },
-        },
-      ],
-      payment_preferences: {
-        auto_bill_outstanding: true,
-        setup_fee_failure_action: "CONTINUE",
-        payment_failure_threshold: 2,
-      },
+      billing_cycles: [{
+        frequency: { interval_unit: "MONTH", interval_count: 1 },
+        tenure_type: "REGULAR",
+        sequence: 1,
+        total_cycles: 0,
+        pricing_scheme: { fixed_price: { value: amount.toString(), currency_code: "USD" } },
+      }],
+      payment_preferences: { auto_bill_outstanding: true, setup_fee_failure_action: "CONTINUE", payment_failure_threshold: 2 },
     };
-
     const response = await axios.post(`${process.env.PAYPAL_API_URL}/v1/billing/plans`, planPayload, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
+      headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
     });
-
     res.json({ id: response.data.id });
   } catch (err) {
-    console.error("PayPal Runtime Plan Generation Failure:", err.response?.data || err.message);
-    res.status(500).json({ error: "Bespoke dynamic plan construction aborted on server runtime." });
+    res.status(500).json({ error: "Plan construction aborted on server runtime." });
   }
 });
 
 app.post("/api/webhooks/paypal", async (req, res) => {
-  await connectDB(); // Ensure DB is connected in serverless
+  await connectDB();
   let event;
-  try {
-    event = JSON.parse(req.body.toString());
-  } catch (err) {
-    return res.status(400).send("Webhook body parsing exception.");
-  }
+  try { event = JSON.parse(req.body.toString()); } catch (err) { return res.status(400).send("Webhook body parsing exception."); }
 
-  // One-Time Donation
   if (event.event_type === "PAYMENT.SALE.COMPLETED") {
     const sale = event.resource;
     const customFormEmail = sale.custom_id || (sale.billing_agreement_id ? null : "donor@tiktop.online");
-
     if (customFormEmail && !sale.billing_agreement_id) {
       try {
         await Support.findOneAndUpdate(
           { referenceId: sale.id },
-          {
-            email: customFormEmail,
-            amount: parseFloat(sale.amount.total),
-            type: "one-time",
-            referenceId: sale.id,
-            status: "completed",
-          },
+          { email: customFormEmail, amount: parseFloat(sale.amount.total), type: "one-time", referenceId: sale.id, status: "completed" },
           { upsert: true, new: true }
         );
         await sendThankYouEmail(customFormEmail, sale.amount.total, "one-time");
-      } catch (dbErr) {
-        console.error("Database write exception parsing transaction:", dbErr.message);
-      }
+      } catch (dbErr) { console.error("DB write exception:", dbErr.message); }
     }
-  }
-  // Monthly Subscription
-  else if (event.event_type === "BILLING.SUBSCRIPTION.ACTIVATED") {
+  } else if (event.event_type === "BILLING.SUBSCRIPTION.ACTIVATED") {
     const subscription = event.resource;
     const customFormEmail = subscription.custom_id || subscription.subscriber.email_address;
     const totalValueAmount = subscription.billing_info?.last_payment?.amount?.value || "10.00";
-
     try {
       await Support.findOneAndUpdate(
         { referenceId: subscription.id },
-        {
-          email: customFormEmail,
-          amount: parseFloat(totalValueAmount),
-          type: "monthly",
-          referenceId: subscription.id,
-          status: "completed",
-        },
+        { email: customFormEmail, amount: parseFloat(totalValueAmount), type: "monthly", referenceId: subscription.id, status: "completed" },
         { upsert: true, new: true }
       );
       await sendThankYouEmail(customFormEmail, totalValueAmount, "monthly");
-    } catch (dbErr) {
-      console.error("Database write exception tracking active membership:", dbErr.message);
-    }
+    } catch (dbErr) { console.error("DB write exception:", dbErr.message); }
   }
-
   res.sendStatus(200);
 });
+
 app.post("/api/donation-success", async (req, res) => {
   await connectDB();
-
   try {
     const { email, amount, mode, orderId } = req.body;
-
-    if (!email || !amount || !orderId) {
-      return res.status(400).json({
-        error: "Missing required fields"
-      });
-    }
+    if (!email || !amount || !orderId) return res.status(400).json({ error: "Missing required fields" });
 
     await Support.findOneAndUpdate(
       { referenceId: orderId },
-      {
-        email,
-        amount: Number(amount),
-        type: mode === "monthly" ? "monthly" : "one-time",
-        gateway: "paypal",
-        status: "completed",
-        referenceId: orderId
-      },
-      {
-        upsert: true,
-        new: true
-      }
+      { email, amount: Number(amount), type: mode === "monthly" ? "monthly" : "one-time", gateway: "paypal", status: "completed", referenceId: orderId },
+      { upsert: true, new: true }
     );
-
-    await sendThankYouEmail(
-      email,
-      amount,
-      mode === "monthly" ? "monthly" : "one-time"
-    );
-
-    res.json({
-      success: true
-    });
-
+    await sendThankYouEmail(email, amount, mode === "monthly" ? "monthly" : "one-time");
+    res.json({ success: true });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({
-      error: "Internal server error"
-    });
+    res.status(500).json({ error: "Internal server error" });
   }
 });
+
 // ==========================================
-// 5. TIKTOK MEDIA DOWNLOAD ROUTES
+// 5. MEDIA DOWNLOAD ROUTES
 // ==========================================
 app.get("/api", async (req, res) => {
   try {
     const url = req.query.url;
     if (!url) return res.status(400).json({ error: "No URL provided" });
-
     const apiUrl = `https://tikwm.com/api/?url=${encodeURIComponent(url)}&hd=1`;
-    const response = await fetch(apiUrl, {
-      headers: {
-        "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 17_5 like Mac OS X)",
-      },
-    });
-
-    const json = await response.json();
-    res.json(json);
-  } catch {
-    res.status(500).json({ error: "API failed" });
-  }
+    const response = await fetch(apiUrl, { headers: { "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 17_5 like Mac OS X)" } });
+    res.json(await response.json());
+  } catch { res.status(500).json({ error: "API failed" }); }
 });
 
 app.get("/mp3", async (req, res) => {
   try {
     const response = await fetch(req.query.url);
-    const id = req.query.id || Math.floor(Math.random() * 100000);
-    const fileName = `tiktop-${id}.mp3`;
-
+    const fileName = `tiktop-${req.query.id || Math.floor(Math.random() * 100000)}.mp3`;
     res.setHeader("Content-Type", "audio/mpeg");
     res.setHeader("Content-Disposition", `attachment; filename="${fileName}"`);
     response.body.pipe(res);
-  } catch {
-    res.status(500).send("Audio download failed");
-  }
+  } catch { res.status(500).send("Audio download failed"); }
 });
 
 app.get("/download", async (req, res) => {
   try {
     const response = await fetch(req.query.url);
-    const id = req.query.id || "video";
-    
-    let fileName = req.query.hd === "1" ? `tiktop-${id}_hd.mp4` : `tiktop-${id}.mp4`;
-
+    const fileName = req.query.hd === "1" ? `tiktop-${req.query.id || "video"}_hd.mp4` : `tiktop-${req.query.id || "video"}.mp4`;
     res.setHeader("Content-Type", "video/mp4");
     res.setHeader("Content-Disposition", `attachment; filename="${fileName}"`);
     response.body.pipe(res);
-  } catch {
-    res.status(500).send("Download failed");
-  }
+  } catch { res.status(500).send("Download failed"); }
 });
 
-app.get("/image", async (req, res) => {
-  try {
-    const response = await fetch(req.query.url);
-    const id = req.query.id || "image";
-    const index = req.query.index ? `-img-${req.query.index}` : "";
-    const fileName = `tiktop-${id}${index}.jpeg`;
+// ==========================================
+// 6. PROFILE FETCHING (FIXED PROXY LOGIC)
+// ==========================================
 
-    res.setHeader("Content-Type", "image/jpeg");
-    res.setHeader("Content-Disposition", `attachment; filename="${fileName}"`);
-    response.body.pipe(res);
-  } catch {
-    res.status(500).send("Image download failed");
-  }
-});
+// Store your RAW HTTP Proxies here. DO NOT include the Railway API URL here.
+const PROXY_LIST = [
+  "http://fzmgezkd:uz4cjlb6zfvb@31.59.20.176:6754",
+  "http://fzmgezkd:uz4cjlb6zfvb@31.56.127.193:7684",
+  "http://fzmgezkd:uz4cjlb6zfvb@45.38.107.97:6014",
+  "http://fzmgezkd:uz4cjlb6zfvb@198.105.121.200:6462",
+  "http://fzmgezkd:uz4cjlb6zfvb@64.137.96.74:6641",
+  "http://fzmgezkd:uz4cjlb6zfvb@198.23.243.226:6361",
+  "http://fzmgezkd:uz4cjlb6zfvb@38.154.185.97:6370",
+  "http://fzmgezkd:uz4cjlb6zfvb@84.247.60.125:6095",
+  "http://fzmgezkd:uz4cjlb6zfvb@142.111.67.146:5611",
+  "http://fzmgezkd:uz4cjlb6zfvb@191.96.254.138:6185",
+];
 
-// Profile downloader (Enhanced with Proxy Rotation, Anti-Bot Headers, and Timeout Fixes)
 app.get("/api/profile", async (req, res) => {
   let username = (req.query.username || "").trim();
   const cursor = req.query.cursor || "0";
   let secUid = req.query.secUid || ""; 
-  
-  // REDUCED FROM 12 TO 10: This speeds up the request and helps prevent your proxy from hitting a 500 timeout error
   const count = 10; 
 
-  if (!username) {
-    return res.status(400).json({ error: "Username is required" });
-  }
-
+  if (!username) return res.status(400).json({ error: "Username is required" });
   username = username.replace("@", "");
-
-  // ==========================================
-  // PROXY ROTATION ARRAY
-  // Add all 10 of your proxy base URLs here
-  // ==========================================
-  const PROXY_LIST = [
-    process.env.FREE_SCRAPER_API_URL || "http://fzmgezkd:uz4cjlb6zfvb@31.59.20.176:6754",
-     "http://fzmgezkd:uz4cjlb6zfvb@31.56.127.193:7684",
-     "http://fzmgezkd:uz4cjlb6zfvb@45.38.107.97:6014",
-     "http://fzmgezkd:uz4cjlb6zfvb@198.105.121.200:6462",
-     "http://fzmgezkd:uz4cjlb6zfvb@64.137.96.74:6641",
-     "http://fzmgezkd:uz4cjlb6zfvb@198.23.243.226:6361",
-     "http://fzmgezkd:uz4cjlb6zfvb@38.154.185.97:6370",
-     "http://fzmgezkd:uz4cjlb6zfvb@84.247.60.125:6095",
-     "http://fzmgezkd:uz4cjlb6zfvb@142.111.67.146:5611",
-     "http://fzmgezkd:uz4cjlb6zfvb@191.96.254.138:6185",
-  ];
 
   const proxyApiKey = process.env.SCRAPER_API_KEY || "";
   const apiKeyParam = proxyApiKey ? `&api_key=${proxyApiKey}` : "";
+  
+  // Set this exactly to your railway app base URL in Vercel settings (e.g. https://api-production-xxx.up.railway.app)
+  const RAILWAY_API_URL = process.env.FREE_SCRAPER_API_URL;
 
   const fetchData = async (endpoint) => {
     const cacheBuster = endpoint.includes('?') ? `&_t=${Date.now()}` : `?_t=${Date.now()}`;
     const targetUrl = `https://tikwm.com${endpoint}${cacheBuster}`;
     
-    // 1. Loop through available proxies
-    for (let i = 0; i < PROXY_LIST.length; i++) {
-      const cleanBaseUrl = PROXY_LIST[i].replace(/\/$/, "");
-      const proxyUrl = `${cleanBaseUrl}/api/scrape?url=${encodeURIComponent(targetUrl)}${apiKeyParam}`;
+    // Strategy 1: Try your Railway Scraper FIRST (if it is defined in Env Vars)
+    if (RAILWAY_API_URL) {
+      const cleanBaseUrl = RAILWAY_API_URL.replace(/\/$/, "");
+      const scraperUrl = `${cleanBaseUrl}/api/scrape?url=${encodeURIComponent(targetUrl)}${apiKeyParam}`;
       
       try {
-        console.log(`[Attempt ${i+1}] Trying Proxy: ${cleanBaseUrl}`);
-        const proxyRes = await fetch(proxyUrl);
-        
-        if (proxyRes.ok) {
-          const rawText = await proxyRes.text();
+        console.log(`[Railway Attempt] Calling: ${cleanBaseUrl}`);
+        const res = await fetch(scraperUrl);
+        if (res.ok) {
+          const rawText = await res.text();
           let parsed;
           try { parsed = JSON.parse(rawText); } catch(e) {}
-          
-          if (parsed) {
-            if (parsed.html) {
-               return typeof parsed.html === "string" ? JSON.parse(parsed.html) : parsed.html;
-            }
-            return parsed; // Success! Return data and exit the loop.
+          if (parsed && !parsed.error) {
+            return parsed.html ? (typeof parsed.html === "string" ? JSON.parse(parsed.html) : parsed.html) : parsed;
           }
-        } else {
-          console.log(`[Attempt ${i+1}] Proxy failed with ${proxyRes.status}, trying next...`);
         }
       } catch (err) {
-        console.error(`[Attempt ${i+1}] Proxy fetch error:`, err.message);
+        console.log(`[Railway Failed] Proceeding to raw proxies... Error:`, err.message);
       }
     }
 
-    // 2. Direct Fallback (If ALL proxies fail)
-    console.log(`[Fallback] All proxies failed. Fetching directly from: ${targetUrl}`);
+    // Strategy 2: Raw Proxy Rotation (Using HttpsProxyAgent)
+    for (let i = 0; i < PROXY_LIST.length; i++) {
+      try {
+        console.log(`[Proxy Attempt ${i+1}] Tunneling via: ${PROXY_LIST[i].split('@')[1]}`);
+        const agent = new HttpsProxyAgent(PROXY_LIST[i]);
+        
+        const proxyRes = await fetch(targetUrl, {
+          agent: agent,
+          headers: {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+            "Accept": "application/json, text/plain, */*",
+            "Accept-Language": "en-US,en;q=0.9",
+            "Referer": "https://www.tikwm.com/",
+            "Origin": "https://www.tikwm.com"
+          },
+          timeout: 10000 // Ensure bad proxies don't hang your Vercel instance
+        });
+        
+        if (proxyRes.ok) {
+          const rawText = await proxyRes.text();
+          const parsed = JSON.parse(rawText);
+          if (parsed && parsed.code === 0) return parsed;
+        }
+      } catch (err) {
+        // Silently skip failed proxy and try next
+      }
+    }
+
+    // Strategy 3: Direct Fallback 
+    console.log(`[Direct Fallback] All proxies rejected. Fetching via Vercel IP...`);
     try {
       const directRes = await fetch(targetUrl, {
         headers: {
-          // Beefed up headers to bypass the 403 Forbidden Cloudflare block
           "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
-          "Accept": "application/json, text/plain, */*",
-          "Accept-Language": "en-US,en;q=0.9",
-          "Referer": "https://www.tikwm.com/",
-          "Origin": "https://www.tikwm.com",
-          "Connection": "keep-alive"
+          "Accept": "application/json, text/plain, */*"
         }
       });
       if (!directRes.ok) return { error: `Direct HTTP ${directRes.status}` };
-      
-      const rawText = await directRes.text();
-      return JSON.parse(rawText);
+      return JSON.parse(await directRes.text());
     } catch (err) {
       return { error: `Direct fetch failed: ${err.message}` };
     }
@@ -421,7 +308,6 @@ app.get("/api/profile", async (req, res) => {
     let infoData = null;
     let userStats = null;
 
-    // STEP 1: Fetch user stats and extract secUid
     if (cursor === "0" || !secUid) {
       infoData = await fetchData(`/api/user/info?unique_id=@${username}`);
       
@@ -439,12 +325,10 @@ app.get("/api/profile", async (req, res) => {
       } else if (cursor === "0") {
         return res.status(502).json({ error: "Could not locate user profile. " + (infoData?.msg || "") });
       }
-
-      // Pause to respect TikWM rate limits
+      // Small pause to preserve rate limits
       await new Promise(resolve => setTimeout(resolve, 1200));
     }
 
-    // STEP 2: Fetch posts
     const postsQuery = secUid
       ? `sec_uid=${encodeURIComponent(secUid)}&count=${count}&cursor=${cursor}`
       : `unique_id=@${username}&count=${count}&cursor=${cursor}`;
@@ -470,7 +354,6 @@ app.get("/api/profile", async (req, res) => {
       console.error("TikWM Posts Output Error:", postsData); 
     }
 
-    // STEP 3: Return payload
     res.json({
       user: userStats,
       videos: videos,
@@ -484,12 +367,4 @@ app.get("/api/profile", async (req, res) => {
   }
 });
 
-
-
-
-
-// ==========================================
-// 6. EXPORT APP FOR VERCEL
-// ==========================================
 module.exports = app;
-
