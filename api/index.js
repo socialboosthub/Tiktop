@@ -259,7 +259,7 @@ app.get("/api/profile", async (req, res) => {
         console.log(`[Railway Failed] Proceeding to raw proxies... Error:`, err.message);
       }
     }
-    // Strategy 2: Raw Proxy Rotation (Using HttpsProxyAgent)
+        // Strategy 2: Raw Proxy Rotation (Using HttpsProxyAgent)
     for (let i = 0; i < PROXY_LIST.length; i++) {
       try {
         const proxyIpPort = PROXY_LIST[i].split('@')[1];
@@ -308,7 +308,6 @@ app.get("/api/profile", async (req, res) => {
     } catch (err) {
       return { error: `Direct fetch failed: ${err.message}` };
     }
-
       });
       if (!directRes.ok) return { error: `Direct HTTP ${directRes.status}` };
       return JSON.parse(await directRes.text());
