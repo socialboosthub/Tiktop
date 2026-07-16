@@ -327,93 +327,90 @@ app.get("/image", async (req, res) => {
   }
 });
 
-// Profile downloader (Now perfectly configured for your /api/scrape endpoint!)
+
 app.get("/api/profile", async (req, res) => {
   let username = (req.query.username || "").trim();
-  const cursor = req.query.cursor || "0"; 
-  const count = 7; 
 
   if (!username) {
     return res.status(400).json({ error: "Username is required" });
   }
 
+  // Normalize username (remove @ for url construction, we'll add it back for the API query)
   username = username.replace("@", "");
 
-  const MY_SCRAPER_URL = process.env.FREE_SCRAPER_API_URL;
-  if (!MY_SCRAPER_URL) {
-    console.error("Missing FREE_SCRAPER_API_URL in .env");
-    return res.status(500).json({ error: "Custom scraper proxy configuration missing" });
+  const SCRAPER_API_KEY = process.env.SCRAPER_API_KEY;
+  if (!SCRAPER_API_KEY) {
+    console.error("Missing SCRAPER_API_KEY in .env");
+    return res.status(500).json({ error: "Proxy configuration missing" });
   }
 
+  // Helper function to safely route TikWM requests through ScraperAPI
   const fetchThroughProxy = async (endpoint) => {
     const targetUrl = `https://tikwm.com${endpoint}`;
-    
-    // Cleans up any trailing slashes from your base URL
-    const cleanBaseUrl = MY_SCRAPER_URL.replace(/\/$/, ""); 
-    
-    // Correctly routes through your custom Next.js '/api/scrape' route
-    const apiUrl = `${cleanBaseUrl}/api/scrape?url=${encodeURIComponent(targetUrl)}`;
+    const apiUrl = `http://api.scraperapi.com?api_key=${SCRAPER_API_KEY}&url=${encodeURIComponent(targetUrl)}`;
     
     try {
       const response = await fetch(apiUrl);
       const text = await response.text();
       return JSON.parse(text);
     } catch (err) {
-      console.error(`Your custom scraper failed for ${endpoint}:`, err.message);
+      console.error(`Proxy failed for ${endpoint}:`, err.message);
       return null;
     }
   };
 
   try {
-    const fetchInfoPromise = cursor === "0" 
-      ? fetchThroughProxy(`/api/user/info?unique_id=@${username}`)
-      : Promise.resolve(null);
+    // Fetch both info (for stats) and posts (for videos) in parallel through the proxy
+    const [infoData, postsData] = await Promise.all([
+      fetchThroughProxy(`/api/user/info?unique_id=@${username}`),
+      fetchThroughProxy(`/api/user/posts?unique_id=@${username}&count=30&cursor=0`)
+    ]);
 
-    const fetchPostsPromise = fetchThroughProxy(`/api/user/posts?unique_id=@${username}&count=${count}&cursor=${cursor}`);
-
-    const [infoData, postsData] = await Promise.all([fetchInfoPromise, fetchPostsPromise]);
-
-    let userStats = null;
+    let userStats = { 
+      username: username, 
+      avatar: "https://www.tiktok.com/favicon.ico", 
+      followers: 0, 
+      following: 0, 
+      likes: 0 
+    };
     let videos = [];
-    let nextCursor = "0";
-    let hasMore = false;
 
+    // 1. Process User Info (Accurate Followers, Following, Likes)
     if (infoData && infoData.code === 0 && infoData.data) {
       const profile = infoData.data;
-      userStats = {
-        username: profile.user?.uniqueId || username,
-        avatar: profile.user?.avatarMedium || profile.user?.avatarThumb || "https://www.tiktok.com/favicon.ico",
-        followers: profile.stats?.followerCount || 0,
-        following: profile.stats?.followingCount || 0,
-        likes: profile.stats?.heartCount || 0
-      };
+      userStats.username = profile.user?.uniqueId || username;
+      userStats.avatar = profile.user?.avatarMedium || profile.user?.avatarThumb || userStats.avatar;
+      userStats.followers = profile.stats?.followerCount || 0;
+      userStats.following = profile.stats?.followingCount || 0;
+      userStats.likes = profile.stats?.heartCount || 0;
     }
 
+    // 2. Process Videos
     if (postsData && postsData.code === 0 && postsData.data) {
       const remoteVideos = postsData.data.videos || postsData.data.list || [];
       
-      nextCursor = postsData.data.cursor || "0";
-      hasMore = postsData.data.hasMore === 1 || postsData.data.hasMore === true;
+      // If info endpoint failed but posts succeeded, attempt to grab basic avatar from posts
+      if (userStats.avatar === "https://www.tiktok.com/favicon.ico" && remoteVideos.length > 0) {
+        userStats.avatar = remoteVideos[0].author?.avatar || userStats.avatar;
+      }
 
       videos = remoteVideos.map(v => ({
         id: v.video_id || v.id,
         caption: v.title || v.desc || "TikTok Video",
         cover: v.cover || v.origin_cover,
-        play: `https://www.tiktok.com/@${username}/video/${v.video_id || v.id}`
+        play: v.play || `https://www.tiktok.com/@${userStats.username}/video/${v.video_id || v.id}`
       }));
     }
 
-    if (cursor === "0" && (!infoData || infoData.code !== 0) && (!postsData || postsData.code !== 0)) {
-      return res.status(404).json({ error: "User not found, account is private, or custom proxy failed." });
+    // 3. Fallback if both requests failed or user doesn't exist
+    if ((!infoData || infoData.code !== 0) && (!postsData || postsData.code !== 0)) {
+      return res.status(404).json({ error: "User not found, account is private, or proxy blocked request." });
     }
 
+    // Return combined payload
     res.json({
-      user: userStats, 
-      videos: videos,
-      pagination: {
-        nextCursor: nextCursor,
-        hasMore: hasMore
-      }
+      user: userStats,
+      videos: videos
     });
 
   } catch (error) {
@@ -423,9 +420,7 @@ app.get("/api/profile", async (req, res) => {
 });
 
 
-
 // ==========================================
 // 6. EXPORT APP FOR VERCEL
 // ==========================================
 module.exports = app;
-
