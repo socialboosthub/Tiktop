@@ -206,7 +206,6 @@ app.get("/download", async (req, res) => {
 // 6. PROFILE FETCHING (FIXED PROXY LOGIC)
 // ==========================================
 
-// Store your RAW HTTP Proxies here. DO NOT include the Railway API URL here.
 const PROXY_LIST = [
   "http://fzmgezkd:uz4cjlb6zfvb@31.59.20.176:6754",
   "http://fzmgezkd:uz4cjlb6zfvb@31.56.127.193:7684",
@@ -232,14 +231,13 @@ app.get("/api/profile", async (req, res) => {
   const proxyApiKey = process.env.SCRAPER_API_KEY || "";
   const apiKeyParam = proxyApiKey ? `&api_key=${proxyApiKey}` : "";
   
-  // Set this exactly to your railway app base URL in Vercel settings (e.g. https://api-production-xxx.up.railway.app)
   const RAILWAY_API_URL = process.env.FREE_SCRAPER_API_URL;
 
   const fetchData = async (endpoint) => {
     const cacheBuster = endpoint.includes('?') ? `&_t=${Date.now()}` : `?_t=${Date.now()}`;
     const targetUrl = `https://tikwm.com${endpoint}${cacheBuster}`;
     
-    // Strategy 1: Try your Railway Scraper FIRST (if it is defined in Env Vars)
+    // Strategy 1: Railway Scraper
     if (RAILWAY_API_URL) {
       const cleanBaseUrl = RAILWAY_API_URL.replace(/\/$/, "");
       const scraperUrl = `${cleanBaseUrl}/api/scrape?url=${encodeURIComponent(targetUrl)}${apiKeyParam}`;
@@ -259,7 +257,8 @@ app.get("/api/profile", async (req, res) => {
         console.log(`[Railway Failed] Proceeding to raw proxies... Error:`, err.message);
       }
     }
-        // Strategy 2: Raw Proxy Rotation (Using HttpsProxyAgent)
+
+    // Strategy 2: Raw Proxy Rotation (Using HttpsProxyAgent)
     for (let i = 0; i < PROXY_LIST.length; i++) {
       try {
         const proxyIpPort = PROXY_LIST[i].split('@')[1];
@@ -278,12 +277,16 @@ app.get("/api/profile", async (req, res) => {
           timeout: 10000 
         });
         
-        // DIAGNOSTIC LOG: See exactly what the proxy answered
         console.log(`[Proxy Attempt ${i+1}] Response Status: ${proxyRes.status} ${proxyRes.statusText}`);
         
         if (proxyRes.ok) {
           const rawText = await proxyRes.text();
-          const parsed = JSON.parse(rawText);
+          let parsed;
+          try {
+            parsed = JSON.parse(rawText);
+          } catch (e) {
+            console.warn(`[Proxy Attempt ${i+1}] Received HTML or bad format instead of JSON.`);
+          }
           if (parsed && parsed.code === 0) return parsed;
         } else {
           console.warn(`[Proxy Attempt ${i+1}] Skipped because status is not 2xx.`);
@@ -293,7 +296,7 @@ app.get("/api/profile", async (req, res) => {
       }
     }
 
-    // Strategy 3: Direct Fallback 
+    // Strategy 3: Direct Fallback (Cleaned up syntax errors & added safe JSON parsing)
     console.log(`[Direct Fallback] All proxies rejected. Fetching via Vercel IP...`);
     try {
       const directRes = await fetch(targetUrl, {
@@ -304,13 +307,13 @@ app.get("/api/profile", async (req, res) => {
       });
       console.log(`[Direct Fallback] Status: ${directRes.status}`);
       if (!directRes.ok) return { error: `Direct HTTP ${directRes.status}` };
-      return JSON.parse(await directRes.text());
-    } catch (err) {
-      return { error: `Direct fetch failed: ${err.message}` };
-    }
-      });
-      if (!directRes.ok) return { error: `Direct HTTP ${directRes.status}` };
-      return JSON.parse(await directRes.text());
+      
+      const directText = await directRes.text();
+      try {
+        return JSON.parse(directText);
+      } catch (e) {
+        return { error: `Direct fetch returned plain text/HTML instead of JSON: ${directText.substring(0, 100)}` };
+      }
     } catch (err) {
       return { error: `Direct fetch failed: ${err.message}` };
     }
@@ -337,7 +340,6 @@ app.get("/api/profile", async (req, res) => {
       } else if (cursor === "0") {
         return res.status(502).json({ error: "Could not locate user profile. " + (infoData?.msg || "") });
       }
-      // Small pause to preserve rate limits
       await new Promise(resolve => setTimeout(resolve, 1200));
     }
 
@@ -380,3 +382,4 @@ app.get("/api/profile", async (req, res) => {
 });
 
 module.exports = app;
+
