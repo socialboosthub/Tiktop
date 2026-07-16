@@ -347,9 +347,16 @@ app.get("/api/profile", async (req, res) => {
   // Add all 10 of your proxy base URLs here
   // ==========================================
   const PROXY_LIST = [
-    process.env.FREE_SCRAPER_API_URL || "https://api-i7hfcyh1v-socialboosthubs-projects.vercel.app",
-    // "https://your-second-proxy.vercel.app",
-    // "https://your-third-proxy.vercel.app",
+    process.env.FREE_SCRAPER_API_URL || "http://fzmgezkd:uz4cjlb6zfvb@31.59.20.176:6754",
+     "http://fzmgezkd:uz4cjlb6zfvb@31.56.127.193:7684",
+     "http://fzmgezkd:uz4cjlb6zfvb@45.38.107.97:6014",
+     "http://fzmgezkd:uz4cjlb6zfvb@198.105.121.200:6462",
+     "http://fzmgezkd:uz4cjlb6zfvb@64.137.96.74:6641",
+     "http://fzmgezkd:uz4cjlb6zfvb@198.23.243.226:6361",
+     "http://fzmgezkd:uz4cjlb6zfvb@38.154.185.97:6370",
+     "http://fzmgezkd:uz4cjlb6zfvb@84.247.60.125:6095",
+     "http://fzmgezkd:uz4cjlb6zfvb@142.111.67.146:5611",
+     "http://fzmgezkd:uz4cjlb6zfvb@191.96.254.138:6185",
   ];
 
   const proxyApiKey = process.env.SCRAPER_API_KEY || "";
